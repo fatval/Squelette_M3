@@ -11,16 +11,20 @@ namespace Squelette_M3
         public UserControlRecettes()
         {
             InitializeComponent();
-            ChargerRecettes();
+            ChargerRecettesDGV();
         }
 
-        private void ChargerRecettes()
+        /// <summary>
+        /// 
+        /// </summary>
+        private void ChargerRecettesDGV()
         {
             try
-            {
+            {   //S'assurer que les lignes et colonnes sont vidées avant de remplir des nouvelles
                 dgvRecettes.Rows.Clear();
                 dgvRecettes.Columns.Clear();
 
+                //Remplissage de la data grid view (dgv)
                 dgvRecettes.Columns.Add("Id_Recette", "ID");
                 dgvRecettes.Columns.Add("REC_Nom", "Nom de la recette");
                 dgvRecettes.Columns.Add("REC_DateHeureCreation", "Date de création");
@@ -49,7 +53,7 @@ namespace Squelette_M3
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-                ChargerRecettes();
+                ChargerRecettesDGV();
             }
         }
 
@@ -80,7 +84,7 @@ namespace Squelette_M3
                 {
                     if (formEditor.ShowDialog(this) == DialogResult.OK)
                     {
-                        ChargerRecettes();
+                        ChargerRecettesDGV();
                         MessageBox.Show("✅ Recette modifiée avec succès !",
                             "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -108,7 +112,7 @@ namespace Squelette_M3
         }
 
 
-
+       
         private void btnSupprimer_Click(object sender, EventArgs e)
         {
             try
@@ -134,7 +138,7 @@ namespace Squelette_M3
                 {
                     SupprimerRecetteAvecLots(idRecette);
                     MessageBox.Show("Recette et ses lots supprimés avec succès !");
-                    ChargerRecettes();
+                    ChargerRecettesDGV();
                 }
             }
             catch (Exception ex)
@@ -167,7 +171,16 @@ namespace Squelette_M3
             }
         }
 
-        // ─── Supprimer la Recette et ses Lots associés ─────────────────────
+        /// <summary>
+        /// Supprime une recette ainsi que tous les lots et événements associés de la base de données dans une
+        /// transaction atomique.
+        /// </summary>
+        /// <remarks>Cette méthode supprime la recette spécifiée, tous les lots qui lui sont liés, les
+        /// événements associés à ces lots, ainsi que les entrées correspondantes dans la table associative. Toutes les
+        /// opérations sont effectuées dans une transaction pour garantir la cohérence des données. En cas d'erreur, la
+        /// transaction est annulée et un message d'erreur est affiché à l'utilisateur.</remarks>
+        /// <param name="idRecette">Identifiant unique de la recette à supprimer. Doit correspondre à une recette existante dans la base de
+        /// données.</param>
         private void SupprimerRecetteAvecLots(int idRecette)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
@@ -204,7 +217,7 @@ namespace Squelette_M3
                         }
 
                         // 3️⃣ SUPPRIMER LES LOTS
-                        string deleteLots = "DELETE FROM lot WHERE Id_Recette = @id";
+                        string deleteLots = "DELETE FROM lot WHERE Id_Recette = @id";//placeholder  (@id)pour éviter les injections SQL
                         using (MySqlCommand cmd = new MySqlCommand(deleteLots, connection, transaction))
                         {
                             cmd.Parameters.AddWithValue("@id", idRecette);

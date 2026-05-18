@@ -30,7 +30,13 @@ namespace M3
             RafraichirGrille();
         }
 
-        // ─── RAFRAICHIR LA GRILLE ───────────────────────────────────
+        /// <summary>
+        /// Met à jour le contenu de la grille d'opérations pour refléter l'état actuel de la liste des opérations en
+        /// cours.
+        /// </summary>
+        /// <remarks>Cette méthode efface toutes les lignes existantes dans la grille, puis ajoute une
+        /// ligne pour chaque opération en cours. Elle doit être appelée chaque fois que la liste des opérations change
+        /// afin de garantir que l'affichage reste synchronisé avec les données sous-jacentes.</remarks>
         private void RafraichirGrille()
         {
             dgvOperations.Rows.Clear();
@@ -57,6 +63,7 @@ namespace M3
                     return;
                 }
 
+                //
                 Operation nouvelleOp = new Operation
                 {
                     OPE_Ordre = operationsEnCours.Count + 1,
@@ -135,7 +142,7 @@ namespace M3
 
                     operationsEnCours.Add(new Operation
                     {
-                        OPE_Ordre = i + 1,
+                        OPE_Ordre = i++,
                         OPE_PositionMoteur = positionMoteur,
                         OPE_TempsAttente = tempsAttente,
                         OPE_Quittance = quittance
@@ -157,13 +164,14 @@ namespace M3
         {
             try
             {
+                //Gestion de l'erreur nom de recette vide
                 if (string.IsNullOrWhiteSpace(txtNomRecette.Text))
                 {
                     MessageBox.Show("❌ Le nom de la recette ne peut pas être vide !",
                         "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
+                //Gestion de l'erreur 
                 if (!SynchroniserDepuisGrille()) return;
 
                 if (operationsEnCours.Count == 0)
@@ -179,7 +187,7 @@ namespace M3
                     REC_DateHeureCreation = DateTime.Now,
                     Operations = new List<Operation>(operationsEnCours)
                 };
-
+                //Si recetteIdAModifier = -1 --> Nouvelle recette, sinon, modification d'une recette existante
                 if (recetteIdAModifier == -1)
                 {
                     Recette.AjouterRecette(recette.REC_Nom, recette.Operations);

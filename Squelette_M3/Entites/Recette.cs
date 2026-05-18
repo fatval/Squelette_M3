@@ -18,10 +18,120 @@ namespace Squelette_M3
         public DateTime REC_DateHeureCreation { get; set; }
         public List<Operation> Operations { get; set; } = new List<Operation>();
 
+        // ─── Compter les Lots associés à une Recette ───────────────────────
+        private int CompterLotsAssocies(int idRecette)
+        {
+            try
+            {
+                using (MySqlConnection connection = DBManager.GetConnection())
+                {
+                    connection.Open();
+
+                    string query = "SELECT COUNT(*) FROM lot WHERE Id_Recette = @idRecette";
+
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@idRecette", idRecette);
+                        return Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                }
+            }
+            catch
+            {
+                return 0; // En cas d'erreur, retourner 0
+            }
+        }
+
+        // ─── Supprimer la Recette et ses Lots associés ─────────────────────
+        public void SupprimerRecetteAvecLots(int idRecette)
+        {
+            using (MySqlConnection connection = DBManager.GetConnection())
+            {
+                connection.Open();
+                using (MySqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // 1️⃣ RÉCUPÉRER TOUS LES LOTS LIÉS À CETTE RECETTE
+                        List<int> lotsASupprimer = new List<int>();
+                        string getLotsQuery = "SELECT Id_Lot FROM lot WHERE Id_Recette = @id";
+                        using (MySqlCommand cmd = new MySqlCommand(getLotsQuery, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@id", idRecette);
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    lotsASupprimer.Add(Convert.ToInt32(reader["Id_Lot"]));
+                                }
+                            }
+                        }
+
+                        // 2️⃣ SUPPRIMER LES ÉVÉNEMENTS DE CES LOTS
+                        if (lotsASupprimer.Count > 0)
+                        {
+                            string lotsIn = string.Join(",", lotsASupprimer);
+                            string deleteEvenements = $"DELETE FROM evenement WHERE Id_Lot IN ({lotsIn})";
+                            using (MySqlCommand cmd = new MySqlCommand(deleteEvenements, connection, transaction))
+                            {
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+
+                        // 3️⃣ SUPPRIMER LES LOTS
+                        string deleteLots = "DELETE FROM lot WHERE Id_Recette = @id";//placeholder (@id) pour éviter les injections SQL
+                        using (MySqlCommand cmd = new MySqlCommand(deleteLots, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@id", idRecette);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 4️⃣ SUPPRIMER DANS LA TABLE ASSOCIATIVE Contenir
+                        string deleteContenir = "DELETE FROM Contenir WHERE Id_Recette = @id";
+                        using (MySqlCommand cmd = new MySqlCommand(deleteContenir, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@id", idRecette);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // 5️⃣ SUPPRIMER LA RECETTE
+                        string deleteRecette = "DELETE FROM recette WHERE Id_Recette = @id";
+                        using (MySqlCommand cmd = new MySqlCommand(deleteRecette, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@id", idRecette);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                        MessageBox.Show("✅ Recette et ses lots supprimés avec succès !", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (MySqlException mex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"❌ Erreur SQL : {mex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        MessageBox.Show($"❌ Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+
         // ═══════════════════════════════════════════════════════════
         // 📖 LECTURE
         // ═══════════════════════════════════════════════════════════
 
+        /// <summary>
+        /// Récupère toutes les recettes enregistrées dans la base de données.
+        /// </summary>
+        /// <remarks>Cette méthode ouvre une connexion à la base de données pour lire les données des
+        /// recettes. Elle ne lève pas d'exception si aucune recette n'est présente, mais retourne simplement une liste
+        /// vide.</remarks>
+        /// <returns>Une liste d'objets <see cref="Recette"/> représentant toutes les recettes. La liste est vide si aucune
+        /// recette n'est trouvée.</returns>
         public static List<Recette> GetAll()
         {
             List<Recette> liste = new List<Recette>();
