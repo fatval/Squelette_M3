@@ -27,7 +27,6 @@ namespace Squelette_M3
                 {
                     connection.Open();
 
-                    string query = "SELECT COUNT(*) FROM lot WHERE Id_Recette = @idRecette";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
