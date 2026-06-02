@@ -4,9 +4,15 @@ using System;
 using System.Collections.Generic;
 
 namespace Squelette_M3
+
 {
+
     public class Recette
+
     {
+        //Les requetes SQL utilisées dans la classe Recett
+        const string getNombreDeLotsRequete = "SELECT COUNT(*) FROM lot WHERE Id_Recette = @idRecette";
+        
         public int REC_Id
         {
             get { return Id_Recette; }
@@ -18,7 +24,14 @@ namespace Squelette_M3
         public DateTime REC_DateHeureCreation { get; set; }
         public List<Operation> Operations { get; set; } = new List<Operation>();
 
-        // ─── Compter les Lots associés à une Recette ───────────────────────
+        /// <summary>
+        /// Compte le nombre de lots associés à la recette spécifiée.
+        /// </summary>
+        /// <remarks>Exécute une requête COUNT(*) sur la table « lot » en utilisant une connexion fournie
+        /// par DBManager. Ouvre la connexion et utilise ExecuteScalar ; toute exception est interceptée et entraîne le
+        /// retour de 0.</remarks>
+        /// <param name="idRecette">Identifiant de la recette.</param>
+        /// <returns>Nombre de lots associés à la recette ; retourne 0 en cas d'erreur.</returns>
         private int CompterLotsAssocies(int idRecette)
         {
             try
@@ -27,8 +40,9 @@ namespace Squelette_M3
                 {
                     connection.Open();
 
+                    
 
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    using (MySqlCommand cmd = new MySqlCommand(getNombreDeLotsRequete, connection))
                     {
                         cmd.Parameters.AddWithValue("@idRecette", idRecette);
                         return Convert.ToInt32(cmd.ExecuteScalar());
@@ -41,7 +55,13 @@ namespace Squelette_M3
             }
         }
 
-        // ─── Supprimer la Recette et ses Lots associés ─────────────────────
+        /// <summary>
+        /// Supprime la recette identifiée ainsi que ses lots, les événements liés et les entrées de la table
+        /// associative Contenir, le tout dans une transaction.
+        /// </summary>
+        /// <remarks>Toutes les opérations sont effectuées dans une transaction ; la transaction est
+        /// annulée en cas d'erreur et des messages d'information ou d'erreur sont affichés à l'utilisateur.</remarks>
+        /// <param name="idRecette">Identifiant de la recette à supprimer.</param>
         public void SupprimerRecetteAvecLots(int idRecette)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
@@ -51,7 +71,7 @@ namespace Squelette_M3
                 {
                     try
                     {
-                        // 1️⃣ RÉCUPÉRER TOUS LES LOTS LIÉS À CETTE RECETTE
+                        
                         List<int> lotsASupprimer = new List<int>();
                         string getLotsQuery = "SELECT Id_Lot FROM lot WHERE Id_Recette = @id";
                         using (MySqlCommand cmd = new MySqlCommand(getLotsQuery, connection, transaction))
@@ -66,7 +86,7 @@ namespace Squelette_M3
                             }
                         }
 
-                        // 2️⃣ SUPPRIMER LES ÉVÉNEMENTS DE CES LOTS
+                        // si aucun lot n'est associé, on peut directement supprimer la recette sans se soucier des événements
                         if (lotsASupprimer.Count > 0)
                         {
                             string lotsIn = string.Join(",", lotsASupprimer);
@@ -77,7 +97,7 @@ namespace Squelette_M3
                             }
                         }
 
-                        // 3️⃣ SUPPRIMER LES LOTS
+                        // 3️PRIMER LES LOTS
                         string deleteLots = "DELETE FROM lot WHERE Id_Recette = @id";//placeholder (@id) pour éviter les injections SQL
                         using (MySqlCommand cmd = new MySqlCommand(deleteLots, connection, transaction))
                         {
@@ -85,7 +105,7 @@ namespace Squelette_M3
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 4️⃣ SUPPRIMER DANS LA TABLE ASSOCIATIVE Contenir
+                        // SUPPRIMER DANS LA TABLE ASSOCIATIVE Contenir
                         string deleteContenir = "DELETE FROM Contenir WHERE Id_Recette = @id";
                         using (MySqlCommand cmd = new MySqlCommand(deleteContenir, connection, transaction))
                         {
@@ -93,7 +113,7 @@ namespace Squelette_M3
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 5️⃣ SUPPRIMER LA RECETTE
+                        // SUPPRIMER LA RECETTE
                         string deleteRecette = "DELETE FROM recette WHERE Id_Recette = @id";
                         using (MySqlCommand cmd = new MySqlCommand(deleteRecette, connection, transaction))
                         {
@@ -104,24 +124,20 @@ namespace Squelette_M3
                         transaction.Commit();
                         MessageBox.Show("✅ Recette et ses lots supprimés avec succès !", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    catch (MySqlException mex)
+                    catch (MySqlException exceptionSql)
                     {
                         transaction.Rollback();
-                        MessageBox.Show($"❌ Erreur SQL : {mex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"❌ Erreur SQL : {exceptionSql.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    catch (Exception ex)
+                    catch (Exception exception)
                     {
                         transaction.Rollback();
-                        MessageBox.Show($"❌ Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"❌ Erreur : {exception.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
         }
 
-
-        // ═══════════════════════════════════════════════════════════
-        // 📖 LECTURE
-        // ═══════════════════════════════════════════════════════════
 
         /// <summary>
         /// Récupère toutes les recettes enregistrées dans la base de données.
@@ -135,12 +151,12 @@ namespace Squelette_M3
         {
             List<Recette> liste = new List<Recette>();
 
-            using (MySqlConnection connection = DBManager.GetConnection())
+            
             {
-                connection.Open();
+                DBManager.GetConnection().Open();
                 string query = "SELECT Id_Recette, REC_Nom, REC_DateHeureCreation FROM recette";
 
-                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                using (MySqlCommand cmd = new MySqlCommand(query, DBManager.GetConnection()))
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -156,7 +172,11 @@ namespace Squelette_M3
             }
             return liste;
         }
-
+        /// <summary>
+        /// Récupère une recette spécifique à partir de son identifiant.
+        /// </summary>
+        /// <param name="id">L'identifiant de la recette à récupérer.</param>
+        /// <returns>L'objet <see cref="Recette"/> représentant la recette trouvée, ou <c>null</c> si aucune recette n'est trouvée.</returns>
         public static Recette GetById(int id)
         {
             Recette recette = null;
@@ -216,10 +236,13 @@ namespace Squelette_M3
             return recette;
         }
 
-        // ═══════════════════════════════════════════════════════════
-        // ✏️ CRÉATION
-        // ═══════════════════════════════════════════════════════════
-
+        /// <summary>
+        /// Récupère les recettes dont le nom correspond à une recherche partielle.
+        /// </summary>
+        /// <param name="nom">Le nom de la recette à rechercher.</param>
+        /// <param name="operations">La liste des opérations associées à la recette.</param>
+        /// <returns>L'identifiant de la recette créée.</returns>
+        /// <exception cref="Exception"></exception>
         public static int AjouterRecette(string nom, List<Operation> operations)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
@@ -229,7 +252,7 @@ namespace Squelette_M3
                 {
                     try
                     {
-                        // 1️⃣ Insérer la recette
+                        // Insérer la recette
                         string query = "INSERT INTO recette (REC_Nom, REC_DateHeureCreation) VALUES (@nom, @date)";
                         int newId;
                         using (MySqlCommand cmd = new MySqlCommand(query, connection, transaction))
@@ -240,7 +263,7 @@ namespace Squelette_M3
                             newId = (int)cmd.LastInsertedId;
                         }
 
-                        // 2️⃣ Insérer les opérations
+                        // insérer les opérations
                         foreach (var op in operations)
                         {
                             string insertOp = @"INSERT INTO operation 
@@ -274,10 +297,14 @@ namespace Squelette_M3
         }
 
 
-        // ═══════════════════════════════════════════════════════════
-        // ✏️ MODIFICATION
-        // ═══════════════════════════════════════════════════════════
 
+        /// <summary>
+        /// Met à jour une recette et ses opérations associées.
+        /// </summary>
+        /// <param name="idRecette">L'identifiant de la recette à modifier.</param>
+        /// <param name="nouveauNom">Le nouveau nom de la recette.</param>
+        /// <param name="operations">La liste des opérations associées à la recette.</param>
+        /// <exception cref="Exception"></exception>
         public static void ModifierRecette(int idRecette, string nouveauNom, List<Operation> operations)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
@@ -287,7 +314,7 @@ namespace Squelette_M3
                 {
                     try
                     {
-                        // 1️⃣ Modifier le nom de la recette
+                        
                         string updateRecette = "UPDATE recette SET REC_Nom = @nom WHERE Id_Recette = @id";
                         using (MySqlCommand cmd = new MySqlCommand(updateRecette, connection, transaction))
                         {
@@ -296,7 +323,7 @@ namespace Squelette_M3
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 2️⃣ Supprimer les anciennes opérations
+                        
                         string deleteOps = "DELETE FROM operation WHERE Id_Recette = @id";
                         using (MySqlCommand cmd = new MySqlCommand(deleteOps, connection, transaction))
                         {
@@ -304,7 +331,7 @@ namespace Squelette_M3
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 3️⃣ Réinsérer les opérations
+                        // Réinsérer les opérations mises à jour
                         foreach (var op in operations)
                         {
                             string insertOp = @"INSERT INTO operation 
@@ -341,10 +368,11 @@ namespace Squelette_M3
             }
         }
 
-        // ═══════════════════════════════════════════════════════════
-        // 🗑️ SUPPRESSION
-        // ═══════════════════════════════════════════════════════════
-
+        /// <summary>
+        /// Supprime une recette et toutes ses opérations associées.
+        /// </summary>
+        /// <param name="idRecette">L'identifiant de la recette à supprimer.</param>
+        /// <exception cref="Exception"></exception>
         public static void SupprimerRecette(int idRecette)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
