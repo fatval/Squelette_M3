@@ -15,6 +15,7 @@ namespace M3
         public FormCreerRecette()
         {
             InitializeComponent();
+            dgvOperations.DataError += (s, e) => { e.Cancel = true; };
         }
 
         // ─── CONSTRUCTEUR : Modifier une recette existante ─────────
@@ -29,6 +30,7 @@ namespace M3
             operationsEnCours = new List<Operation>(recetteAModifier.Operations);
             RafraichirGrille();
         }
+
 
         /// <summary>
         /// Met à jour le contenu de la grille d'opérations pour refléter l'état actuel de la liste des opérations en
@@ -45,7 +47,7 @@ namespace M3
             {
                 int rowIndex = dgvOperations.Rows.Add();
                 dgvOperations.Rows[rowIndex].Cells["colOrdre"].Value = op.OPE_Ordre;
-                dgvOperations.Rows[rowIndex].Cells["colPosition"].Value = op.OPE_PositionMoteur;
+                dgvOperations.Rows[rowIndex].Cells["colPosition"].Value = op.OPE_PositionMoteur.ToString();
                 dgvOperations.Rows[rowIndex].Cells["colTempsArret"].Value = op.OPE_TempsAttente;
                 dgvOperations.Rows[rowIndex].Cells["colQuittance"].Value = op.OPE_Quittance;
             }
@@ -55,7 +57,7 @@ namespace M3
         private void btnAjouterOp_Click(object sender, EventArgs e)
         {
             try
-            {
+            {//Limite à 10 opérations
                 if (operationsEnCours.Count >= 10)
                 {
                     MessageBox.Show("❌ Maximum 10 opérations atteint !",
@@ -142,7 +144,7 @@ namespace M3
 
                     operationsEnCours.Add(new Operation
                     {
-                        OPE_Ordre = i++,
+                        OPE_Ordre = i + 1, //ne pas utiliser i++ sinon ça saute la ligne 1
                         OPE_PositionMoteur = positionMoteur,
                         OPE_TempsAttente = tempsAttente,
                         OPE_Quittance = quittance
@@ -169,16 +171,16 @@ namespace M3
                 {
                     MessageBox.Show("❌ Le nom de la recette ne peut pas être vide !",
                         "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    return;//Sortir de la fonction en cas d'erreur
                 }
-                //Gestion de l'erreur 
-                if (!SynchroniserDepuisGrille()) return;
 
+                if (!SynchroniserDepuisGrille()) return;
+                //Gestion d'erreur : 
                 if (operationsEnCours.Count == 0)
                 {
                     MessageBox.Show("❌ Vous devez ajouter au moins une opération !",
                         "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
+                    return;//Sortir de la fonction en cas d'erreur
                 }
 
                 Recette recette = new Recette
@@ -211,5 +213,6 @@ namespace M3
                     "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
 }

@@ -57,7 +57,7 @@
             this.lblTitre.AutoSize = true;
             this.lblTitre.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
             this.lblTitre.ForeColor = System.Drawing.Color.White;
-            this.lblTitre.Location = new System.Drawing.Point(15, 18);  // ✅ CHANGÉ : 50 → 15
+            this.lblTitre.Location = new System.Drawing.Point(60, 18);  // ✅ CHANGÉ : 50 → 15
             this.lblTitre.Name = "lblTitre";
             this.lblTitre.Size = new System.Drawing.Size(280, 37);
             this.lblTitre.TabIndex = 2;
