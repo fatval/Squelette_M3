@@ -1,8 +1,8 @@
 ﻿using M3;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;   
 
 namespace Squelette_M3
 {
@@ -137,37 +137,12 @@ namespace Squelette_M3
                 if (confirm == DialogResult.Yes)
                 {
                     SupprimerRecetteAvecLots(idRecette);
-                    MessageBox.Show("Recette et ses lots supprimés avec succès !");
                     ChargerRecettesDGV();
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // ─── Compter les Lots associés à une Recette ───────────────────────
-        private int CompterLotsAssocies(int idRecette)
-        {
-            try
-            {
-                using (MySqlConnection connection = DBManager.GetConnection())
-                {
-                    connection.Open();
-
-                    string query = "SELECT COUNT(*) FROM lot WHERE Id_Recette = @idRecette";
-
-                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
-                    {
-                        cmd.Parameters.AddWithValue("@idRecette", idRecette);
-                        return Convert.ToInt32(cmd.ExecuteScalar());
-                    }
-                }
-            }
-            catch
-            {
-                return 0; // En cas d'erreur, retourner 0
             }
         }
 
