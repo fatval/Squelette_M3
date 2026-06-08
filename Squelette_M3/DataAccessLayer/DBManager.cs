@@ -32,13 +32,18 @@ public static class DBManager
     {
         return new MySqlConnection(_connectionString);
     }
+
     /// <summary>
-    /// Essaie de tester la connexion à la base de données. 
-    /// Retourne true si la connexion est réussie, false sinon.
+    /// Teste la connexion à la base de données MySQL en ouvrant une connexion à partir de la chaîne de connexion
+    /// configurée.
     /// </summary>
-    /// <returns></returns>
+    /// <remarks>Les exceptions sont interceptées et non propagées; la méthode renvoie false en cas d'erreur
+    /// ou si la chaîne de connexion est vide.</remarks>
+    /// <returns>true si la connexion a été établie avec succès; false si la chaîne de connexion est nulle ou vide, ou en cas
+    /// d'erreur.</returns>
     public static bool TestConnexion()
     {
+        
         try
         {
             if (string.IsNullOrEmpty(_connectionString)) return false;

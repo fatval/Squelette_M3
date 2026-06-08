@@ -24,21 +24,6 @@ namespace Squelette_M3
         public DateTime REC_DateHeureCreation { get; set; }
         public List<Operation> Operations { get; set; } = new List<Operation>();
 
-        /// <summary>
-        /// Compte le nombre de lots associés à la recette spécifiée.
-        /// </summary>
-        /// <remarks>Exécute une requête COUNT(*) sur la table « lot » en utilisant une connexion fournie
-        /// par DBManager. Ouvre la connexion et utilise ExecuteScalar ; toute exception est interceptée et entraîne le
-        /// retour de 0.</remarks>
-        /// <param name="idRecette">Identifiant de la recette.</param>
-        /// <returns>Nombre de lots associés à la recette ; retourne 0 en cas d'erreur.</returns>
-        private int CompterLotsAssocies(int idRecette)
-        {
-            try
-            {
-                using (MySqlConnection connection = DBManager.GetConnection())
-                {
-                    connection.Open();
 
                     
 
@@ -62,6 +47,8 @@ namespace Squelette_M3
         /// <remarks>Toutes les opérations sont effectuées dans une transaction ; la transaction est
         /// annulée en cas d'erreur et des messages d'information ou d'erreur sont affichés à l'utilisateur.</remarks>
         /// <param name="idRecette">Identifiant de la recette à supprimer.</param>
+
+        // ─── Supprimer la Recette et ses Lots associés ─────────────────────
         public void SupprimerRecetteAvecLots(int idRecette)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
@@ -264,23 +251,39 @@ namespace Squelette_M3
                         }
 
                         // insérer les opérations
+                        // 2️⃣ Insérer les opérations et les lier à la recette
                         foreach (var op in operations)
                         {
+                            // ÉTAPE A : Insérer l'opération (id auto incrémenté par MySQL)
                             string insertOp = @"INSERT INTO operation 
-                        (Id_Recette, OPE_Ordre, OPE_Nom, OPE_PositionMoteur, OPE_TempsAttente, OPE_CycleVerin, OPE_Quittance, OPE_SensMoteur) 
-                        VALUES (@idRecette, @ordre, @nom, @position, @temps, @verin, @quittance, @sens)";
+    (OPE_Nom, OPE_PositionMoteur, OPE_TempsAttente, OPE_CycleVerin, OPE_Quittance, OPE_SensMoteur) 
+    VALUES (@nom, @position, @temps, @verin, @quittance, @sens)";
+
+                            int newOpId; // Pour stocker le nouvel ID de l'opération
 
                             using (MySqlCommand cmd = new MySqlCommand(insertOp, connection, transaction))
                             {
-                                cmd.Parameters.AddWithValue("@idRecette", newId);
-                                cmd.Parameters.AddWithValue("@ordre", op.OPE_Ordre);
                                 cmd.Parameters.AddWithValue("@nom", op.OPE_Nom);
                                 cmd.Parameters.AddWithValue("@position", op.OPE_PositionMoteur);
                                 cmd.Parameters.AddWithValue("@temps", op.OPE_TempsAttente);
                                 cmd.Parameters.AddWithValue("@verin", op.OPE_CycleVerin);
                                 cmd.Parameters.AddWithValue("@quittance", op.OPE_Quittance);
                                 cmd.Parameters.AddWithValue("@sens", op.OPE_SensMoteur);
+
                                 cmd.ExecuteNonQuery();
+
+                                // On récupère l'ID de l'opération qui vient d'être crée
+                                newOpId = (int)cmd.LastInsertedId;
+                            }
+
+                            // ÉTAPE B : Insérer le lien dans la table associative
+                            string insertLien = "INSERT INTO contenir (Id_Recette, Id_Operation_est_contenu_dans) VALUES (@idRecette, @idOperation)";
+
+                            using (MySqlCommand cmdLien = new MySqlCommand(insertLien, connection, transaction))
+                            {
+                                cmdLien.Parameters.AddWithValue("@idRecette", newId); // L'ID de la recette (créée en 1️)
+                                cmdLien.Parameters.AddWithValue("@idOperation", newOpId); // L'ID de l'opération (créée à l'étape A)
+                                cmdLien.ExecuteNonQuery();
                             }
                         }
 
@@ -382,7 +385,7 @@ namespace Squelette_M3
                 {
                     try
                     {
-                        // 1️⃣ Supprimer les événements associés aux lots
+                        // 1️ Supprimer les événements associés aux lots
                         string deleteEvenements = @"DELETE FROM evenement 
                             WHERE Id_Lot IN (SELECT Id_Lot FROM lot WHERE Id_Recette = @id)";
                         using (MySqlCommand cmd = new MySqlCommand(deleteEvenements, connection, transaction))
@@ -391,7 +394,7 @@ namespace Squelette_M3
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 2️⃣ Supprimer les lots
+                        // 2️ Supprimer les lots
                         string deleteLots = "DELETE FROM lot WHERE Id_Recette = @id";
                         using (MySqlCommand cmd = new MySqlCommand(deleteLots, connection, transaction))
                         {
