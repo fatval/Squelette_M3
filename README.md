@@ -242,36 +242,6 @@ DBManager.ConnectToDB("nomBaseDonnees", "nomUtilisateur", "motDePasse");
 ```
 
 ---
-
-## 📝 À FAIRE - Priorités (25.05.2026)
-
-### Pour **Valentin** 👨‍💼
-- [ ] **Logique:** Établir un schéma des différentes fonctions nécessaires dans l'UI
-- [ ] **Formulaires:** Créer une branche `"débugger le Form création de recette"`
-      - Tester la validation du formulaire
-      - Vérifier la gestion des erreurs
-      - Optimiser l'expérience utilisateur
-
-### Pour **Noé** 👨‍💻
-#### Refactorisation du Code
-- [ ] **Logique:** Proposer une nouvelle branche pour séparer le code métier et la logique SQL
-  - **Problème actuel:** Logique SQL mélangée avec l'UI (UserControl)
-  - **Solution:** Créer des méthodes statiques dans la couche `DataAccessLayer`
-  - **Exemple à refactoriser:**
-    ```csharp
-    // MAUVAIS - SQL dans l'UI
-    private void ChargerLots()
-    {
-        using (MySqlConnection connection = DBManager.GetConnection()) { ... }
-    }
-    
-    // BON - SQL dans DataAccessLayer
-    public static List<Lot> GetAllLots()
-    {
-        // Logique SQL ici
-    }
-    ```
-
 #### Nettoyage du Code
 - [ ] **Fonctions:** Éviter les répétitions
   - Extraire les patterns communes
