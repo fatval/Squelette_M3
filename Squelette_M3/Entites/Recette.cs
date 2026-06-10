@@ -105,7 +105,7 @@ namespace Squelette_M3
                     catch (MySqlException mex)
                     {
                         transaction.Rollback();
-                        MessageBox.Show($"❌ Erreur SQL : {exceptionSql.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"❌ Erreur SQL : {mex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                         catch (Exception ex)
                         {
@@ -137,8 +137,8 @@ namespace Squelette_M3
         public static List<Recette> GetAll()
         {
             List<Recette> liste = new List<Recette>();
+            using (MySqlConnection connection = DBManager.GetConnection())
 
-            
             {
                 connection.OpenIfNot();
 
