@@ -14,9 +14,7 @@ namespace Squelette_M3
             ChargerRecettesDGV();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+
         private void ChargerRecettesDGV()
         {
             try
@@ -112,7 +110,11 @@ namespace Squelette_M3
         }
 
 
-       
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="sender"></param>
+       /// <param name="e"></param>
         private void btnSupprimer_Click(object sender, EventArgs e)
         {
             try
