@@ -1,9 +1,17 @@
 ﻿using MySql.Data.MySqlClient;
+using System.Drawing.Text;
 
 public static class DBManager
 {
-    static private string _connectionString;
-
+    static private string _connectionString; 
+    /// <summary>
+    /// Configure la connexion à la base de données. Doit être appelé avant tout autre méthode.
+    /// Le format de la chaîne de connexion est : "server=localhost;database=nomDB;user=nomUser;password=mot
+    /// Le port est fixé à 3306 par défaut, mais peut être modifié si nécessaire.
+    /// </summary>
+    /// <param name="databaseName">Nom de la base de données</param>
+    /// <param name="userName">Nom d'utilisateur pour la connexion</param>
+    /// <param name="password">Mot de passe pour la connexion</param>
     public static void ConnectToDB(string databaseName, string userName, string password)
     {
         _connectionString = $"server=localhost;database={databaseName};user={userName};password={password};port=3306";
@@ -15,7 +23,11 @@ public static class DBManager
         }
     }
 
-    // Retourne TOUJOURS une nouvelle connexion fraîche
+    /// <summary>
+    /// Configure la connexion à la base de données en utilisant une chaîne de connexion complète.
+    /// Doit être appelé avant tout autre méthode.
+    /// </summary>
+    /// <returns></returns>
     public static MySqlConnection GetConnection()
     {
         return new MySqlConnection(_connectionString);
@@ -42,7 +54,7 @@ public static class DBManager
                 return true;
             }
         }
-        catch
+        catch 
         {
             return false;
         }
