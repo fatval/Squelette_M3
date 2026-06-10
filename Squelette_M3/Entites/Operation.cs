@@ -1,6 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-
-namespace M3.Models
+﻿namespace M3.Models
 {
     public class Operation
     {
