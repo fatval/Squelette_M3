@@ -18,12 +18,9 @@ namespace M3
 
         private void InitializeComponent()
         {
-<<<<<<< HEAD
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-=======
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCreerRecette));
->>>>>>> a799a05ab1e8e3ebef2af8db350d44285257f8a5
             lblTitre = new Label();
             lblNomRecette = new Label();
             txtNomRecette = new TextBox();
@@ -91,7 +88,6 @@ namespace M3
             dgvOperations.AllowUserToResizeRows = false;
             dgvOperations.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvOperations.BackgroundColor = Color.White;
-<<<<<<< HEAD
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Control;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -100,7 +96,6 @@ namespace M3
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
             dgvOperations.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-=======
             dgvOperations.BorderStyle = BorderStyle.Fixed3D;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = SystemColors.Control;
@@ -110,7 +105,6 @@ namespace M3
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dgvOperations.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
->>>>>>> a799a05ab1e8e3ebef2af8db350d44285257f8a5
             dgvOperations.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvOperations.Columns.AddRange(new DataGridViewColumn[] { colPosition, colTempsArret, colQuittance });
             dgvOperations.Font = new Font("Segoe UI", 9F);
@@ -132,10 +126,7 @@ namespace M3
             colPosition.Items.AddRange(new object[] { "12", "3", "6", "9" });
             colPosition.MinimumWidth = 10;
             colPosition.Name = "colPosition";
-<<<<<<< HEAD
             colPosition.Width = 150;
-=======
->>>>>>> a799a05ab1e8e3ebef2af8db350d44285257f8a5
             // 
             // colTempsArret
             // 
@@ -143,21 +134,15 @@ namespace M3
             colTempsArret.HeaderText = "Temps d'arrêt (s)";
             colTempsArret.MinimumWidth = 10;
             colTempsArret.Name = "colTempsArret";
-<<<<<<< HEAD
             colTempsArret.Width = 104;
-=======
             colTempsArret.Width = 205;
->>>>>>> a799a05ab1e8e3ebef2af8db350d44285257f8a5
             // 
             // colQuittance
             // 
             colQuittance.HeaderText = "Quittance manuelle";
             colQuittance.MinimumWidth = 10;
             colQuittance.Name = "colQuittance";
-<<<<<<< HEAD
             colQuittance.Width = 150;
-=======
->>>>>>> a799a05ab1e8e3ebef2af8db350d44285257f8a5
             // 
             // btnAjouterOperation
             // 
