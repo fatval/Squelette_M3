@@ -13,290 +13,294 @@
 
         private void InitializeComponent()
         {
-            this.panelHeader = new System.Windows.Forms.Panel();
-            this.picIcon = new System.Windows.Forms.PictureBox();
-            this.lblTitre = new System.Windows.Forms.Label();
-            this.panelSeparator = new System.Windows.Forms.Panel();
-
-            this.panelCreation = new System.Windows.Forms.Panel();
-            this.lblCreation = new System.Windows.Forms.Label();
-            this.lblNomLot = new System.Windows.Forms.Label();
-            this.txtNomLot = new System.Windows.Forms.TextBox();
-            this.lblRecette = new System.Windows.Forms.Label();
-            this.cmbRecettes = new System.Windows.Forms.ComboBox();
-            this.lblQuantite = new System.Windows.Forms.Label();
-            this.nudQuantite = new System.Windows.Forms.NumericUpDown();
-            this.btnCreerLot = new System.Windows.Forms.Button();
-            this.panelSeparator2 = new System.Windows.Forms.Panel();
-
-            this.dgvLots = new System.Windows.Forms.DataGridView();
-            this.colId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNom = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colQuantite = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colRecette = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colEtat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-
-            this.lblResultats = new System.Windows.Forms.Label();
-
-            ((System.ComponentModel.ISupportInitialize)this.picIcon).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)this.nudQuantite).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)this.dgvLots).BeginInit();
-            this.SuspendLayout();
-
-            // ─── PANEL HEADER ─────────────────────────────────────────────
-            this.panelHeader.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            this.panelHeader.Controls.Add(this.picIcon);
-            this.panelHeader.Controls.Add(this.lblTitre);
-            this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelHeader.Location = new System.Drawing.Point(0, 0);
-            this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(1000, 70);
-            this.panelHeader.TabIndex = 0;
-
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            panelHeader = new Panel();
+            picIcon = new PictureBox();
+            lblTitre = new Label();
+            panelSeparator = new Panel();
+            panelCreation = new Panel();
+            lblNomLot = new Label();
+            txtNomLot = new TextBox();
+            lblRecette = new Label();
+            cmbRecettes = new ComboBox();
+            lblQuantite = new Label();
+            nudQuantite = new NumericUpDown();
+            btnCreerLot = new Button();
+            panelSeparator2 = new Panel();
+            dgvLots = new DataGridView();
+            colId = new DataGridViewTextBoxColumn();
+            colNom = new DataGridViewTextBoxColumn();
+            colQuantite = new DataGridViewTextBoxColumn();
+            colRecette = new DataGridViewTextBoxColumn();
+            colDate = new DataGridViewTextBoxColumn();
+            colEtat = new DataGridViewTextBoxColumn();
+            lblResultats = new Label();
+            panelHeader.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picIcon).BeginInit();
+            panelCreation.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudQuantite).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvLots).BeginInit();
+            SuspendLayout();
+            // 
+            // panelHeader
+            // 
+            panelHeader.BackColor = Color.FromArgb(41, 128, 185);
+            panelHeader.Controls.Add(picIcon);
+            panelHeader.Controls.Add(lblTitre);
+            panelHeader.Dock = DockStyle.Top;
+            panelHeader.Location = new Point(0, 0);
+            panelHeader.Name = "panelHeader";
+            panelHeader.Size = new Size(1000, 70);
+            panelHeader.TabIndex = 0;
+            // 
             // picIcon
-            this.picIcon.Location = new System.Drawing.Point(15, 17);
-            this.picIcon.Name = "picIcon";
-            this.picIcon.Size = new System.Drawing.Size(36, 36);
-            this.picIcon.TabIndex = 1;
-            this.picIcon.TabStop = false;
-
+            // 
+            picIcon.Location = new Point(15, 17);
+            picIcon.Name = "picIcon";
+            picIcon.Size = new Size(36, 36);
+            picIcon.TabIndex = 1;
+            picIcon.TabStop = false;
+            // 
             // lblTitre
-            this.lblTitre.AutoSize = true;
-            this.lblTitre.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
-            this.lblTitre.ForeColor = System.Drawing.Color.White;
-            this.lblTitre.Location = new System.Drawing.Point(60, 18);
-            this.lblTitre.Name = "lblTitre";
-            this.lblTitre.Size = new System.Drawing.Size(230, 37);
-            this.lblTitre.TabIndex = 2;
-            this.lblTitre.Text = "📦 Gestion des Lots";
-
-            // ─── PANEL SEPARATOR 1 ────────────────────────────────────────
-            this.panelSeparator.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            this.panelSeparator.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeparator.Height = 3;
-            this.panelSeparator.Location = new System.Drawing.Point(0, 70);
-            this.panelSeparator.Name = "panelSeparator";
-            this.panelSeparator.TabIndex = 1;
-
-            // ─── PANEL CREATION ────────────────────────────────────────────
-            this.panelCreation.BackColor = System.Drawing.Color.White;
-            this.panelCreation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelCreation.Controls.Add(this.lblCreation);
-            this.panelCreation.Controls.Add(this.lblNomLot);
-            this.panelCreation.Controls.Add(this.txtNomLot);
-            this.panelCreation.Controls.Add(this.lblRecette);
-            this.panelCreation.Controls.Add(this.cmbRecettes);
-            this.panelCreation.Controls.Add(this.lblQuantite);
-            this.panelCreation.Controls.Add(this.nudQuantite);
-            this.panelCreation.Controls.Add(this.btnCreerLot);
-            this.panelCreation.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelCreation.Location = new System.Drawing.Point(0, 73);
-            this.panelCreation.Name = "panelCreation";
-            this.panelCreation.Padding = new System.Windows.Forms.Padding(20);
-            this.panelCreation.Size = new System.Drawing.Size(1000, 150);
-            this.panelCreation.TabIndex = 2;
-
-            // lblCreation
-            this.lblCreation.AutoSize = true;
-            this.lblCreation.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblCreation.ForeColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            this.lblCreation.Location = new System.Drawing.Point(20, 8);
-            this.lblCreation.Name = "lblCreation";
-            this.lblCreation.Size = new System.Drawing.Size(170, 20);
-            this.lblCreation.TabIndex = 0;
-            this.lblCreation.Text = "➕ Créer un nouveau lot";
-
+            // 
+            lblTitre.AutoSize = true;
+            lblTitre.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            lblTitre.ForeColor = Color.White;
+            lblTitre.Location = new Point(60, 18);
+            lblTitre.Name = "lblTitre";
+            lblTitre.Size = new Size(272, 37);
+            lblTitre.TabIndex = 2;
+            lblTitre.Text = "📦 Gestion des Lots";
+            // 
+            // panelSeparator
+            // 
+            panelSeparator.BackColor = Color.FromArgb(41, 128, 185);
+            panelSeparator.Dock = DockStyle.Top;
+            panelSeparator.Location = new Point(0, 70);
+            panelSeparator.Name = "panelSeparator";
+            panelSeparator.Size = new Size(1000, 3);
+            panelSeparator.TabIndex = 1;
+            // 
+            // panelCreation
+            // 
+            panelCreation.BackColor = Color.White;
+            panelCreation.BorderStyle = BorderStyle.FixedSingle;
+            panelCreation.Controls.Add(lblNomLot);
+            panelCreation.Controls.Add(txtNomLot);
+            panelCreation.Controls.Add(lblRecette);
+            panelCreation.Controls.Add(cmbRecettes);
+            panelCreation.Controls.Add(lblQuantite);
+            panelCreation.Controls.Add(nudQuantite);
+            panelCreation.Controls.Add(btnCreerLot);
+            panelCreation.Dock = DockStyle.Top;
+            panelCreation.Location = new Point(0, 73);
+            panelCreation.Name = "panelCreation";
+            panelCreation.Padding = new Padding(20);
+            panelCreation.Size = new Size(1000, 150);
+            panelCreation.TabIndex = 2;
+            // 
             // lblNomLot
-            this.lblNomLot.AutoSize = true;
-            this.lblNomLot.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblNomLot.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
-            this.lblNomLot.Location = new System.Drawing.Point(20, 40);
-            this.lblNomLot.Name = "lblNomLot";
-            this.lblNomLot.Size = new System.Drawing.Size(75, 15);
-            this.lblNomLot.TabIndex = 1;
-            this.lblNomLot.Text = "Nom du lot :";
-
+            // 
+            lblNomLot.AutoSize = true;
+            lblNomLot.Font = new Font("Segoe UI", 9F);
+            lblNomLot.ForeColor = Color.FromArgb(52, 73, 94);
+            lblNomLot.Location = new Point(14, 42);
+            lblNomLot.Name = "lblNomLot";
+            lblNomLot.Size = new Size(74, 15);
+            lblNomLot.TabIndex = 1;
+            lblNomLot.Text = "Nom du lot :";
+            // 
             // txtNomLot
-            this.txtNomLot.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtNomLot.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtNomLot.Location = new System.Drawing.Point(120, 37);
-            this.txtNomLot.Name = "txtNomLot";
-            this.txtNomLot.Size = new System.Drawing.Size(200, 23);
-            this.txtNomLot.TabIndex = 2;
-
+            // 
+            txtNomLot.BorderStyle = BorderStyle.FixedSingle;
+            txtNomLot.Font = new Font("Segoe UI", 9F);
+            txtNomLot.Location = new Point(94, 37);
+            txtNomLot.Name = "txtNomLot";
+            txtNomLot.Size = new Size(200, 23);
+            txtNomLot.TabIndex = 2;
+            // 
             // lblRecette
-            this.lblRecette.AutoSize = true;
-            this.lblRecette.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblRecette.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
-            this.lblRecette.Location = new System.Drawing.Point(340, 40);
-            this.lblRecette.Name = "lblRecette";
-            this.lblRecette.Size = new System.Drawing.Size(60, 15);
-            this.lblRecette.TabIndex = 3;
-            this.lblRecette.Text = "Recette :";
-
+            // 
+            lblRecette.AutoSize = true;
+            lblRecette.Font = new Font("Segoe UI", 9F);
+            lblRecette.ForeColor = Color.FromArgb(52, 73, 94);
+            lblRecette.Location = new Point(324, 42);
+            lblRecette.Name = "lblRecette";
+            lblRecette.Size = new Size(52, 15);
+            lblRecette.TabIndex = 3;
+            lblRecette.Text = "Recette :";
+            // 
             // cmbRecettes
-            this.cmbRecettes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbRecettes.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.cmbRecettes.FormattingEnabled = true;
-            this.cmbRecettes.Location = new System.Drawing.Point(420, 37);
-            this.cmbRecettes.Name = "cmbRecettes";
-            this.cmbRecettes.Size = new System.Drawing.Size(200, 23);
-            this.cmbRecettes.TabIndex = 4;
-
+            // 
+            cmbRecettes.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbRecettes.Font = new Font("Segoe UI", 9F);
+            cmbRecettes.FormattingEnabled = true;
+            cmbRecettes.Location = new Point(384, 37);
+            cmbRecettes.Name = "cmbRecettes";
+            cmbRecettes.Size = new Size(200, 23);
+            cmbRecettes.TabIndex = 4;
+            // 
             // lblQuantite
-            this.lblQuantite.AutoSize = true;
-            this.lblQuantite.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblQuantite.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
-            this.lblQuantite.Location = new System.Drawing.Point(640, 40);
-            this.lblQuantite.Name = "lblQuantite";
-            this.lblQuantite.Size = new System.Drawing.Size(68, 15);
-            this.lblQuantite.TabIndex = 5;
-            this.lblQuantite.Text = "Quantité :";
-
+            // 
+            lblQuantite.AutoSize = true;
+            lblQuantite.Font = new Font("Segoe UI", 9F);
+            lblQuantite.ForeColor = Color.FromArgb(52, 73, 94);
+            lblQuantite.Location = new Point(613, 41);
+            lblQuantite.Name = "lblQuantite";
+            lblQuantite.Size = new Size(59, 15);
+            lblQuantite.TabIndex = 5;
+            lblQuantite.Text = "Quantité :";
+            // 
             // nudQuantite
-            this.nudQuantite.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.nudQuantite.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.nudQuantite.Location = new System.Drawing.Point(720, 37);
-            this.nudQuantite.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            this.nudQuantite.Name = "nudQuantite";
-            this.nudQuantite.Size = new System.Drawing.Size(100, 23);
-            this.nudQuantite.TabIndex = 6;
-            this.nudQuantite.Value = new decimal(new int[] { 1, 0, 0, 0 });
-
+            // 
+            nudQuantite.BorderStyle = BorderStyle.FixedSingle;
+            nudQuantite.Font = new Font("Segoe UI", 9F);
+            nudQuantite.Location = new Point(673, 37);
+            nudQuantite.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            nudQuantite.Name = "nudQuantite";
+            nudQuantite.Size = new Size(100, 23);
+            nudQuantite.TabIndex = 6;
+            nudQuantite.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
             // btnCreerLot
-            this.btnCreerLot.BackColor = System.Drawing.Color.FromArgb(46, 204, 113);
-            this.btnCreerLot.FlatAppearance.BorderSize = 0;
-            this.btnCreerLot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCreerLot.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnCreerLot.ForeColor = System.Drawing.Color.White;
-            this.btnCreerLot.Location = new System.Drawing.Point(850, 37);
-            this.btnCreerLot.Name = "btnCreerLot";
-            this.btnCreerLot.Size = new System.Drawing.Size(120, 35);
-            this.btnCreerLot.TabIndex = 7;
-            this.btnCreerLot.Text = "✓ Créer";
-            this.btnCreerLot.UseVisualStyleBackColor = false;
-            this.btnCreerLot.Click += new System.EventHandler(this.btnCreerLot_Click);
-
-            // Effet Hover
-            this.btnCreerLot.MouseEnter += (s, e) => this.btnCreerLot.BackColor = System.Drawing.Color.FromArgb(39, 174, 96);
-            this.btnCreerLot.MouseLeave += (s, e) => this.btnCreerLot.BackColor = System.Drawing.Color.FromArgb(46, 204, 113);
-
-            // ─── PANEL SEPARATOR 2 ────────────────────────────────────────
-            this.panelSeparator2.BackColor = System.Drawing.Color.FromArgb(189, 195, 199);
-            this.panelSeparator2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeparator2.Height = 1;
-            this.panelSeparator2.Location = new System.Drawing.Point(0, 223);
-            this.panelSeparator2.Name = "panelSeparator2";
-            this.panelSeparator2.TabIndex = 3;
-
-            // ─── DATAGRIDVIEW LOTS ────────────────────────────────────────
-            this.dgvLots.AllowUserToAddRows = false;
-            this.dgvLots.AllowUserToDeleteRows = false;
-            this.dgvLots.BackgroundColor = System.Drawing.Color.FromArgb(236, 240, 241);
-            this.dgvLots.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvLots.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.dgvLots.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvLots.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[]
-            {
-                this.colId,
-                this.colNom,
-                this.colQuantite,
-                this.colRecette,
-                this.colDate,
-                this.colEtat
-            });
-            this.dgvLots.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvLots.Location = new System.Drawing.Point(0, 224);
-            this.dgvLots.Name = "dgvLots";
-            this.dgvLots.ReadOnly = true;
-            this.dgvLots.RowHeadersVisible = false;
-            this.dgvLots.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvLots.Size = new System.Drawing.Size(1000, 446);
-            this.dgvLots.TabIndex = 4;
-
-            // Style en-têtes
-            System.Windows.Forms.DataGridViewCellStyle headerStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            headerStyle.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            headerStyle.ForeColor = System.Drawing.Color.White;
-            headerStyle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            headerStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dgvLots.ColumnHeadersDefaultCellStyle = headerStyle;
-            this.dgvLots.ColumnHeadersHeight = 35;
-
-            // Style alternance
-            System.Windows.Forms.DataGridViewCellStyle altStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            altStyle.BackColor = System.Drawing.Color.FromArgb(245, 246, 247);
-            this.dgvLots.AlternatingRowsDefaultCellStyle = altStyle;
-
-            // Style sélection
-            System.Windows.Forms.DataGridViewCellStyle selectStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            selectStyle.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            selectStyle.ForeColor = System.Drawing.Color.White;
-            this.dgvLots.DefaultCellStyle = new System.Windows.Forms.DataGridViewCellStyle()
-            {
-                Padding = new System.Windows.Forms.Padding(5)
-            };
-
-            // Colonnes
-            this.colId.DataPropertyName = "Id";
-            this.colId.HeaderText = "ID";
-            this.colId.Name = "colId";
-            this.colId.Width = 50;
-
-            this.colNom.DataPropertyName = "Nom";
-            this.colNom.HeaderText = "Nom du Lot";
-            this.colNom.Name = "colNom";
-            this.colNom.Width = 130;
-
-            this.colQuantite.DataPropertyName = "Quantite";
-            this.colQuantite.HeaderText = "Quantité";
-            this.colQuantite.Name = "colQuantite";
-            this.colQuantite.Width = 80;
-
-            this.colRecette.DataPropertyName = "Recette";
-            this.colRecette.HeaderText = "Recette";
-            this.colRecette.Name = "colRecette";
-            this.colRecette.Width = 120;
-
-            this.colDate.DataPropertyName = "Date";
-            this.colDate.HeaderText = "Date de Création";
-            this.colDate.Name = "colDate";
-            this.colDate.Width = 140;
-
-            this.colEtat.DataPropertyName = "Etat";
-            this.colEtat.HeaderText = "État";
-            this.colEtat.Name = "colEtat";
-            this.colEtat.Width = 100;
-
+            // 
+            btnCreerLot.BackColor = Color.FromArgb(46, 204, 113);
+            btnCreerLot.FlatAppearance.BorderSize = 0;
+            btnCreerLot.FlatStyle = FlatStyle.Flat;
+            btnCreerLot.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnCreerLot.ForeColor = Color.White;
+            btnCreerLot.Location = new Point(656, 86);
+            btnCreerLot.Name = "btnCreerLot";
+            btnCreerLot.Size = new Size(120, 35);
+            btnCreerLot.TabIndex = 7;
+            btnCreerLot.Text = "✓ Créer";
+            btnCreerLot.UseVisualStyleBackColor = false;
+            btnCreerLot.Click += btnCreerLot_Click;
+            // 
+            // panelSeparator2
+            // 
+            panelSeparator2.BackColor = Color.FromArgb(189, 195, 199);
+            panelSeparator2.Dock = DockStyle.Top;
+            panelSeparator2.Location = new Point(0, 223);
+            panelSeparator2.Name = "panelSeparator2";
+            panelSeparator2.Size = new Size(1000, 1);
+            panelSeparator2.TabIndex = 3;
+            // 
+            // dgvLots
+            // 
+            dgvLots.AllowUserToAddRows = false;
+            dgvLots.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(245, 246, 247);
+            dgvLots.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dgvLots.BackgroundColor = Color.FromArgb(236, 240, 241);
+            dgvLots.BorderStyle = BorderStyle.None;
+            dgvLots.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(41, 128, 185);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dgvLots.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dgvLots.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvLots.Columns.AddRange(new DataGridViewColumn[] { colId, colNom, colQuantite, colRecette, colDate, colEtat });
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dgvLots.DefaultCellStyle = dataGridViewCellStyle3;
+            dgvLots.Dock = DockStyle.Fill;
+            dgvLots.Location = new Point(0, 224);
+            dgvLots.Name = "dgvLots";
+            dgvLots.ReadOnly = true;
+            dgvLots.RowHeadersVisible = false;
+            dgvLots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvLots.Size = new Size(1000, 446);
+            dgvLots.TabIndex = 4;
+            // 
+            // colId
+            // 
+            colId.DataPropertyName = "Id";
+            colId.HeaderText = "ID";
+            colId.Name = "colId";
+            colId.ReadOnly = true;
+            colId.Width = 50;
+            // 
+            // colNom
+            // 
+            colNom.DataPropertyName = "Nom";
+            colNom.HeaderText = "Nom du Lot";
+            colNom.Name = "colNom";
+            colNom.ReadOnly = true;
+            colNom.Width = 130;
+            // 
+            // colQuantite
+            // 
+            colQuantite.DataPropertyName = "Quantite";
+            colQuantite.HeaderText = "Quantité";
+            colQuantite.Name = "colQuantite";
+            colQuantite.ReadOnly = true;
+            colQuantite.Width = 80;
+            // 
+            // colRecette
+            // 
+            colRecette.DataPropertyName = "Recette";
+            colRecette.HeaderText = "Recette";
+            colRecette.Name = "colRecette";
+            colRecette.ReadOnly = true;
+            colRecette.Width = 120;
+            // 
+            // colDate
+            // 
+            colDate.DataPropertyName = "Date";
+            colDate.HeaderText = "Date de Création";
+            colDate.Name = "colDate";
+            colDate.ReadOnly = true;
+            colDate.Width = 140;
+            // 
+            // colEtat
+            // 
+            colEtat.DataPropertyName = "Etat";
+            colEtat.HeaderText = "État";
+            colEtat.Name = "colEtat";
+            colEtat.ReadOnly = true;
+            // 
             // lblResultats
-            this.lblResultats.AutoSize = true;
-            this.lblResultats.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblResultats.ForeColor = System.Drawing.Color.FromArgb(127, 140, 141);
-            this.lblResultats.Location = new System.Drawing.Point(15, 230);
-            this.lblResultats.Name = "lblResultats";
-            this.lblResultats.Size = new System.Drawing.Size(0, 15);
-            this.lblResultats.TabIndex = 5;
-
-            // ─── USER CONTROL ─────────────────────────────────────────────
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(236, 240, 241);
-            this.Controls.Add(this.lblResultats);
-            this.Controls.Add(this.dgvLots);
-            this.Controls.Add(this.panelSeparator2);
-            this.Controls.Add(this.panelCreation);
-            this.Controls.Add(this.panelSeparator);
-            this.Controls.Add(this.panelHeader);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Name = "UserControlLots";
-            this.Size = new System.Drawing.Size(1000, 670);
-
-            ((System.ComponentModel.ISupportInitialize)this.picIcon).EndInit();
-            ((System.ComponentModel.ISupportInitialize)this.nudQuantite).EndInit();
-            ((System.ComponentModel.ISupportInitialize)this.dgvLots).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            // 
+            lblResultats.AutoSize = true;
+            lblResultats.Font = new Font("Segoe UI", 9F);
+            lblResultats.ForeColor = Color.FromArgb(127, 140, 141);
+            lblResultats.Location = new Point(15, 230);
+            lblResultats.Name = "lblResultats";
+            lblResultats.Size = new Size(0, 15);
+            lblResultats.TabIndex = 5;
+            // 
+            // UserControlLots
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(236, 240, 241);
+            Controls.Add(lblResultats);
+            Controls.Add(dgvLots);
+            Controls.Add(panelSeparator2);
+            Controls.Add(panelCreation);
+            Controls.Add(panelSeparator);
+            Controls.Add(panelHeader);
+            Font = new Font("Segoe UI", 9F);
+            Name = "UserControlLots";
+            Size = new Size(1000, 670);
+            panelHeader.ResumeLayout(false);
+            panelHeader.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picIcon).EndInit();
+            panelCreation.ResumeLayout(false);
+            panelCreation.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudQuantite).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvLots).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         private System.Windows.Forms.Panel panelHeader;
@@ -304,7 +308,6 @@
         private System.Windows.Forms.Label lblTitre;
         private System.Windows.Forms.Panel panelSeparator;
         private System.Windows.Forms.Panel panelCreation;
-        private System.Windows.Forms.Label lblCreation;
         private System.Windows.Forms.Label lblNomLot;
         private System.Windows.Forms.TextBox txtNomLot;
         private System.Windows.Forms.Label lblRecette;
