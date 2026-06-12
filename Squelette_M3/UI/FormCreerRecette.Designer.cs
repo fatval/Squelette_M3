@@ -18,7 +18,12 @@ namespace M3
 
         private void InitializeComponent()
         {
+<<<<<<< HEAD
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+=======
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCreerRecette));
+>>>>>>> a799a05ab1e8e3ebef2af8db350d44285257f8a5
             lblTitre = new Label();
             lblNomRecette = new Label();
             txtNomRecette = new TextBox();
@@ -84,7 +89,9 @@ namespace M3
             dgvOperations.AllowUserToDeleteRows = false;
             dgvOperations.AllowUserToResizeColumns = false;
             dgvOperations.AllowUserToResizeRows = false;
+            dgvOperations.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvOperations.BackgroundColor = Color.White;
+<<<<<<< HEAD
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Control;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -93,16 +100,28 @@ namespace M3
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
             dgvOperations.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+=======
+            dgvOperations.BorderStyle = BorderStyle.Fixed3D;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dgvOperations.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+>>>>>>> a799a05ab1e8e3ebef2af8db350d44285257f8a5
             dgvOperations.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvOperations.Columns.AddRange(new DataGridViewColumn[] { colPosition, colTempsArret, colQuittance });
             dgvOperations.Font = new Font("Segoe UI", 9F);
+            dgvOperations.GridColor = SystemColors.HotTrack;
             dgvOperations.Location = new Point(33, 194);
             dgvOperations.Name = "dgvOperations";
             dgvOperations.RowHeadersVisible = false;
             dgvOperations.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvOperations.RowTemplate.Height = 28;
             dgvOperations.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvOperations.Size = new Size(786, 435);
+            dgvOperations.Size = new Size(810, 661);
             dgvOperations.TabIndex = 1;
             // 
             // colPosition
@@ -113,7 +132,10 @@ namespace M3
             colPosition.Items.AddRange(new object[] { "12", "3", "6", "9" });
             colPosition.MinimumWidth = 10;
             colPosition.Name = "colPosition";
+<<<<<<< HEAD
             colPosition.Width = 150;
+=======
+>>>>>>> a799a05ab1e8e3ebef2af8db350d44285257f8a5
             // 
             // colTempsArret
             // 
@@ -121,14 +143,21 @@ namespace M3
             colTempsArret.HeaderText = "Temps d'arrêt (s)";
             colTempsArret.MinimumWidth = 10;
             colTempsArret.Name = "colTempsArret";
+<<<<<<< HEAD
             colTempsArret.Width = 104;
+=======
+            colTempsArret.Width = 205;
+>>>>>>> a799a05ab1e8e3ebef2af8db350d44285257f8a5
             // 
             // colQuittance
             // 
             colQuittance.HeaderText = "Quittance manuelle";
             colQuittance.MinimumWidth = 10;
             colQuittance.Name = "colQuittance";
+<<<<<<< HEAD
             colQuittance.Width = 150;
+=======
+>>>>>>> a799a05ab1e8e3ebef2af8db350d44285257f8a5
             // 
             // btnAjouterOperation
             // 
@@ -138,9 +167,9 @@ namespace M3
             btnAjouterOperation.FlatStyle = FlatStyle.Flat;
             btnAjouterOperation.Font = new Font("Segoe UI", 9F);
             btnAjouterOperation.ForeColor = Color.White;
-            btnAjouterOperation.Location = new Point(61, 811);
+            btnAjouterOperation.Location = new Point(909, 194);
             btnAjouterOperation.Name = "btnAjouterOperation";
-            btnAjouterOperation.Size = new Size(174, 107);
+            btnAjouterOperation.Size = new Size(242, 95);
             btnAjouterOperation.TabIndex = 2;
             btnAjouterOperation.Text = "+ Ajouter opération";
             btnAjouterOperation.UseVisualStyleBackColor = false;
@@ -154,9 +183,9 @@ namespace M3
             btnSupprimerOperation.FlatStyle = FlatStyle.Flat;
             btnSupprimerOperation.Font = new Font("Segoe UI", 9F);
             btnSupprimerOperation.ForeColor = Color.White;
-            btnSupprimerOperation.Location = new Point(637, 823);
+            btnSupprimerOperation.Location = new Point(1388, 194);
             btnSupprimerOperation.Name = "btnSupprimerOperation";
-            btnSupprimerOperation.Size = new Size(188, 95);
+            btnSupprimerOperation.Size = new Size(284, 95);
             btnSupprimerOperation.TabIndex = 3;
             btnSupprimerOperation.Text = "- Supprimer opération";
             btnSupprimerOperation.UseVisualStyleBackColor = false;
@@ -168,11 +197,11 @@ namespace M3
             btnEnregistrer.Cursor = Cursors.Hand;
             btnEnregistrer.FlatAppearance.BorderSize = 0;
             btnEnregistrer.FlatStyle = FlatStyle.Flat;
-            btnEnregistrer.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnEnregistrer.Font = new Font("Segoe UI", 10F);
             btnEnregistrer.ForeColor = Color.White;
-            btnEnregistrer.Location = new Point(61, 22);
+            btnEnregistrer.Location = new Point(68, 7);
             btnEnregistrer.Name = "btnEnregistrer";
-            btnEnregistrer.Size = new Size(130, 58);
+            btnEnregistrer.Size = new Size(171, 87);
             btnEnregistrer.TabIndex = 4;
             btnEnregistrer.Text = "✔ Enregistrer";
             btnEnregistrer.UseVisualStyleBackColor = false;
@@ -187,9 +216,9 @@ namespace M3
             btnAnnuler.FlatStyle = FlatStyle.Flat;
             btnAnnuler.Font = new Font("Segoe UI", 10F);
             btnAnnuler.ForeColor = Color.White;
-            btnAnnuler.Location = new Point(1525, 22);
+            btnAnnuler.Location = new Point(1525, 7);
             btnAnnuler.Name = "btnAnnuler";
-            btnAnnuler.Size = new Size(99, 68);
+            btnAnnuler.Size = new Size(158, 87);
             btnAnnuler.TabIndex = 5;
             btnAnnuler.Text = "✖ Annuler";
             btnAnnuler.UseVisualStyleBackColor = false;
@@ -218,6 +247,9 @@ namespace M3
             // FormCreerRecette
             // 
             AcceptButton = btnEnregistrer;
+            AutoScaleDimensions = new SizeF(192F, 192F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoSize = true;
             BackColor = Color.White;
             CancelButton = btnAnnuler;
             ClientSize = new Size(1754, 1061);
@@ -230,10 +262,10 @@ namespace M3
             Controls.Add(btnSupprimerOperation);
             Controls.Add(panelBoutons);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FormCreerRecette";
-            StartPosition = FormStartPosition.CenterParent;
             Text = "Nouvelle Recette";
             ((System.ComponentModel.ISupportInitialize)dgvOperations).EndInit();
             panelTitre.ResumeLayout(false);
