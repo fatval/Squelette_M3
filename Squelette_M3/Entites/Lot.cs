@@ -1,4 +1,13 @@
-﻿using MySql.Data.MySqlClient;
+﻿/*
+ * Auteur :  Noé A-Hadi Valentin Boegli
+ * Date :  12.06.2026
+ * description :  Classe Lot : Représente un lot de production dans le système de gestion de production.
+ * dernière modification : 12.06.2026
+ *  - Propriétés :
+ *     Fonction rechercherLotParNom : Outils de recherche pour filrer les lots par nom, par recette, ou par état.
+ *     utilisatioin des placeholders pour éviter les injections SQL.
+ */
+using MySql.Data.MySqlClient;
 
 namespace M3.Models
 {
@@ -19,7 +28,11 @@ namespace M3.Models
         public string REC_Nom { get; set; }
 
 
-        //rechercher des lots par nom pour retourner leur id
+        /// <summary>
+        /// Rechercher des lots par nom pour retourner leur id
+        /// </summary>
+        /// <param name="nom">Le nom du lot à rechercher</param>
+        /// <returns>L'identifiant du lot si trouvé, -1 sinon</returns>
         static int RechercherLotParNom(string nom)
         {
             using (MySqlConnection connection = new MySqlConnection(_CONNEXION_STRING))
@@ -56,6 +69,7 @@ namespace M3.Models
                 reader.Close();
             }
         }
+
         /// <summary>
         /// Crée un nouveau lot dans la base de données avec le nom, la quantité et l'identifiant de recette spécifiés.
         /// </summary>
@@ -75,6 +89,7 @@ namespace M3.Models
                 command.ExecuteNonQuery();
             }
         }
+
         /// <summary>
         /// Supprime le lot correspondant à l'identifiant spécifié de la base de données.
         /// </summary>
@@ -92,6 +107,7 @@ namespace M3.Models
                 command.ExecuteNonQuery();
             }
         }
+
         /// <summary>
         /// Met à jour l'état d'un lot dans la base de données en fonction de l'identifiant du lot et de l'identifiant
         /// de l'état spécifiés.

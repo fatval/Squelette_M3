@@ -40,7 +40,7 @@ namespace Squelette_M3
             {
                 try
                 {
-                    connection.OpenIfNot();
+                    connection.OpenIfNot(); // Assurez-vous que la connexion est ouverte avant de commencer la transaction Open if not already open
 
                     using (MySqlTransaction transaction = connection.BeginTransaction())
                     {
@@ -124,11 +124,26 @@ namespace Squelette_M3
                 }
             }
         }
-
-
-        // ═══════════════════════════════════════════════════════════
-        // 📖 LECTURE
-        // ═══════════════════════════════════════════════════════════
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="nom"></param>
+        public static void ModifierRecette(int id, string nom)
+        {
+            const string CONNEXION_STRING = "server=localhost;user=root;password=;database=m3";
+            using (MySqlConnection connection = new MySqlConnection(CONNEXION_STRING))
+            {
+                connection.Open();
+                string query = "UPDATE recette SET REC_Nom = @nom WHERE Id_Recette = @id";
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+                    command.Parameters.AddWithValue("@nom", nom);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
 
         /// <summary>
         /// fct qui renvoie une liste de recette
