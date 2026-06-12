@@ -165,109 +165,107 @@
             nudQuantite.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // btnCreerLot
-            // 
-            btnCreerLot.BackColor = Color.FromArgb(46, 204, 113);
-            btnCreerLot.FlatAppearance.BorderSize = 0;
-            btnCreerLot.FlatStyle = FlatStyle.Flat;
-            btnCreerLot.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnCreerLot.ForeColor = Color.White;
-            btnCreerLot.Location = new Point(656, 86);
-            btnCreerLot.Name = "btnCreerLot";
-            btnCreerLot.Size = new Size(120, 35);
-            btnCreerLot.TabIndex = 7;
-            btnCreerLot.Text = "✓ Créer";
-            btnCreerLot.UseVisualStyleBackColor = false;
-            btnCreerLot.Click += btnCreerLot_Click;
-            // 
-            // panelSeparator2
-            // 
-            panelSeparator2.BackColor = Color.FromArgb(189, 195, 199);
-            panelSeparator2.Dock = DockStyle.Top;
-            panelSeparator2.Location = new Point(0, 223);
-            panelSeparator2.Name = "panelSeparator2";
-            panelSeparator2.Size = new Size(1000, 1);
-            panelSeparator2.TabIndex = 3;
-            // 
-            // dgvLots
-            // 
-            dgvLots.AllowUserToAddRows = false;
-            dgvLots.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(245, 246, 247);
-            dgvLots.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            dgvLots.BackgroundColor = Color.FromArgb(236, 240, 241);
-            dgvLots.BorderStyle = BorderStyle.None;
-            dgvLots.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(41, 128, 185);
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dgvLots.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            dgvLots.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvLots.Columns.AddRange(new DataGridViewColumn[] { colId, colNom, colQuantite, colRecette, colDate, colEtat });
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            dgvLots.DefaultCellStyle = dataGridViewCellStyle3;
-            dgvLots.Dock = DockStyle.Fill;
-            dgvLots.Location = new Point(0, 224);
-            dgvLots.Name = "dgvLots";
-            dgvLots.ReadOnly = true;
-            dgvLots.RowHeadersVisible = false;
-            dgvLots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvLots.Size = new Size(1000, 446);
-            dgvLots.TabIndex = 4;
-            // 
-            // colId
-            // 
-            colId.DataPropertyName = "Id";
-            colId.HeaderText = "ID";
-            colId.Name = "colId";
-            colId.ReadOnly = true;
-            colId.Width = 50;
-            // 
-            // colNom
-            // 
-            colNom.DataPropertyName = "Nom";
-            colNom.HeaderText = "Nom du Lot";
-            colNom.Name = "colNom";
-            colNom.ReadOnly = true;
-            colNom.Width = 130;
-            // 
-            // colQuantite
-            // 
-            colQuantite.DataPropertyName = "Quantite";
-            colQuantite.HeaderText = "Quantité";
-            colQuantite.Name = "colQuantite";
-            colQuantite.ReadOnly = true;
-            colQuantite.Width = 80;
-            // 
-            // colRecette
-            // 
-            colRecette.DataPropertyName = "Recette";
-            colRecette.HeaderText = "Recette";
-            colRecette.Name = "colRecette";
-            colRecette.ReadOnly = true;
-            colRecette.Width = 120;
-            // 
-            // colDate
-            // 
-            colDate.DataPropertyName = "Date";
-            colDate.HeaderText = "Date de Création";
-            colDate.Name = "colDate";
-            colDate.ReadOnly = true;
-            colDate.Width = 140;
-            // 
-            // colEtat
-            // 
-            colEtat.DataPropertyName = "Etat";
-            colEtat.HeaderText = "État";
-            colEtat.Name = "colEtat";
-            colEtat.ReadOnly = true;
-            // 
+            this.btnCreerLot.BackColor = System.Drawing.Color.FromArgb(46, 204, 113);
+            this.btnCreerLot.FlatAppearance.BorderSize = 0;
+            this.btnCreerLot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCreerLot.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnCreerLot.ForeColor = System.Drawing.Color.White;
+            this.btnCreerLot.Location = new System.Drawing.Point(850, 37);
+            this.btnCreerLot.Name = "btnCreerLot";
+            this.btnCreerLot.Size = new System.Drawing.Size(120, 35);
+            this.btnCreerLot.TabIndex = 7;
+            this.btnCreerLot.Text = "✓ Créer";
+            this.btnCreerLot.UseVisualStyleBackColor = false;
+            this.btnCreerLot.Click += new System.EventHandler(this.btnCreerLot_Click);
+
+
+            // ─── PANEL SEPARATOR 2 ────────────────────────────────────────
+            this.panelSeparator2.BackColor = System.Drawing.Color.FromArgb(189, 195, 199);
+            this.panelSeparator2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSeparator2.Height = 1;
+            this.panelSeparator2.Location = new System.Drawing.Point(0, 223);
+            this.panelSeparator2.Name = "panelSeparator2";
+            this.panelSeparator2.TabIndex = 3;
+
+            // ─── DATAGRIDVIEW LOTS ────────────────────────────────────────
+            this.dgvLots.AllowUserToAddRows = false;
+            this.dgvLots.AllowUserToDeleteRows = false;
+            this.dgvLots.BackgroundColor = System.Drawing.Color.FromArgb(236, 240, 241);
+            this.dgvLots.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvLots.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dgvLots.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvLots.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[]
+            {
+                this.colId,
+                this.colNom,
+                this.colQuantite,
+                this.colRecette,
+                this.colDate,
+                this.colEtat
+            });
+            this.dgvLots.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvLots.Location = new System.Drawing.Point(0, 224);
+            this.dgvLots.Name = "dgvLots";
+            this.dgvLots.ReadOnly = true;
+            this.dgvLots.RowHeadersVisible = false;
+            this.dgvLots.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvLots.Size = new System.Drawing.Size(1000, 446);
+            this.dgvLots.TabIndex = 4;
+
+            // Style en-têtes
+            System.Windows.Forms.DataGridViewCellStyle headerStyle = new System.Windows.Forms.DataGridViewCellStyle();
+            headerStyle.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
+            headerStyle.ForeColor = System.Drawing.Color.White;
+            headerStyle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            headerStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.dgvLots.ColumnHeadersDefaultCellStyle = headerStyle;
+            this.dgvLots.ColumnHeadersHeight = 35;
+
+            // Style alternance
+            System.Windows.Forms.DataGridViewCellStyle altStyle = new System.Windows.Forms.DataGridViewCellStyle();
+            altStyle.BackColor = System.Drawing.Color.FromArgb(245, 246, 247);
+            this.dgvLots.AlternatingRowsDefaultCellStyle = altStyle;
+
+            // Style sélection
+            System.Windows.Forms.DataGridViewCellStyle selectStyle = new System.Windows.Forms.DataGridViewCellStyle();
+            selectStyle.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
+            selectStyle.ForeColor = System.Drawing.Color.White;
+            this.dgvLots.DefaultCellStyle = new System.Windows.Forms.DataGridViewCellStyle()
+            {
+                Padding = new System.Windows.Forms.Padding(5)
+            };
+
+            // Colonnes
+            this.colId.DataPropertyName = "Id";
+            this.colId.HeaderText = "ID";
+            this.colId.Name = "colId";
+            this.colId.Width = 50;
+
+            this.colNom.DataPropertyName = "Nom";
+            this.colNom.HeaderText = "Nom du Lot";
+            this.colNom.Name = "colNom";
+            this.colNom.Width = 130;
+
+            this.colQuantite.DataPropertyName = "Quantite";
+            this.colQuantite.HeaderText = "Quantité";
+            this.colQuantite.Name = "colQuantite";
+            this.colQuantite.Width = 80;
+
+            this.colRecette.DataPropertyName = "Recette";
+            this.colRecette.HeaderText = "Recette";
+            this.colRecette.Name = "colRecette";
+            this.colRecette.Width = 120;
+
+            this.colDate.DataPropertyName = "Date";
+            this.colDate.HeaderText = "Date de Création";
+            this.colDate.Name = "colDate";
+            this.colDate.Width = 140;
+
+            this.colEtat.DataPropertyName = "Etat";
+            this.colEtat.HeaderText = "État";
+            this.colEtat.Name = "colEtat";
+            this.colEtat.Width = 100;
+
             // lblResultats
             // 
             lblResultats.AutoSize = true;

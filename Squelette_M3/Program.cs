@@ -8,8 +8,8 @@ namespace Squelette_M3
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+
+            Application.SetHighDpiMode(HighDpiMode.SystemAware); //Permet à l'application de s'adapter à la résolution de l'écran et ne pas tenir compte du scaling windows
             ApplicationConfiguration.Initialize();
             DBManager.ConnectToDB("m3", "root", "");
             Application.Run(new FormMain());

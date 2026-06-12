@@ -46,7 +46,6 @@ namespace M3
             foreach (Operation op in operationsEnCours)
             {
                 int rowIndex = dgvOperations.Rows.Add();
-                dgvOperations.Rows[rowIndex].Cells["colOrdre"].Value = op.OPE_Ordre;
                 dgvOperations.Rows[rowIndex].Cells["colPosition"].Value = op.OPE_PositionMoteur.ToString();
                 dgvOperations.Rows[rowIndex].Cells["colTempsArret"].Value = op.OPE_TempsAttente;
                 dgvOperations.Rows[rowIndex].Cells["colQuittance"].Value = op.OPE_Quittance;
@@ -68,7 +67,7 @@ namespace M3
                 //
                 Operation nouvelleOp = new Operation
                 {
-                    OPE_Ordre = operationsEnCours.Count + 1,
+                    Id_Operation = operationsEnCours.Count + 1,
                     OPE_PositionMoteur = 3,
                     OPE_TempsAttente = 0,
                     OPE_Quittance = false
@@ -104,7 +103,7 @@ namespace M3
                 operationsEnCours.RemoveAt(rowIndex);
 
                 for (int i = 0; i < operationsEnCours.Count; i++)
-                    operationsEnCours[i].OPE_Ordre = i + 1;
+                    operationsEnCours[i].Id_Operation = i + 1;
 
                 RafraichirGrille();
             }
@@ -213,6 +212,5 @@ namespace M3
                     "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }
