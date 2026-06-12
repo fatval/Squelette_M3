@@ -56,7 +56,11 @@ namespace M3
         private void btnAjouterOp_Click(object sender, EventArgs e)
         {
             try
-            {//Limite à 10 opérations
+            {
+                // ✅ 1. SAUVEGARDER les saisies actuelles AVANT d'ajouter
+                if (!SynchroniserDepuisGrille()) return;
+
+                // 2. Limite à 10 opérations
                 if (operationsEnCours.Count >= 10)
                 {
                     MessageBox.Show("❌ Maximum 10 opérations atteint !",
@@ -64,7 +68,7 @@ namespace M3
                     return;
                 }
 
-                //
+                // 3. Créer la nouvelle opération
                 Operation nouvelleOp = new Operation
                 {
                     Id_Operation = operationsEnCours.Count + 1,
@@ -87,6 +91,7 @@ namespace M3
             }
         }
 
+
         // ─── SUPPRIMER OPÉRATION ────────────────────────────────────
         private void btnSupprimerOp_Click(object sender, EventArgs e)
         {
@@ -98,6 +103,9 @@ namespace M3
                         "Attention", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
+
+                // ✅ Sauvegarder les saisies AVANT de supprimer
+                if (!SynchroniserDepuisGrille()) return;
 
                 int rowIndex = dgvOperations.SelectedRows[0].Index;
                 operationsEnCours.RemoveAt(rowIndex);
@@ -113,6 +121,7 @@ namespace M3
                     "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         // ─── SYNCHRONISER GRILLE → LISTE ───────────────────────────
         private bool SynchroniserDepuisGrille()
@@ -208,9 +217,21 @@ namespace M3
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"❌ Erreur lors de l'enregistrement :\n{ex.Message}",
+                string message = "";
+                Exception current = ex;
+                int niveau = 0;
+
+                while (current != null)
+                {
+                    message += $"[Niveau {niveau}] {current.GetType().Name}\n{current.Message}\n\n";
+                    current = current.InnerException;
+                    niveau++;
+                }
+
+                MessageBox.Show($"❌ Détail complet :\n\n{message}",
                     "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
         }
     }
 }

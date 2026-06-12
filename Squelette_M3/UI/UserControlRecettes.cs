@@ -57,7 +57,7 @@ namespace Squelette_M3
         {
             try
             {
-                // ✅ Vérifier qu'une recette est sélectionnée
+                //Vérifier qu'une recette est sélectionnée
                 if (dgvRecettes.SelectedRows.Count == 0)
                 {
                     MessageBox.Show(
@@ -70,7 +70,7 @@ namespace Squelette_M3
                 }
 
                 // Récupérer l'ID de la recette sélectionnée
-                int recetteId = Convert.ToInt32(dgvRecettes.SelectedRows[0].Cells["Id_Recette"].Value);
+                int recetteId = Convert.ToInt32(dgvRecettes.SelectedRows[0].Cells["colId"].Value);
 
                 // Charger l'objet Recette complet depuis la DB
                 Recette recetteAModifier = Recette.GetById(recetteId);
@@ -81,8 +81,6 @@ namespace Squelette_M3
                     if (formEditor.ShowDialog(this) == DialogResult.OK)
                     {
                         ChargerRecettesDGV();
-                        MessageBox.Show("✅ Recette modifiée avec succès !",
-                            "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
 
