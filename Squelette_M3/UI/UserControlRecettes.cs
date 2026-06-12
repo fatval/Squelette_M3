@@ -70,7 +70,7 @@ namespace Squelette_M3
                 }
 
                 // Récupérer l'ID de la recette sélectionnée
-                int recetteId = Convert.ToInt32(dgvRecettes.SelectedRows[0].Cells["Id_Recette"].Value);
+                int recetteId = Convert.ToInt32(dgvRecettes.SelectedRows[0].Cells["colId"].Value);
 
                 // Charger l'objet Recette complet depuis la DB
                 Recette recetteAModifier = Recette.GetById(recetteId);
