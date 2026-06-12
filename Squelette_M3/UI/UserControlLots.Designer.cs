@@ -97,16 +97,17 @@
             panelCreation.Dock = DockStyle.Top;
             panelCreation.Location = new Point(0, 73);
             panelCreation.Name = "panelCreation";
-            panelCreation.Padding = new Padding(20);
-            panelCreation.Size = new Size(1000, 150);
+            panelCreation.Padding = new Padding(20, 12, 20, 12);
+            panelCreation.Size = new Size(1000, 55);
             panelCreation.TabIndex = 2;
+
             // 
             // lblNomLot
             // 
             lblNomLot.AutoSize = true;
             lblNomLot.Font = new Font("Segoe UI", 9F);
             lblNomLot.ForeColor = Color.FromArgb(52, 73, 94);
-            lblNomLot.Location = new Point(14, 42);
+            lblNomLot.Location = new Point(14, 20);
             lblNomLot.Name = "lblNomLot";
             lblNomLot.Size = new Size(74, 15);
             lblNomLot.TabIndex = 1;
@@ -116,9 +117,9 @@
             // 
             txtNomLot.BorderStyle = BorderStyle.FixedSingle;
             txtNomLot.Font = new Font("Segoe UI", 9F);
-            txtNomLot.Location = new Point(94, 37);
+            txtNomLot.Location = new Point(94, 18);
             txtNomLot.Name = "txtNomLot";
-            txtNomLot.Size = new Size(200, 23);
+            txtNomLot.Size = new Size(141, 23);
             txtNomLot.TabIndex = 2;
             // 
             // lblRecette
@@ -126,7 +127,7 @@
             lblRecette.AutoSize = true;
             lblRecette.Font = new Font("Segoe UI", 9F);
             lblRecette.ForeColor = Color.FromArgb(52, 73, 94);
-            lblRecette.Location = new Point(324, 42);
+            lblRecette.Location = new Point(263, 20);
             lblRecette.Name = "lblRecette";
             lblRecette.Size = new Size(52, 15);
             lblRecette.TabIndex = 3;
@@ -137,17 +138,18 @@
             cmbRecettes.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbRecettes.Font = new Font("Segoe UI", 9F);
             cmbRecettes.FormattingEnabled = true;
-            cmbRecettes.Location = new Point(384, 37);
+            cmbRecettes.Location = new Point(321, 17);
             cmbRecettes.Name = "cmbRecettes";
-            cmbRecettes.Size = new Size(200, 23);
+            cmbRecettes.Size = new Size(136, 23);
             cmbRecettes.TabIndex = 4;
+            cmbRecettes.SelectedIndexChanged += cmbRecettes_SelectedIndexChanged;
             // 
             // lblQuantite
             // 
             lblQuantite.AutoSize = true;
             lblQuantite.Font = new Font("Segoe UI", 9F);
             lblQuantite.ForeColor = Color.FromArgb(52, 73, 94);
-            lblQuantite.Location = new Point(613, 41);
+            lblQuantite.Location = new Point(473, 20);
             lblQuantite.Name = "lblQuantite";
             lblQuantite.Size = new Size(59, 15);
             lblQuantite.TabIndex = 5;
@@ -157,115 +159,123 @@
             // 
             nudQuantite.BorderStyle = BorderStyle.FixedSingle;
             nudQuantite.Font = new Font("Segoe UI", 9F);
-            nudQuantite.Location = new Point(673, 37);
+            nudQuantite.Location = new Point(538, 17);
             nudQuantite.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudQuantite.Name = "nudQuantite";
-            nudQuantite.Size = new Size(100, 23);
+            nudQuantite.Size = new Size(38, 23);
             nudQuantite.TabIndex = 6;
             nudQuantite.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // btnCreerLot
-            this.btnCreerLot.BackColor = System.Drawing.Color.FromArgb(46, 204, 113);
-            this.btnCreerLot.FlatAppearance.BorderSize = 0;
-            this.btnCreerLot.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCreerLot.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnCreerLot.ForeColor = System.Drawing.Color.White;
-            this.btnCreerLot.Location = new System.Drawing.Point(850, 37);
-            this.btnCreerLot.Name = "btnCreerLot";
-            this.btnCreerLot.Size = new System.Drawing.Size(120, 35);
-            this.btnCreerLot.TabIndex = 7;
-            this.btnCreerLot.Text = "✓ Créer";
-            this.btnCreerLot.UseVisualStyleBackColor = false;
-            this.btnCreerLot.Click += new System.EventHandler(this.btnCreerLot_Click);
-
-
-            // ─── PANEL SEPARATOR 2 ────────────────────────────────────────
-            this.panelSeparator2.BackColor = System.Drawing.Color.FromArgb(189, 195, 199);
-            this.panelSeparator2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeparator2.Height = 1;
-            this.panelSeparator2.Location = new System.Drawing.Point(0, 223);
-            this.panelSeparator2.Name = "panelSeparator2";
-            this.panelSeparator2.TabIndex = 3;
-
-            // ─── DATAGRIDVIEW LOTS ────────────────────────────────────────
-            this.dgvLots.AllowUserToAddRows = false;
-            this.dgvLots.AllowUserToDeleteRows = false;
-            this.dgvLots.BackgroundColor = System.Drawing.Color.FromArgb(236, 240, 241);
-            this.dgvLots.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvLots.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.dgvLots.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvLots.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[]
-            {
-                this.colId,
-                this.colNom,
-                this.colQuantite,
-                this.colRecette,
-                this.colDate,
-                this.colEtat
-            });
-            this.dgvLots.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvLots.Location = new System.Drawing.Point(0, 224);
-            this.dgvLots.Name = "dgvLots";
-            this.dgvLots.ReadOnly = true;
-            this.dgvLots.RowHeadersVisible = false;
-            this.dgvLots.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvLots.Size = new System.Drawing.Size(1000, 446);
-            this.dgvLots.TabIndex = 4;
-
-            // Style en-têtes
-            System.Windows.Forms.DataGridViewCellStyle headerStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            headerStyle.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            headerStyle.ForeColor = System.Drawing.Color.White;
-            headerStyle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            headerStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dgvLots.ColumnHeadersDefaultCellStyle = headerStyle;
-            this.dgvLots.ColumnHeadersHeight = 35;
-
-            // Style alternance
-            System.Windows.Forms.DataGridViewCellStyle altStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            altStyle.BackColor = System.Drawing.Color.FromArgb(245, 246, 247);
-            this.dgvLots.AlternatingRowsDefaultCellStyle = altStyle;
-
-            // Style sélection
-            System.Windows.Forms.DataGridViewCellStyle selectStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            selectStyle.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            selectStyle.ForeColor = System.Drawing.Color.White;
-            this.dgvLots.DefaultCellStyle = new System.Windows.Forms.DataGridViewCellStyle()
-            {
-                Padding = new System.Windows.Forms.Padding(5)
-            };
-
-            // Colonnes
-            this.colId.DataPropertyName = "Id";
-            this.colId.HeaderText = "ID";
-            this.colId.Name = "colId";
-            this.colId.Width = 50;
-
-            this.colNom.DataPropertyName = "Nom";
-            this.colNom.HeaderText = "Nom du Lot";
-            this.colNom.Name = "colNom";
-            this.colNom.Width = 130;
-
-            this.colQuantite.DataPropertyName = "Quantite";
-            this.colQuantite.HeaderText = "Quantité";
-            this.colQuantite.Name = "colQuantite";
-            this.colQuantite.Width = 80;
-
-            this.colRecette.DataPropertyName = "Recette";
-            this.colRecette.HeaderText = "Recette";
-            this.colRecette.Name = "colRecette";
-            this.colRecette.Width = 120;
-
-            this.colDate.DataPropertyName = "Date";
-            this.colDate.HeaderText = "Date de Création";
-            this.colDate.Name = "colDate";
-            this.colDate.Width = 140;
-
-            this.colEtat.DataPropertyName = "Etat";
-            this.colEtat.HeaderText = "État";
-            this.colEtat.Name = "colEtat";
-            this.colEtat.Width = 100;
-
+            // 
+            btnCreerLot.BackColor = Color.FromArgb(46, 204, 113);
+            btnCreerLot.FlatAppearance.BorderSize = 0;
+            btnCreerLot.FlatStyle = FlatStyle.Flat;
+            btnCreerLot.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnCreerLot.ForeColor = Color.White;
+            btnCreerLot.Location = new Point(611, 12);
+            btnCreerLot.Name = "btnCreerLot";
+            btnCreerLot.Size = new Size(131, 31);
+            btnCreerLot.TabIndex = 7;
+            btnCreerLot.Text = "✓ Créer";
+            btnCreerLot.UseVisualStyleBackColor = false;
+            btnCreerLot.Click += btnCreerLot_Click;
+            // 
+            // panelSeparator2
+            // 
+            panelSeparator2.BackColor = Color.FromArgb(189, 195, 199);
+            panelSeparator2.Dock = DockStyle.Top;
+            panelSeparator2.Location = new Point(0, 128);
+            panelSeparator2.Name = "panelSeparator2";
+            panelSeparator2.Size = new Size(1000, 1);
+            panelSeparator2.TabIndex = 3;
+            // 
+            // dgvLots
+            // 
+            dgvLots.AllowUserToAddRows = false;
+            dgvLots.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(245, 246, 247);
+            dgvLots.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dgvLots.BackgroundColor = Color.FromArgb(236, 240, 241);
+            dgvLots.BorderStyle = BorderStyle.None;
+            dgvLots.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(41, 128, 185);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dgvLots.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dgvLots.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvLots.Columns.AddRange(new DataGridViewColumn[] { colId, colNom, colQuantite, colRecette, colDate, colEtat });
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dgvLots.DefaultCellStyle = dataGridViewCellStyle3;
+            dgvLots.Dock = DockStyle.Fill;
+            dgvLots.Location = new Point(0, 172);
+            dgvLots.Name = "dgvLots";
+            dgvLots.ReadOnly = true;
+            dgvLots.RowHeadersVisible = false;
+            dgvLots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvLots.Size = new Size(1000, 498);
+            dgvLots.TabIndex = 4;
+            // 
+            // colId
+            // 
+            colId.DataPropertyName = "Id";
+            colId.HeaderText = "ID";
+            colId.Name = "colId";
+            colId.ReadOnly = true;
+            colId.Resizable = DataGridViewTriState.False;
+            colId.Width = 50;
+            // 
+            // colNom
+            // 
+            colNom.DataPropertyName = "Nom";
+            colNom.HeaderText = "Nom du Lot";
+            colNom.Name = "colNom";
+            colNom.ReadOnly = true;
+            colNom.Resizable = DataGridViewTriState.False;
+            colNom.Width = 130;
+            // 
+            // colQuantite
+            // 
+            colQuantite.DataPropertyName = "Quantite";
+            colQuantite.HeaderText = "Quantité";
+            colQuantite.Name = "colQuantite";
+            colQuantite.ReadOnly = true;
+            colQuantite.Resizable = DataGridViewTriState.False;
+            colQuantite.Width = 80;
+            // 
+            // colRecette
+            // 
+            colRecette.DataPropertyName = "Recette";
+            colRecette.HeaderText = "Recette";
+            colRecette.Name = "colRecette";
+            colRecette.ReadOnly = true;
+            colRecette.Resizable = DataGridViewTriState.False;
+            colRecette.Width = 120;
+            // 
+            // colDate
+            // 
+            colDate.DataPropertyName = "Date";
+            colDate.HeaderText = "Date de Création";
+            colDate.Name = "colDate";
+            colDate.ReadOnly = true;
+            colDate.Resizable = DataGridViewTriState.False;
+            colDate.Width = 140;
+            // 
+            // colEtat
+            // 
+            colEtat.DataPropertyName = "Etat";
+            colEtat.HeaderText = "État";
+            colEtat.Name = "colEtat";
+            colEtat.ReadOnly = true;
+            colEtat.Resizable = DataGridViewTriState.False;
+            // 
             // lblResultats
             // 
             lblResultats.AutoSize = true;
@@ -315,12 +325,12 @@
         private System.Windows.Forms.Button btnCreerLot;
         private System.Windows.Forms.Panel panelSeparator2;
         private System.Windows.Forms.DataGridView dgvLots;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNom;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colQuantite;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colRecette;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colEtat;
         private System.Windows.Forms.Label lblResultats;
+        private DataGridViewTextBoxColumn colId;
+        private DataGridViewTextBoxColumn colNom;
+        private DataGridViewTextBoxColumn colQuantite;
+        private DataGridViewTextBoxColumn colRecette;
+        private DataGridViewTextBoxColumn colDate;
+        private DataGridViewTextBoxColumn colEtat;
     }
 }

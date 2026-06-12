@@ -11,6 +11,7 @@ namespace Squelette_M3
         public UserControlRecettes()
         {
             InitializeComponent();
+            dgvRecettes.AllowUserToResizeRows = false;      //Empêcher le redimensionnement des lignes
             ChargerRecettesDGV();
         }
 
@@ -22,13 +23,8 @@ namespace Squelette_M3
             try
             {   //S'assurer que les lignes et colonnes sont vidées avant de remplir des nouvelles
                 dgvRecettes.Rows.Clear();
-                dgvRecettes.Columns.Clear();
 
-                //Remplissage de la data grid view (dgv)
-                dgvRecettes.Columns.Add("Id_Recette", "ID");
-                dgvRecettes.Columns.Add("REC_Nom", "Nom de la recette");
-                dgvRecettes.Columns.Add("REC_DateHeureCreation", "Date de création");
-
+                //Remplir la dgv avec les données de la base de données
                 List<Recette> recettes = Recette.GetAll();
                 foreach (Recette r in recettes)
                 {

@@ -351,7 +351,7 @@ namespace Squelette_M3
 ║  📋 DÉTAIL DU LOT {idLot}
 ╚═══════════════════════════════════════════════════════════════╝
 
-🏷️  ID Lot             : {idLot}
+🏷️ ID Lot             : {idLot}
 📦 Nom                : {lotInfo["LOT_Nom"]}
 🔧 Recette            : {nomRecette}
 📊 Quantité           : {lotInfo["LOT_Quantite"]} pièces
