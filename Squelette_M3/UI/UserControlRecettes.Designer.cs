@@ -13,240 +13,266 @@
 
         private void InitializeComponent()
         {
-            this.panelHeader = new System.Windows.Forms.Panel();
-            this.picIcon = new System.Windows.Forms.PictureBox();
-            this.lblTitre = new System.Windows.Forms.Label();
-            this.panelSeparator = new System.Windows.Forms.Panel();
-
-            this.panelBoutons = new System.Windows.Forms.Panel();
-            this.btnAjouter = new System.Windows.Forms.Button();
-            this.btnModifier = new System.Windows.Forms.Button();
-            this.btnSupprimer = new System.Windows.Forms.Button();
-            this.panelSeparator2 = new System.Windows.Forms.Panel();
-
-            this.dgvRecettes = new System.Windows.Forms.DataGridView();
-            this.colId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNom = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNbOp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDateCreation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-
-            this.lblResultats = new System.Windows.Forms.Label();
-
-            ((System.ComponentModel.ISupportInitialize)this.picIcon).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)this.dgvRecettes).BeginInit();
-            this.SuspendLayout();
-
-            // ─── PANEL HEADER ─────────────────────────────────────────────
-            this.panelHeader.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            this.panelHeader.Controls.Add(this.picIcon);
-            this.panelHeader.Controls.Add(this.lblTitre);
-            this.panelHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelHeader.Location = new System.Drawing.Point(0, 0);
-            this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(1000, 70);
-            this.panelHeader.TabIndex = 0;
-
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            panelHeader = new Panel();
+            picIcon = new PictureBox();
+            lblTitre = new Label();
+            panelSeparator = new Panel();
+            panelSeparator2 = new Panel();
+            dgvRecettes = new DataGridView();
+            colId = new DataGridViewTextBoxColumn();
+            colNom = new DataGridViewTextBoxColumn();
+            colNbOp = new DataGridViewTextBoxColumn();
+            colDateCreation = new DataGridViewTextBoxColumn();
+            lblResultats = new Label();
+            btnSupprimer = new Button();
+            btnModifier = new Button();
+            btnAjouter = new Button();
+            panelBoutons = new Panel();
+            panelHeader.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)picIcon).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvRecettes).BeginInit();
+            panelBoutons.SuspendLayout();
+            SuspendLayout();
+            // 
+            // panelHeader
+            // 
+            panelHeader.BackColor = Color.FromArgb(41, 128, 185);
+            panelHeader.Controls.Add(picIcon);
+            panelHeader.Controls.Add(lblTitre);
+            panelHeader.Dock = DockStyle.Top;
+            panelHeader.Location = new Point(0, 0);
+            panelHeader.Name = "panelHeader";
+            panelHeader.Size = new Size(1000, 70);
+            panelHeader.TabIndex = 0;
+            // 
             // picIcon
-            this.picIcon.Location = new System.Drawing.Point(15, 17);  // ✅ CHANGÉ : 5 → 15
-            this.picIcon.Name = "picIcon";
-            this.picIcon.Size = new System.Drawing.Size(36, 36);
-            this.picIcon.TabIndex = 1;
-            this.picIcon.TabStop = false;
-
+            // 
+            picIcon.Location = new Point(15, 17);
+            picIcon.Name = "picIcon";
+            picIcon.Size = new Size(36, 36);
+            picIcon.TabIndex = 1;
+            picIcon.TabStop = false;
+            // 
             // lblTitre
-            this.lblTitre.AutoSize = true;
-            this.lblTitre.Font = new System.Drawing.Font("Segoe UI", 20F, System.Drawing.FontStyle.Bold);
-            this.lblTitre.ForeColor = System.Drawing.Color.White;
-            this.lblTitre.Location = new System.Drawing.Point(60, 18);  // ✅ CHANGÉ : 50 → 15
-            this.lblTitre.Name = "lblTitre";
-            this.lblTitre.Size = new System.Drawing.Size(280, 37);
-            this.lblTitre.TabIndex = 2;
-            this.lblTitre.Text = "📋 Gestion des Recettes";
-
-
-
-            // ─── PANEL SEPARATOR 1 ────────────────────────────────────────
-            this.panelSeparator.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            this.panelSeparator.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeparator.Height = 3;
-            this.panelSeparator.Location = new System.Drawing.Point(0, 70);
-            this.panelSeparator.Name = "panelSeparator";
-            this.panelSeparator.TabIndex = 1;
-
-            // ─── PANEL BOUTONS ────────────────────────────────────────────
-            this.panelBoutons.BackColor = System.Drawing.Color.White;
-            this.panelBoutons.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelBoutons.Controls.Add(this.btnAjouter);
-            this.panelBoutons.Controls.Add(this.btnModifier);
-            this.panelBoutons.Controls.Add(this.btnSupprimer);
-            this.panelBoutons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelBoutons.Location = new System.Drawing.Point(0, 73);
-            this.panelBoutons.Name = "panelBoutons";
-            this.panelBoutons.Padding = new System.Windows.Forms.Padding(20, 12, 20, 12);
-            this.panelBoutons.Size = new System.Drawing.Size(1000, 55);
-            this.panelBoutons.TabIndex = 2;
-
-            // btnAjouter
-            this.btnAjouter.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            this.btnAjouter.FlatAppearance.BorderSize = 0;
-            this.btnAjouter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAjouter.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnAjouter.ForeColor = System.Drawing.Color.White;
-            this.btnAjouter.Location = new System.Drawing.Point(20, 12);
-            this.btnAjouter.Name = "btnAjouter";
-            this.btnAjouter.Size = new System.Drawing.Size(130, 32);
-            this.btnAjouter.TabIndex = 0;
-            this.btnAjouter.Text = "➕ Ajouter";
-            this.btnAjouter.UseVisualStyleBackColor = false;
-            this.btnAjouter.Click += new System.EventHandler(this.btnAjouter_Click);
-
-
-            // btnModifier
-            this.btnModifier.BackColor = System.Drawing.Color.FromArgb(230, 126, 34);
-            this.btnModifier.FlatAppearance.BorderSize = 0;
-            this.btnModifier.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnModifier.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnModifier.ForeColor = System.Drawing.Color.White;
-            this.btnModifier.Location = new System.Drawing.Point(165, 12);
-            this.btnModifier.Name = "btnModifier";
-            this.btnModifier.Size = new System.Drawing.Size(130, 32);
-            this.btnModifier.TabIndex = 1;
-            this.btnModifier.Text = "✏️ Modifier";
-            this.btnModifier.UseVisualStyleBackColor = false;
-            this.btnModifier.Click += new System.EventHandler(this.btnModifier_Click);
-
-            // btnSupprimer
-            this.btnSupprimer.BackColor = System.Drawing.Color.FromArgb(231, 76, 60);
-            this.btnSupprimer.FlatAppearance.BorderSize = 0;
-            this.btnSupprimer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSupprimer.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnSupprimer.ForeColor = System.Drawing.Color.White;
-            this.btnSupprimer.Location = new System.Drawing.Point(310, 12);
-            this.btnSupprimer.Name = "btnSupprimer";
-            this.btnSupprimer.Size = new System.Drawing.Size(130, 32);
-            this.btnSupprimer.TabIndex = 2;
-            this.btnSupprimer.Text = "🗑️ Supprimer";
-            this.btnSupprimer.UseVisualStyleBackColor = false;
-            this.btnSupprimer.Click += new System.EventHandler(this.btnSupprimer_Click);
-
-            // ─── PANEL SEPARATOR 2 ────────────────────────────────────────
-            this.panelSeparator2.BackColor = System.Drawing.Color.FromArgb(189, 195, 199);
-            this.panelSeparator2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSeparator2.Height = 1;
-            this.panelSeparator2.Location = new System.Drawing.Point(0, 128);
-            this.panelSeparator2.Name = "panelSeparator2";
-            this.panelSeparator2.TabIndex = 3;
-
-            // ─── DATAGRIDVIEW RECETTES ────────────────────────────────────
-            this.dgvRecettes.AllowUserToAddRows = false;
-            this.dgvRecettes.AllowUserToDeleteRows = false;
-            this.dgvRecettes.BackgroundColor = System.Drawing.Color.FromArgb(236, 240, 241);
-            this.dgvRecettes.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvRecettes.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.dgvRecettes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvRecettes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[]
-            {
-                this.colId,
-                this.colNom,
-                this.colNbOp,
-                this.colDateCreation
-            });
-            this.dgvRecettes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvRecettes.Location = new System.Drawing.Point(0, 129);
-            this.dgvRecettes.Name = "dgvRecettes";
-            this.dgvRecettes.ReadOnly = true;
-            this.dgvRecettes.RowHeadersVisible = false;
-            this.dgvRecettes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvRecettes.Size = new System.Drawing.Size(1000, 541);
-            this.dgvRecettes.TabIndex = 4;
-
-            // Style en-têtes
-            System.Windows.Forms.DataGridViewCellStyle headerStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            headerStyle.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            headerStyle.ForeColor = System.Drawing.Color.White;
-            headerStyle.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            headerStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.dgvRecettes.ColumnHeadersDefaultCellStyle = headerStyle;
-            this.dgvRecettes.ColumnHeadersHeight = 35;
-
-            // Style alternance
-            System.Windows.Forms.DataGridViewCellStyle altStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            altStyle.BackColor = System.Drawing.Color.FromArgb(245, 246, 247);
-            this.dgvRecettes.AlternatingRowsDefaultCellStyle = altStyle;
-
-            // Style sélection
-            System.Windows.Forms.DataGridViewCellStyle selectStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            selectStyle.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
-            selectStyle.ForeColor = System.Drawing.Color.White;
-            this.dgvRecettes.DefaultCellStyle = new System.Windows.Forms.DataGridViewCellStyle()
-            {
-                Padding = new System.Windows.Forms.Padding(5)
-            };
-
-            // Colonnes
-            this.colId.DataPropertyName = "Id";
-            this.colId.HeaderText = "ID";
-            this.colId.Name = "colId";
-            this.colId.Width = 50;
-
-            this.colNom.DataPropertyName = "Nom";
-            this.colNom.HeaderText = "Nom de la Recette";
-            this.colNom.Name = "colNom";
-            this.colNom.Width = 250;
-
-            this.colNbOp.DataPropertyName = "NbOperations";
-            this.colNbOp.HeaderText = "Nb Opérations";
-            this.colNbOp.Name = "colNbOp";
-            this.colNbOp.Width = 120;
-
-            this.colDateCreation.DataPropertyName = "DateCreation";
-            this.colDateCreation.HeaderText = "Date de Création";
-            this.colDateCreation.Name = "colDateCreation";
-            this.colDateCreation.Width = 150;
-
+            // 
+            lblTitre.AutoSize = true;
+            lblTitre.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+            lblTitre.ForeColor = Color.White;
+            lblTitre.Location = new Point(60, 18);
+            lblTitre.Name = "lblTitre";
+            lblTitre.Size = new Size(327, 37);
+            lblTitre.TabIndex = 2;
+            lblTitre.Text = "📋 Gestion des Recettes";
+            // 
+            // panelSeparator
+            // 
+            panelSeparator.BackColor = Color.FromArgb(41, 128, 185);
+            panelSeparator.Dock = DockStyle.Top;
+            panelSeparator.Location = new Point(0, 70);
+            panelSeparator.Name = "panelSeparator";
+            panelSeparator.Size = new Size(1000, 3);
+            panelSeparator.TabIndex = 1;
+            // 
+            // panelSeparator2
+            // 
+            panelSeparator2.BackColor = Color.FromArgb(189, 195, 199);
+            panelSeparator2.Dock = DockStyle.Top;
+            panelSeparator2.Location = new Point(0, 128);
+            panelSeparator2.Name = "panelSeparator2";
+            panelSeparator2.Size = new Size(1000, 1);
+            panelSeparator2.TabIndex = 3;
+            // 
+            // dgvRecettes
+            // 
+            dgvRecettes.AllowUserToAddRows = false;
+            dgvRecettes.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(245, 246, 247);
+            dgvRecettes.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dgvRecettes.BackgroundColor = Color.FromArgb(236, 240, 241);
+            dgvRecettes.BorderStyle = BorderStyle.None;
+            dgvRecettes.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(41, 128, 185);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dgvRecettes.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dgvRecettes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvRecettes.Columns.AddRange(new DataGridViewColumn[] { colId, colNom, colNbOp, colDateCreation });
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Window;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dgvRecettes.DefaultCellStyle = dataGridViewCellStyle3;
+            dgvRecettes.Dock = DockStyle.Fill;
+            dgvRecettes.Location = new Point(0, 129);
+            dgvRecettes.Name = "dgvRecettes";
+            dgvRecettes.ReadOnly = true;
+            dgvRecettes.RowHeadersVisible = false;
+            dgvRecettes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvRecettes.Size = new Size(1000, 541);
+            dgvRecettes.TabIndex = 4;
+            // 
+            // colId
+            // 
+            colId.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            colId.DataPropertyName = "Id";
+            colId.HeaderText = "ID";
+            colId.Name = "colId";
+            colId.ReadOnly = true;
+            colId.Resizable = DataGridViewTriState.False;
+            colId.Width = 48;
+            // 
+            // colNom
+            // 
+            colNom.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            colNom.DataPropertyName = "Nom";
+            colNom.HeaderText = "Nom de la Recette";
+            colNom.Name = "colNom";
+            colNom.ReadOnly = true;
+            colNom.Resizable = DataGridViewTriState.False;
+            colNom.Width = 158;
+            // 
+            // colNbOp
+            // 
+            colNbOp.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            colNbOp.DataPropertyName = "NbOperations";
+            colNbOp.HeaderText = "Nb Opérations";
+            colNbOp.Name = "colNbOp";
+            colNbOp.ReadOnly = true;
+            colNbOp.Resizable = DataGridViewTriState.False;
+            colNbOp.Width = 132;
+            // 
+            // colDateCreation
+            // 
+            colDateCreation.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            colDateCreation.DataPropertyName = "DateCreation";
+            colDateCreation.HeaderText = "Date de Création";
+            colDateCreation.Name = "colDateCreation";
+            colDateCreation.ReadOnly = true;
+            colDateCreation.Resizable = DataGridViewTriState.False;
+            colDateCreation.Width = 147;
+            // 
             // lblResultats
-            this.lblResultats.AutoSize = true;
-            this.lblResultats.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblResultats.ForeColor = System.Drawing.Color.FromArgb(127, 140, 141);
-            this.lblResultats.Location = new System.Drawing.Point(15, 135);
-            this.lblResultats.Name = "lblResultats";
-            this.lblResultats.Size = new System.Drawing.Size(0, 15);
-            this.lblResultats.TabIndex = 5;
-
-            // ─── USER CONTROL ─────────────────────────────────────────────
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(236, 240, 241);
-            this.Controls.Add(this.lblResultats);
-            this.Controls.Add(this.dgvRecettes);
-            this.Controls.Add(this.panelSeparator2);
-            this.Controls.Add(this.panelBoutons);
-            this.Controls.Add(this.panelSeparator);
-            this.Controls.Add(this.panelHeader);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.Name = "UserControlRecettes";
-            this.Size = new System.Drawing.Size(1000, 670);
-
-            ((System.ComponentModel.ISupportInitialize)this.picIcon).EndInit();
-            ((System.ComponentModel.ISupportInitialize)this.dgvRecettes).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            // 
+            lblResultats.AutoSize = true;
+            lblResultats.Font = new Font("Segoe UI", 9F);
+            lblResultats.ForeColor = Color.FromArgb(127, 140, 141);
+            lblResultats.Location = new Point(15, 135);
+            lblResultats.Name = "lblResultats";
+            lblResultats.Size = new Size(0, 15);
+            lblResultats.TabIndex = 5;
+            // 
+            // btnSupprimer
+            // 
+            btnSupprimer.BackColor = Color.FromArgb(231, 76, 60);
+            btnSupprimer.Cursor = Cursors.Hand;
+            btnSupprimer.FlatAppearance.BorderSize = 0;
+            btnSupprimer.FlatAppearance.MouseOverBackColor = Color.FromArgb(241, 148, 138);
+            btnSupprimer.FlatAppearance.MouseDownBackColor = Color.FromArgb(180, 110, 100);
+            btnSupprimer.FlatStyle = FlatStyle.Flat;
+            btnSupprimer.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnSupprimer.ForeColor = Color.White;
+            btnSupprimer.Location = new Point(310, 12);
+            btnSupprimer.Name = "btnSupprimer";
+            btnSupprimer.Size = new Size(130, 32);
+            btnSupprimer.TabIndex = 2;
+            btnSupprimer.Text = "🗑️ Supprimer";
+            btnSupprimer.UseVisualStyleBackColor = false;
+            btnSupprimer.Click += btnSupprimer_Click;
+            // 
+            // btnModifier
+            // 
+            btnModifier.BackColor = Color.FromArgb(230, 126, 34);
+            btnModifier.Cursor = Cursors.Hand;
+            btnModifier.FlatAppearance.BorderSize = 0;
+            btnModifier.FlatAppearance.MouseOverBackColor = Color.FromArgb(245, 176, 65);
+            btnModifier.FlatAppearance.MouseDownBackColor = Color.FromArgb(190, 136, 80);
+            btnModifier.FlatStyle = FlatStyle.Flat;
+            btnModifier.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnModifier.ForeColor = Color.White;
+            btnModifier.Location = new Point(165, 12);
+            btnModifier.Name = "btnModifier";
+            btnModifier.Size = new Size(130, 32);
+            btnModifier.TabIndex = 1;
+            btnModifier.Text = "✏️ Modifier";
+            btnModifier.UseVisualStyleBackColor = false;
+            btnModifier.Click += btnModifier_Click;
+            // 
+            // btnAjouter
+            // 
+            btnAjouter.BackColor = Color.FromArgb(41, 128, 185);
+            btnAjouter.Cursor = Cursors.Hand;
+            btnAjouter.FlatAppearance.BorderSize = 0;
+            btnAjouter.FlatAppearance.MouseOverBackColor = Color.FromArgb(93, 173, 226);
+            btnAjouter.FlatAppearance.MouseDownBackColor = Color.FromArgb(74, 137, 180);
+            btnAjouter.FlatStyle = FlatStyle.Flat;
+            btnAjouter.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnAjouter.ForeColor = Color.White;
+            btnAjouter.Location = new Point(20, 12);
+            btnAjouter.Name = "btnAjouter";
+            btnAjouter.Size = new Size(130, 32);
+            btnAjouter.TabIndex = 0;
+            btnAjouter.Text = "➕ Ajouter";
+            btnAjouter.UseVisualStyleBackColor = false;
+            btnAjouter.Click += btnAjouter_Click;
+            // 
+            // panelBoutons
+            // 
+            panelBoutons.BackColor = Color.White;
+            panelBoutons.BorderStyle = BorderStyle.FixedSingle;
+            panelBoutons.Controls.Add(btnAjouter);
+            panelBoutons.Controls.Add(btnModifier);
+            panelBoutons.Controls.Add(btnSupprimer);
+            panelBoutons.Dock = DockStyle.Top;
+            panelBoutons.Location = new Point(0, 73);
+            panelBoutons.Name = "panelBoutons";
+            panelBoutons.Padding = new Padding(20, 12, 20, 12);
+            panelBoutons.Size = new Size(1000, 55);
+            panelBoutons.TabIndex = 2;
+            // 
+            // UserControlRecettes
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(236, 240, 241);
+            Controls.Add(lblResultats);
+            Controls.Add(dgvRecettes);
+            Controls.Add(panelSeparator2);
+            Controls.Add(panelBoutons);
+            Controls.Add(panelSeparator);
+            Controls.Add(panelHeader);
+            Font = new Font("Segoe UI", 9F);
+            Name = "UserControlRecettes";
+            Size = new Size(1000, 670);
+            panelHeader.ResumeLayout(false);
+            panelHeader.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)picIcon).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvRecettes).EndInit();
+            panelBoutons.ResumeLayout(false);
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         private System.Windows.Forms.Panel panelHeader;
         private System.Windows.Forms.PictureBox picIcon;
         private System.Windows.Forms.Label lblTitre;
         private System.Windows.Forms.Panel panelSeparator;
-        private System.Windows.Forms.Panel panelBoutons;
-        private System.Windows.Forms.Button btnAjouter;
-        private System.Windows.Forms.Button btnModifier;
-        private System.Windows.Forms.Button btnSupprimer;
         private System.Windows.Forms.Panel panelSeparator2;
         private System.Windows.Forms.DataGridView dgvRecettes;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNom;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNbOp;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDateCreation;
         private System.Windows.Forms.Label lblResultats;
+        private DataGridViewTextBoxColumn colId;
+        private DataGridViewTextBoxColumn colNom;
+        private DataGridViewTextBoxColumn colNbOp;
+        private DataGridViewTextBoxColumn colDateCreation;
+        private Button btnSupprimer;
+        private Button btnModifier;
+        private Button btnAjouter;
+        private Panel panelBoutons;
     }
 }

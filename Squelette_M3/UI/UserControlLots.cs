@@ -9,6 +9,7 @@ namespace Squelette_M3
         public UserControlLots()
         {
             InitializeComponent();
+            dgvLots.AllowUserToResizeRows = false;      //Empêcher le redimensionnement des lignes
             ChargerRecettes();
             ChargerLots();
         }
@@ -172,6 +173,11 @@ namespace Squelette_M3
                 MessageBox.Show($"Erreur inattendue : {ex.Message}",
                     "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void cmbRecettes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 
