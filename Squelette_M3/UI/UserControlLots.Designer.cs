@@ -178,9 +178,6 @@
             this.btnCreerLot.UseVisualStyleBackColor = false;
             this.btnCreerLot.Click += new System.EventHandler(this.btnCreerLot_Click);
 
-            // Effet Hover
-            this.btnCreerLot.MouseEnter += (s, e) => this.btnCreerLot.BackColor = System.Drawing.Color.FromArgb(39, 174, 96);
-            this.btnCreerLot.MouseLeave += (s, e) => this.btnCreerLot.BackColor = System.Drawing.Color.FromArgb(46, 204, 113);
 
             // ─── PANEL SEPARATOR 2 ────────────────────────────────────────
             this.panelSeparator2.BackColor = System.Drawing.Color.FromArgb(189, 195, 199);
