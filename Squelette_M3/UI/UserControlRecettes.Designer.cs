@@ -99,8 +99,7 @@
             this.btnAjouter.Text = "➕ Ajouter";
             this.btnAjouter.UseVisualStyleBackColor = false;
             this.btnAjouter.Click += new System.EventHandler(this.btnAjouter_Click);
-            this.btnAjouter.MouseEnter += (s, e) => this.btnAjouter.BackColor = System.Drawing.Color.FromArgb(30, 100, 150);
-            this.btnAjouter.MouseLeave += (s, e) => this.btnAjouter.BackColor = System.Drawing.Color.FromArgb(41, 128, 185);
+
 
             // btnModifier
             this.btnModifier.BackColor = System.Drawing.Color.FromArgb(230, 126, 34);
@@ -115,8 +114,6 @@
             this.btnModifier.Text = "✏️ Modifier";
             this.btnModifier.UseVisualStyleBackColor = false;
             this.btnModifier.Click += new System.EventHandler(this.btnModifier_Click);
-            this.btnModifier.MouseEnter += (s, e) => this.btnModifier.BackColor = System.Drawing.Color.FromArgb(210, 100, 10);
-            this.btnModifier.MouseLeave += (s, e) => this.btnModifier.BackColor = System.Drawing.Color.FromArgb(230, 126, 34);
 
             // btnSupprimer
             this.btnSupprimer.BackColor = System.Drawing.Color.FromArgb(231, 76, 60);
@@ -131,8 +128,6 @@
             this.btnSupprimer.Text = "🗑️ Supprimer";
             this.btnSupprimer.UseVisualStyleBackColor = false;
             this.btnSupprimer.Click += new System.EventHandler(this.btnSupprimer_Click);
-            this.btnSupprimer.MouseEnter += (s, e) => this.btnSupprimer.BackColor = System.Drawing.Color.FromArgb(210, 50, 30);
-            this.btnSupprimer.MouseLeave += (s, e) => this.btnSupprimer.BackColor = System.Drawing.Color.FromArgb(231, 76, 60);
 
             // ─── PANEL SEPARATOR 2 ────────────────────────────────────────
             this.panelSeparator2.BackColor = System.Drawing.Color.FromArgb(189, 195, 199);
