@@ -61,7 +61,7 @@ namespace Squelette_M3
         {
             try
             {
-                // ✅ Vérifier qu'une recette est sélectionnée
+                //Vérifier qu'une recette est sélectionnée
                 if (dgvRecettes.SelectedRows.Count == 0)
                 {
                     MessageBox.Show(
@@ -85,8 +85,6 @@ namespace Squelette_M3
                     if (formEditor.ShowDialog(this) == DialogResult.OK)
                     {
                         ChargerRecettesDGV();
-                        MessageBox.Show("✅ Recette modifiée avec succès !",
-                            "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
 
