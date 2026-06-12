@@ -124,26 +124,6 @@ namespace Squelette_M3
                 }
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="nom"></param>
-        public static void ModifierRecette(int id, string nom)
-        {
-            const string CONNEXION_STRING = "server=localhost;user=root;password=;database=m3";
-            using (MySqlConnection connection = new MySqlConnection(CONNEXION_STRING))
-            {
-                connection.Open();
-                string query = "UPDATE recette SET REC_Nom = @nom WHERE Id_Recette = @id";
-                using (MySqlCommand command = new MySqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    command.Parameters.AddWithValue("@nom", nom);
-                    command.ExecuteNonQuery();
-                }
-            }
-        }
 
         /// <summary>
         /// fct qui renvoie une liste de recette
@@ -178,11 +158,7 @@ namespace Squelette_M3
             return liste;
         }
 
-        /// <summary>
-        ///fonction qui renvoie
-        /// </summary>
-        /// <param name="id">id de nim</param>
-        /// <returns></returns>
+
         public static Recette GetById(int id)
         {
             Recette recette = null;
@@ -214,9 +190,16 @@ namespace Squelette_M3
 
                 if (recette != null)
                 {
-                    string queryOps = @"SELECT Id_Operation, OPE_Ordre, OPE_Nom, OPE_PositionMoteur,
-                                               OPE_TempsAttente, OPE_CycleVerin, OPE_Quittance, OPE_SensMoteur
-                                        FROM operation WHERE Id_Recette = @id ORDER BY OPE_Ordre";
+                    // Jointure avec Contenir pour récupérer les opérations DANS L'ORDRE
+                    string queryOps = @"SELECT o.Id_Operation, o.OPE_Nom, o.OPE_PositionMoteur,
+                                       o.OPE_TempsAttente, o.OPE_CycleVerin,
+                                       o.OPE_Quittance, o.OPE_SensMoteur,
+                                       c.CON_NoOperation
+                                FROM operation o
+                                INNER JOIN Contenir c
+                                    ON o.Id_Operation = c.Id_Operation_est_contenu_dans
+                                WHERE c.Id_Recette = @id
+                                ORDER BY c.CON_NoOperation";
 
                     using (MySqlCommand cmd = new MySqlCommand(queryOps, connection))
                     {
@@ -229,6 +212,7 @@ namespace Squelette_M3
                                 recette.Operations.Add(new Operation
                                 {
                                     Id_Operation = Convert.ToInt32(reader["Id_Operation"]),
+                                    OPE_Ordre = Convert.ToInt32(reader["CON_NoOperation"]),  // ← Ordre depuis Contenir
                                     OPE_Nom = reader["OPE_Nom"]?.ToString() ?? "",
                                     OPE_PositionMoteur = Convert.ToInt32(reader["OPE_PositionMoteur"]),
                                     OPE_TempsAttente = Convert.ToInt32(reader["OPE_TempsAttente"]),
@@ -243,6 +227,7 @@ namespace Squelette_M3
             }
             return recette;
         }
+
 
         /// <summary>
         /// Supprime une recette et tous les lots associés de la base de données.
@@ -274,9 +259,10 @@ namespace Squelette_M3
                             newId = (int)cmd.LastInsertedId;
                         }
 
-                        // 2. Insérer les opérations et les lier à la recette
+                        // 2. Insérer les opérations et les lier à la recette 
                         foreach (var op in operations)
                         {
+                            int noOperation = 1;  //Compteur d'ordre
                             // Insérer l'opération
                             string insertOp = @"INSERT INTO operation
                                 (OPE_Nom, OPE_PositionMoteur, OPE_TempsAttente, OPE_CycleVerin,
@@ -298,21 +284,28 @@ namespace Squelette_M3
                                 newOpId = (int)cmd.LastInsertedId;
                             }
 
-                            // Lier l'opération à la recette
+                            // Lier l'opération à la recette, avec l'ordre
                             string insertLien = @"INSERT INTO Contenir
-                                (Id_Recette, Id_Operation_est_contenu_dans)
-                                VALUES (@idRecette, @idOperation)";
+                            (Id_Recette, Id_Operation_est_contenu_dans, CON_NoOperation)
+                            VALUES (@idRecette, @idOperation, @noOperation)";
 
                             using (MySqlCommand cmdLien = new MySqlCommand(insertLien, connection, transaction))
                             {
                                 cmdLien.Parameters.AddWithValue("@idRecette", newId);
                                 cmdLien.Parameters.AddWithValue("@idOperation", newOpId);
+                                cmdLien.Parameters.AddWithValue("@noOperation", noOperation);
                                 cmdLien.ExecuteNonQuery();
                             }
+                            noOperation++;  //Incrémenter pour la prochaine opération
                         }
 
                         transaction.Commit();
                         return newId;
+                    }
+                    catch (MySqlException mex)
+                    {
+                        transaction.Rollback();
+                        throw new Exception($"❌ Erreur MySQL lors de la modification :\n{mex.Message}", mex);
                     }
                     catch (Exception ex)
                     {
@@ -323,7 +316,14 @@ namespace Squelette_M3
             }
         }
 
-         
+        /// <summary>
+        /// Modifie une recette existante en mettant à jour son nom et en remplaçant toutes ses opérations associées par une nouvelle liste d'opérations.
+        /// </summary>
+        /// <param name="idRecette"></param>
+        /// <param name="nouveauNom"></param>
+        /// <param name="operations"></param>
+        /// <exception cref="Exception"></exception>
+
         public static void ModifierRecette(int idRecette, string nouveauNom, List<Operation> operations)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
@@ -344,44 +344,87 @@ namespace Squelette_M3
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 2. Supprimer les anciennes opérations
-                        string deleteOps = "DELETE FROM operation WHERE Id_Recette = @id";
+                        // 2. Récupérer les IDs des opérations liées à cette recette
+                        List<int> anciennesOps = new List<int>();
+                        string getOps = "SELECT Id_Operation_est_contenu_dans FROM Contenir WHERE Id_Recette = @id";
 
-                        using (MySqlCommand cmd = new MySqlCommand(deleteOps, connection, transaction))
+                        using (MySqlCommand cmd = new MySqlCommand(getOps, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@id", idRecette);
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                    anciennesOps.Add(Convert.ToInt32(reader["Id_Operation_est_contenu_dans"]));
+                            }
+                        }
+
+                        // 3. Supprimer les liens dans Contenir
+                        string deleteLiens = "DELETE FROM Contenir WHERE Id_Recette = @id";
+                        using (MySqlCommand cmd = new MySqlCommand(deleteLiens, connection, transaction))
                         {
                             cmd.Parameters.AddWithValue("@id", idRecette);
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 3. Réinsérer les opérations
-                        foreach (var op in operations)
+                        // 4. Supprimer les anciennes opérations
+                        foreach (int opId in anciennesOps)
                         {
+                            string deleteOp = "DELETE FROM operation WHERE Id_Operation = @opId";
+                            using (MySqlCommand cmd = new MySqlCommand(deleteOp, connection, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@opId", opId);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+
+                        // 5. Réinsérer les opérations ET les liens CONTENIR
+                        for (int i = 0; i < operations.Count; i++)
+                        {
+                            var op = operations[i];
+
+                            // Insérer l'opération (SANS Id_Recette dans la table operation)
                             string insertOp = @"INSERT INTO operation
-                                (Id_Recette, OPE_Nom, OPE_PositionMoteur,
-                                 OPE_TempsAttente, OPE_CycleVerin, OPE_Quittance, OPE_SensMoteur)
-                                VALUES (@idRecette, @nom, @position, @temps, @verin, @quittance, @sens)";
+                        (OPE_Nom, OPE_PositionMoteur, OPE_TempsAttente, 
+                         OPE_CycleVerin, OPE_Quittance, OPE_SensMoteur)
+                        VALUES (@nom, @position, @temps, @verin, @quittance, @sens)";
+
+                            int newOpId;
 
                             using (MySqlCommand cmd = new MySqlCommand(insertOp, connection, transaction))
                             {
-                                cmd.Parameters.AddWithValue("@idRecette", idRecette);
                                 cmd.Parameters.AddWithValue("@nom", op.OPE_Nom);
                                 cmd.Parameters.AddWithValue("@position", op.OPE_PositionMoteur);
                                 cmd.Parameters.AddWithValue("@temps", op.OPE_TempsAttente);
                                 cmd.Parameters.AddWithValue("@verin", op.OPE_CycleVerin);
                                 cmd.Parameters.AddWithValue("@quittance", op.OPE_Quittance);
                                 cmd.Parameters.AddWithValue("@sens", op.OPE_SensMoteur);
+
+                                cmd.ExecuteNonQuery();
+                                newOpId = (int)cmd.LastInsertedId;
+                            }
+
+                            // Lier l'opération à la recette avec l'ordre
+                            string insertLien = @"INSERT INTO contenir
+                        (Id_Operation_est_contenu_dans, Id_Recette, CON_NoOperation)
+                        VALUES (@idOp, @idRecette, @noOp)";
+
+                            using (MySqlCommand cmd = new MySqlCommand(insertLien, connection, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@idOp", newOpId);
+                                cmd.Parameters.AddWithValue("@idRecette", idRecette);
+                                cmd.Parameters.AddWithValue("@noOp", i + 1);  //Numéro d'ordre
                                 cmd.ExecuteNonQuery();
                             }
                         }
 
                         transaction.Commit();
                     }
-                    catch (MySqlException mex) // Spécifique à MySQL
+                    catch (MySqlException mex)
                     {
                         transaction.Rollback();
                         throw new Exception($"❌ Erreur MySQL lors de la modification :\n{mex.Message}", mex);
                     }
-                    catch (Exception ex) // Autres exceptions
+                    catch (Exception ex)
                     {
                         transaction.Rollback();
                         throw new Exception($"❌ Erreur lors de la modification :\n{ex.Message}", ex);
