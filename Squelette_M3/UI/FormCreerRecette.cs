@@ -47,8 +47,11 @@ namespace M3
             {
                 int rowIndex = dgvOperations.Rows.Add();
                 dgvOperations.Rows[rowIndex].Cells["colPosition"].Value = op.OPE_PositionMoteur.ToString();
+                dgvOperations.Rows[rowIndex].Cells["colSensMoteur"].Value = op.OPE_SensMoteur;
                 dgvOperations.Rows[rowIndex].Cells["colTempsArret"].Value = op.OPE_TempsAttente;
                 dgvOperations.Rows[rowIndex].Cells["colQuittance"].Value = op.OPE_Quittance;
+                dgvOperations.Rows[rowIndex].Cells["colCycleVerin"].Value = op.OPE_CycleVerin;  
+
             }
         }
 
@@ -73,8 +76,11 @@ namespace M3
                 {
                     Id_Operation = operationsEnCours.Count + 1,
                     OPE_PositionMoteur = 3,
+                    OPE_SensMoteur = false,
                     OPE_TempsAttente = 0,
-                    OPE_Quittance = false
+                    OPE_Quittance = false,
+                    OPE_CycleVerin = false,
+
                 };
 
                 operationsEnCours.Add(nouvelleOp);
@@ -150,12 +156,24 @@ namespace M3
                     if (row.Cells["colQuittance"].Value != null)
                         quittance = Convert.ToBoolean(row.Cells["colQuittance"].Value);
 
+                    //Cycle vérin
+                    bool cycleVerin = false;
+                    if (row.Cells["colCycleVerin"].Value != null)
+                        cycleVerin = Convert.ToBoolean(row.Cells["colCycleVerin"].Value);
+
+                    //Sens moteur (true = horaire, false = antihoraire)
+                    bool sensMoteur = false;
+                    if (row.Cells["colSensMoteur"].Value != null)
+                        sensMoteur = Convert.ToBoolean(row.Cells["colSensMoteur"].Value);
+
                     operationsEnCours.Add(new Operation
                     {
-                        OPE_Ordre = i + 1, //ne pas utiliser i++ sinon ça saute la ligne 1
+                        OPE_Ordre = i + 1,
                         OPE_PositionMoteur = positionMoteur,
                         OPE_TempsAttente = tempsAttente,
-                        OPE_Quittance = quittance
+                        OPE_Quittance = quittance,
+                        OPE_CycleVerin = cycleVerin,  
+                        OPE_SensMoteur = sensMoteur   
                     });
                 }
 
