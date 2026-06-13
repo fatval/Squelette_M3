@@ -175,10 +175,6 @@ namespace Squelette_M3
             }
         }
 
-        private void cmbRecettes_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 
     // ─── Classe helper pour le ComboBox ──────────────────────────────────────

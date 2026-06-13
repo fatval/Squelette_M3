@@ -367,7 +367,7 @@ namespace Squelette_M3
                     {
                         foreach (string evt in evenements)
                         {
-                            detailComplet += evt + "\n";
+                            detailComplet += evt + Environment.NewLine;
                         }
                     }
                     else
