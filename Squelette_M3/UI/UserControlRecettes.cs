@@ -31,6 +31,7 @@ namespace Squelette_M3
                     dgvRecettes.Rows.Add(
                         r.Id_Recette,
                         r.REC_Nom,
+                        Recette.CompterOperations(r.Id_Recette),      //Compte via table contenir
                         r.REC_DateHeureCreation.ToString("dd.MM.yyyy HH:mm")
                     );
                 }

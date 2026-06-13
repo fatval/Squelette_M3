@@ -31,12 +31,11 @@
         /// <param name="quittance">Indique si l'opération implique une quittance</param>
         /// <param name="sensMoteur">Indique le sens du moteur</param>
         /// <returns></returns>
-        public static Operation Create(int id, int ordre, string nom, int positionMoteur, int tempsAttente, bool cycleVerin, bool quittance, bool sensMoteur)
+        public static Operation Create(int id, string nom, int positionMoteur, int tempsAttente, bool cycleVerin, bool quittance, bool sensMoteur)
         {
             return new Operation
             {
                 Id_Operation = id,
-                OPE_Ordre = ordre,
                 OPE_Nom = nom,
                 OPE_PositionMoteur = positionMoteur,
                 OPE_TempsAttente = tempsAttente,

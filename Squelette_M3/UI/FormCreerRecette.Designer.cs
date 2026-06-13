@@ -18,7 +18,6 @@ namespace M3
 
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCreerRecette));
             lblTitre = new Label();
@@ -27,8 +26,10 @@ namespace M3
             lblOperations = new Label();
             dgvOperations = new DataGridView();
             colPosition = new DataGridViewComboBoxColumn();
+            colSensMoteur = new DataGridViewCheckBoxColumn();
             colTempsArret = new DataGridViewTextBoxColumn();
             colQuittance = new DataGridViewCheckBoxColumn();
+            colCycleVerin = new DataGridViewCheckBoxColumn();
             btnAjouterOperation = new Button();
             btnSupprimerOperation = new Button();
             btnEnregistrer = new Button();
@@ -45,7 +46,8 @@ namespace M3
             lblTitre.AutoSize = true;
             lblTitre.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             lblTitre.ForeColor = Color.White;
-            lblTitre.Location = new Point(15, 15);
+            lblTitre.Location = new Point(8, 8);
+            lblTitre.Margin = new Padding(2, 0, 2, 0);
             lblTitre.Name = "lblTitre";
             lblTitre.Size = new Size(246, 25);
             lblTitre.TabIndex = 0;
@@ -55,7 +57,8 @@ namespace M3
             // 
             lblNomRecette.AutoSize = true;
             lblNomRecette.Font = new Font("Segoe UI", 10F);
-            lblNomRecette.Location = new Point(20, 80);
+            lblNomRecette.Location = new Point(10, 40);
+            lblNomRecette.Margin = new Padding(2, 0, 2, 0);
             lblNomRecette.Name = "lblNomRecette";
             lblNomRecette.Size = new Size(125, 19);
             lblNomRecette.TabIndex = 1;
@@ -64,17 +67,19 @@ namespace M3
             // txtNomRecette
             // 
             txtNomRecette.Font = new Font("Segoe UI", 10F);
-            txtNomRecette.Location = new Point(309, 80);
+            txtNomRecette.Location = new Point(154, 40);
+            txtNomRecette.Margin = new Padding(2);
             txtNomRecette.MaxLength = 50;
             txtNomRecette.Name = "txtNomRecette";
-            txtNomRecette.Size = new Size(334, 25);
+            txtNomRecette.Size = new Size(169, 25);
             txtNomRecette.TabIndex = 0;
             // 
             // lblOperations
             // 
             lblOperations.AutoSize = true;
             lblOperations.Font = new Font("Segoe UI", 10F);
-            lblOperations.Location = new Point(671, 86);
+            lblOperations.Location = new Point(336, 43);
+            lblOperations.Margin = new Padding(2, 0, 2, 0);
             lblOperations.Name = "lblOperations";
             lblOperations.Size = new Size(144, 19);
             lblOperations.TabIndex = 2;
@@ -88,14 +93,6 @@ namespace M3
             dgvOperations.AllowUserToResizeRows = false;
             dgvOperations.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvOperations.BackgroundColor = Color.White;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Control;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dgvOperations.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvOperations.BorderStyle = BorderStyle.Fixed3D;
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = SystemColors.Control;
@@ -106,16 +103,17 @@ namespace M3
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             dgvOperations.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dgvOperations.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvOperations.Columns.AddRange(new DataGridViewColumn[] { colPosition, colTempsArret, colQuittance });
+            dgvOperations.Columns.AddRange(new DataGridViewColumn[] { colPosition, colSensMoteur, colTempsArret, colQuittance, colCycleVerin });
             dgvOperations.Font = new Font("Segoe UI", 9F);
             dgvOperations.GridColor = SystemColors.HotTrack;
-            dgvOperations.Location = new Point(33, 194);
+            dgvOperations.Location = new Point(16, 97);
+            dgvOperations.Margin = new Padding(2);
             dgvOperations.Name = "dgvOperations";
             dgvOperations.RowHeadersVisible = false;
             dgvOperations.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             dgvOperations.RowTemplate.Height = 28;
             dgvOperations.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvOperations.Size = new Size(810, 661);
+            dgvOperations.Size = new Size(405, 330);
             dgvOperations.TabIndex = 1;
             // 
             // colPosition
@@ -126,7 +124,12 @@ namespace M3
             colPosition.Items.AddRange(new object[] { "12", "3", "6", "9" });
             colPosition.MinimumWidth = 10;
             colPosition.Name = "colPosition";
-            colPosition.Width = 150;
+            // 
+            // colSensMoteur
+            // 
+            colSensMoteur.HeaderText = "Sens horaire";
+            colSensMoteur.MinimumWidth = 10;
+            colSensMoteur.Name = "colSensMoteur";
             // 
             // colTempsArret
             // 
@@ -135,14 +138,18 @@ namespace M3
             colTempsArret.MinimumWidth = 10;
             colTempsArret.Name = "colTempsArret";
             colTempsArret.Width = 104;
-            colTempsArret.Width = 205;
             // 
             // colQuittance
             // 
             colQuittance.HeaderText = "Quittance manuelle";
             colQuittance.MinimumWidth = 10;
             colQuittance.Name = "colQuittance";
-            colQuittance.Width = 150;
+            // 
+            // colCycleVerin
+            // 
+            colCycleVerin.HeaderText = "Cycle vérin";
+            colCycleVerin.MinimumWidth = 10;
+            colCycleVerin.Name = "colCycleVerin";
             // 
             // btnAjouterOperation
             // 
@@ -152,9 +159,10 @@ namespace M3
             btnAjouterOperation.FlatStyle = FlatStyle.Flat;
             btnAjouterOperation.Font = new Font("Segoe UI", 9F);
             btnAjouterOperation.ForeColor = Color.White;
-            btnAjouterOperation.Location = new Point(909, 194);
+            btnAjouterOperation.Location = new Point(454, 97);
+            btnAjouterOperation.Margin = new Padding(2);
             btnAjouterOperation.Name = "btnAjouterOperation";
-            btnAjouterOperation.Size = new Size(242, 95);
+            btnAjouterOperation.Size = new Size(121, 48);
             btnAjouterOperation.TabIndex = 2;
             btnAjouterOperation.Text = "+ Ajouter opération";
             btnAjouterOperation.UseVisualStyleBackColor = false;
@@ -168,9 +176,10 @@ namespace M3
             btnSupprimerOperation.FlatStyle = FlatStyle.Flat;
             btnSupprimerOperation.Font = new Font("Segoe UI", 9F);
             btnSupprimerOperation.ForeColor = Color.White;
-            btnSupprimerOperation.Location = new Point(1388, 194);
+            btnSupprimerOperation.Location = new Point(694, 97);
+            btnSupprimerOperation.Margin = new Padding(2);
             btnSupprimerOperation.Name = "btnSupprimerOperation";
-            btnSupprimerOperation.Size = new Size(284, 95);
+            btnSupprimerOperation.Size = new Size(142, 48);
             btnSupprimerOperation.TabIndex = 3;
             btnSupprimerOperation.Text = "- Supprimer opération";
             btnSupprimerOperation.UseVisualStyleBackColor = false;
@@ -184,9 +193,10 @@ namespace M3
             btnEnregistrer.FlatStyle = FlatStyle.Flat;
             btnEnregistrer.Font = new Font("Segoe UI", 10F);
             btnEnregistrer.ForeColor = Color.White;
-            btnEnregistrer.Location = new Point(68, 7);
+            btnEnregistrer.Location = new Point(34, 3);
+            btnEnregistrer.Margin = new Padding(2);
             btnEnregistrer.Name = "btnEnregistrer";
-            btnEnregistrer.Size = new Size(171, 87);
+            btnEnregistrer.Size = new Size(101, 47);
             btnEnregistrer.TabIndex = 4;
             btnEnregistrer.Text = "✔ Enregistrer";
             btnEnregistrer.UseVisualStyleBackColor = false;
@@ -201,11 +211,12 @@ namespace M3
             btnAnnuler.FlatStyle = FlatStyle.Flat;
             btnAnnuler.Font = new Font("Segoe UI", 10F);
             btnAnnuler.ForeColor = Color.White;
-            btnAnnuler.Location = new Point(1525, 7);
+            btnAnnuler.Location = new Point(741, 3);
+            btnAnnuler.Margin = new Padding(2);
             btnAnnuler.Name = "btnAnnuler";
-            btnAnnuler.Size = new Size(158, 87);
+            btnAnnuler.Size = new Size(101, 47);
             btnAnnuler.TabIndex = 5;
-            btnAnnuler.Text = "✖ Annuler";
+            btnAnnuler.Text = "✖ \r\nAnnuler";
             btnAnnuler.UseVisualStyleBackColor = false;
             // 
             // panelTitre
@@ -214,8 +225,9 @@ namespace M3
             panelTitre.Controls.Add(lblTitre);
             panelTitre.Dock = DockStyle.Top;
             panelTitre.Location = new Point(0, 0);
+            panelTitre.Margin = new Padding(2);
             panelTitre.Name = "panelTitre";
-            panelTitre.Size = new Size(1754, 60);
+            panelTitre.Size = new Size(877, 30);
             panelTitre.TabIndex = 0;
             // 
             // panelBoutons
@@ -224,20 +236,21 @@ namespace M3
             panelBoutons.Controls.Add(btnEnregistrer);
             panelBoutons.Controls.Add(btnAnnuler);
             panelBoutons.Dock = DockStyle.Bottom;
-            panelBoutons.Location = new Point(0, 955);
+            panelBoutons.Location = new Point(0, 477);
+            panelBoutons.Margin = new Padding(2);
             panelBoutons.Name = "panelBoutons";
-            panelBoutons.Size = new Size(1754, 106);
+            panelBoutons.Size = new Size(877, 53);
             panelBoutons.TabIndex = 4;
             // 
             // FormCreerRecette
             // 
             AcceptButton = btnEnregistrer;
-            AutoScaleDimensions = new SizeF(192F, 192F);
+            AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
             BackColor = Color.White;
             CancelButton = btnAnnuler;
-            ClientSize = new Size(1754, 1061);
+            ClientSize = new Size(877, 530);
             Controls.Add(panelTitre);
             Controls.Add(lblNomRecette);
             Controls.Add(txtNomRecette);
@@ -248,6 +261,7 @@ namespace M3
             Controls.Add(panelBoutons);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(2);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FormCreerRecette";
@@ -274,7 +288,9 @@ namespace M3
         private System.Windows.Forms.Button btnEnregistrer;
         private System.Windows.Forms.Button btnAnnuler;
         private DataGridViewComboBoxColumn colPosition;
+        private DataGridViewCheckBoxColumn colSensMoteur;
         private DataGridViewTextBoxColumn colTempsArret;
         private DataGridViewCheckBoxColumn colQuittance;
+        private DataGridViewCheckBoxColumn colCycleVerin;
     }
 }
