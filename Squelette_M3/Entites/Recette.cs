@@ -13,9 +13,6 @@ namespace Squelette_M3
     public class Recette
 
     {
-        //Les requetes SQL utilisées dans la classe Recett
-        const string getNombreDeLotsRequete = "SELECT COUNT(*) FROM lot WHERE Id_Recette = @idRecette";
-        
         public int REC_Id
         {
             get { return Id_Recette; }
@@ -228,6 +225,27 @@ namespace Squelette_M3
             return recette;
         }
 
+        /// <summary>
+/// Compte le nombre d'opérations liées à une recette via la table Contenir.
+/// </summary>
+/// <param name="idRecette">L'identifiant de la recette.</param>
+/// <returns>Le nombre d'opérations.</returns>
+public static int CompterOperations(int idRecette)
+{
+    using (MySqlConnection connection = DBManager.GetConnection())
+    {
+        connection.OpenIfNot();
+
+        string query = "SELECT COUNT(*) FROM Contenir WHERE Id_Recette = @id";
+
+        using (MySqlCommand cmd = new MySqlCommand(query, connection))
+        {
+            cmd.Parameters.AddWithValue("@id", idRecette);
+            object result = cmd.ExecuteScalar();
+            return result != null ? Convert.ToInt32(result) : 0;
+        }
+    }
+}
 
         /// <summary>
         /// Supprime une recette et tous les lots associés de la base de données.
