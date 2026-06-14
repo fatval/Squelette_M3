@@ -100,7 +100,6 @@
             panelCreation.Padding = new Padding(20, 12, 20, 12);
             panelCreation.Size = new Size(1000, 55);
             panelCreation.TabIndex = 2;
-
             // 
             // lblNomLot
             // 
@@ -127,7 +126,7 @@
             lblRecette.AutoSize = true;
             lblRecette.Font = new Font("Segoe UI", 9F);
             lblRecette.ForeColor = Color.FromArgb(52, 73, 94);
-            lblRecette.Location = new Point(263, 20);
+            lblRecette.Location = new Point(272, 20);
             lblRecette.Name = "lblRecette";
             lblRecette.Size = new Size(52, 15);
             lblRecette.TabIndex = 3;
@@ -138,18 +137,17 @@
             cmbRecettes.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbRecettes.Font = new Font("Segoe UI", 9F);
             cmbRecettes.FormattingEnabled = true;
-            cmbRecettes.Location = new Point(321, 17);
+            cmbRecettes.Location = new Point(330, 17);
             cmbRecettes.Name = "cmbRecettes";
-            cmbRecettes.Size = new Size(136, 23);
+            cmbRecettes.Size = new Size(139, 23);
             cmbRecettes.TabIndex = 4;
-            cmbRecettes.SelectedIndexChanged += cmbRecettes_SelectedIndexChanged;
             // 
             // lblQuantite
             // 
             lblQuantite.AutoSize = true;
             lblQuantite.Font = new Font("Segoe UI", 9F);
             lblQuantite.ForeColor = Color.FromArgb(52, 73, 94);
-            lblQuantite.Location = new Point(473, 20);
+            lblQuantite.Location = new Point(502, 20);
             lblQuantite.Name = "lblQuantite";
             lblQuantite.Size = new Size(59, 15);
             lblQuantite.TabIndex = 5;
@@ -159,12 +157,14 @@
             // 
             nudQuantite.BorderStyle = BorderStyle.FixedSingle;
             nudQuantite.Font = new Font("Segoe UI", 9F);
-            nudQuantite.Location = new Point(538, 17);
+            nudQuantite.Increment = new decimal(new int[] { 100, 0, 0, 0 });
+            nudQuantite.Location = new Point(567, 17);
+            nudQuantite.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             nudQuantite.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudQuantite.Name = "nudQuantite";
-            nudQuantite.Size = new Size(38, 23);
+            nudQuantite.Size = new Size(52, 23);
             nudQuantite.TabIndex = 6;
-            nudQuantite.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            nudQuantite.Value = new decimal(new int[] { 1000, 0, 0, 0 });
             // 
             // btnCreerLot
             // 
@@ -173,7 +173,7 @@
             btnCreerLot.FlatStyle = FlatStyle.Flat;
             btnCreerLot.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnCreerLot.ForeColor = Color.White;
-            btnCreerLot.Location = new Point(611, 12);
+            btnCreerLot.Location = new Point(637, 12);
             btnCreerLot.Name = "btnCreerLot";
             btnCreerLot.Size = new Size(131, 31);
             btnCreerLot.TabIndex = 7;
@@ -215,12 +215,12 @@
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
             dgvLots.DefaultCellStyle = dataGridViewCellStyle3;
             dgvLots.Dock = DockStyle.Fill;
-            dgvLots.Location = new Point(0, 172);
+            dgvLots.Location = new Point(0, 129);
             dgvLots.Name = "dgvLots";
             dgvLots.ReadOnly = true;
             dgvLots.RowHeadersVisible = false;
             dgvLots.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvLots.Size = new Size(1000, 498);
+            dgvLots.Size = new Size(1000, 541);
             dgvLots.TabIndex = 4;
             // 
             // colId
