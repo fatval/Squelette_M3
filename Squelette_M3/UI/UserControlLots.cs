@@ -160,7 +160,7 @@ namespace Squelette_M3
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 txtNomLot.Text = "";
-                nudQuantite.Value = 1;
+                nudQuantite.Value = 1000;
                 ChargerLots();
             }
             catch (MySqlException ex)
