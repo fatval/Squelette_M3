@@ -33,8 +33,8 @@ Squelette_M3/
 │   ├── UserControlHistorique.cs # Historique et export des données
 │   └── FormCreerRecette.cs    # Formulaire de création/modification de recette
 │
-├── .github/
-│   └── copilot-instructions.md # Directives de développement
+├
+│
 │
 ├── Program.cs                 # Point d'entrée de l'application
 ├── Squelette_M3.csproj        # Configuration du projet
