@@ -23,7 +23,6 @@
             panelRecherche = new Panel();
             lblRecherche = new Label();
             txtRecherche = new TextBox();
-            btnRechercher = new Button();
             btnRafraichir = new Button();
             btnExporter = new Button();
             lblResultats = new Label();
@@ -85,7 +84,6 @@
             panelRecherche.BorderStyle = BorderStyle.FixedSingle;
             panelRecherche.Controls.Add(lblRecherche);
             panelRecherche.Controls.Add(txtRecherche);
-            panelRecherche.Controls.Add(btnRechercher);
             panelRecherche.Controls.Add(btnRafraichir);
             panelRecherche.Controls.Add(btnExporter);
             panelRecherche.Controls.Add(lblResultats);
@@ -117,24 +115,6 @@
             txtRecherche.Size = new Size(240, 23);
             txtRecherche.TabIndex = 2;
             // 
-            // btnRechercher
-            // 
-            btnRechercher.BackColor = Color.FromArgb(52, 152, 219);
-            btnRechercher.Cursor = Cursors.Hand;
-            btnRechercher.FlatAppearance.BorderSize = 0;
-            btnRechercher.FlatAppearance.MouseDownBackColor = Color.FromArgb(74, 137, 180);
-            btnRechercher.FlatAppearance.MouseOverBackColor = Color.FromArgb(93, 173, 226);
-            btnRechercher.FlatStyle = FlatStyle.Flat;
-            btnRechercher.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnRechercher.ForeColor = Color.White;
-            btnRechercher.Location = new Point(350, 14);
-            btnRechercher.Name = "btnRechercher";
-            btnRechercher.Size = new Size(120, 31);
-            btnRechercher.TabIndex = 3;
-            btnRechercher.Text = "🔎 Chercher";
-            btnRechercher.UseVisualStyleBackColor = false;
-            btnRechercher.Click += BtnRechercher_Click;
-            // 
             // btnRafraichir
             // 
             btnRafraichir.BackColor = Color.FromArgb(46, 204, 113);
@@ -145,9 +125,9 @@
             btnRafraichir.FlatStyle = FlatStyle.Flat;
             btnRafraichir.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnRafraichir.ForeColor = Color.White;
-            btnRafraichir.Location = new Point(480, 14);
+            btnRafraichir.Location = new Point(351, 14);
             btnRafraichir.Name = "btnRafraichir";
-            btnRafraichir.Size = new Size(120, 31);
+            btnRafraichir.Size = new Size(144, 31);
             btnRafraichir.TabIndex = 4;
             btnRafraichir.Text = "🔄 Rafraîchir";
             btnRafraichir.UseVisualStyleBackColor = false;
@@ -163,9 +143,9 @@
             btnExporter.FlatStyle = FlatStyle.Flat;
             btnExporter.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnExporter.ForeColor = Color.White;
-            btnExporter.Location = new Point(610, 14);
+            btnExporter.Location = new Point(513, 14);
             btnExporter.Name = "btnExporter";
-            btnExporter.Size = new Size(120, 31);
+            btnExporter.Size = new Size(144, 31);
             btnExporter.TabIndex = 5;
             btnExporter.Text = "📥 Exporter";
             btnExporter.UseVisualStyleBackColor = false;
@@ -303,7 +283,6 @@
         private System.Windows.Forms.PictureBox picIcon;
         private System.Windows.Forms.Label lblRecherche;
         private System.Windows.Forms.TextBox txtRecherche;
-        private System.Windows.Forms.Button btnRechercher;
         private System.Windows.Forms.Button btnRafraichir;
         private System.Windows.Forms.Button btnExporter;
         private System.Windows.Forms.DataGridView dgvHistorique;

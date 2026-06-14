@@ -1,138 +1,47 @@
-﻿// Authors NoéA. &  ValentinB
-// Classe Recette
-using M3.Models;
+﻿/*
+ * Auteurs : Noé A-Hadi, Valentin Boegli
+ * Date    : 2026
+ * Description : Classe Recette - Représente la gamme opératoire d'un type de pièce.
+ *               Une recette regroupe de 1 à 10 opérations exécutées dans un ordre précis.
+ *
+ * Propriétés :
+ * - Id_Recette            : Identifiant unique de la recette.
+ * - REC_Nom               : Nom unique de la recette (ex: "AM203").
+ * - REC_DateHeureCreation : Date et heure de création de la recette.
+ * - Operations            : Liste ordonnée des opérations associées (via table Contenir).
+ *
+ * Méthodes :
+ * - GetAll()                          : Retourne toutes les recettes.
+ * - GetById(int)                      : Retourne une recette et ses opérations ordonnées.
+ * - CompterOperations(int)            : Compte les opérations liées à une recette.
+ * - AjouterRecette(string, List)      : Crée une recette + ses opérations (transaction).
+ * - ModifierRecette(int, string, List): Met à jour une recette et remplace ses opérations.
+ * - SupprimerRecette(int)             : Supprime une recette, ses opérations et ses lots.
+ */
+
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Data;
 
 namespace Squelette_M3
-
 {
-
     public class Recette
-
     {
-        public int REC_Id
-        {
-            get { return Id_Recette; }
-            set { Id_Recette = value; }
-        }
+        // ─── Propriétés ──────────────────────────────────────────────────────
+        public int Id_Recette { get; set; }                                     // PK
+        public string REC_Nom { get; set; } = "";                               // Nom unique (ex: "AM203")
+        public DateTime REC_DateHeureCreation { get; set; }                     // Date et heure de création
+        public List<Operation> Operations { get; set; } = new List<Operation>();// Opérations ordonnées
+
 
         /// <summary>
-        /// Constructeur de la classe Recette
+        /// Renvoie la liste de toutes les recettes (sans leurs opérations).
         /// </summary>
-        public int Id_Recette { get; set; }
-        public string REC_Nom { get; set; } = "";
-        public DateTime REC_DateHeureCreation { get; set; }
-        public List<Operation> Operations { get; set; } = new List<Operation>();
-
-        /// <summary>
-        /// fonctions pour supprimer une recette avec ses lôts yc les opérations
-        /// </summary>
-        /// <param name="idRecette"></param>
-        public void SupprimerRecetteAvecLots(int idRecette)
-        {
-            using (MySqlConnection connection = DBManager.GetConnection())
-            {
-                try
-                {
-                    connection.OpenIfNot(); // Assurez-vous que la connexion est ouverte avant de commencer la transaction Open if not already open
-
-                    using (MySqlTransaction transaction = connection.BeginTransaction())
-                    {
-                        try
-                        {
-                            // 1. Récupérer tous les lots liés à cette recette
-                            List<int> lotsASupprimer = new List<int>();
-                            string getLotsQuery = "SELECT Id_Lot FROM lot WHERE Id_Recette = @id";
-
-                            using (MySqlCommand cmd = new MySqlCommand(getLotsQuery, connection, transaction))
-                            {
-                                cmd.Parameters.AddWithValue("@id", idRecette);
-                                using (MySqlDataReader reader = cmd.ExecuteReader())
-                                {
-                                    while (reader.Read())
-                                    {
-                                        lotsASupprimer.Add(Convert.ToInt32(reader["Id_Lot"]));
-                                    }
-                                }
-                            }
-
-                            // 2. Supprimer les événements de ces lots
-                            if (lotsASupprimer.Count > 0)
-                            {
-                                string lotsIn = string.Join(",", lotsASupprimer);
-                                string deleteEvenements = $"DELETE FROM evenement WHERE Id_Lot IN ({lotsIn})";
-
-                                using (MySqlCommand cmd = new MySqlCommand(deleteEvenements, connection, transaction))
-                                {
-                                    cmd.ExecuteNonQuery();
-                                }
-                            }
-
-                            // 3. Supprimer les lots
-                            string deleteLots = "DELETE FROM lot WHERE Id_Recette = @id";
-                            using (MySqlCommand cmd = new MySqlCommand(deleteLots, connection, transaction))
-                            {
-                                cmd.Parameters.AddWithValue("@id", idRecette);
-                                cmd.ExecuteNonQuery();
-                            }
-
-                            // 4. Supprimer les entrées dans la table associative Contenir
-                            string deleteContenir = "DELETE FROM Contenir WHERE Id_Recette = @id";
-                            using (MySqlCommand cmd = new MySqlCommand(deleteContenir, connection, transaction))
-                            {
-                                cmd.Parameters.AddWithValue("@id", idRecette);
-                                cmd.ExecuteNonQuery();
-                            }
-
-                        // 5️⃣ SUPPRIMER LA RECETTE
-                            string deleteRecette = "DELETE FROM recette WHERE Id_Recette = @id";
-                            using (MySqlCommand cmd = new MySqlCommand(deleteRecette, connection, transaction))
-                            {
-                                cmd.Parameters.AddWithValue("@id", idRecette);
-                                cmd.ExecuteNonQuery();
-                            }
-
-                            transaction.Commit();
-                        MessageBox.Show("✅ Recette et ses lots supprimés avec succès !", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                         
-                        }
-                    catch (MySqlException mex)
-                    {
-                        transaction.Rollback();
-                        MessageBox.Show($"❌ Erreur SQL : {mex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                        catch (Exception ex)
-                        {
-                            transaction.Rollback();
-                            MessageBox.Show($"❌ Erreur : {ex.Message}", "Erreur",
-                                          MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            throw;
-                        }
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    MessageBox.Show($"❌ Erreur SQL : {ex.Message}", "Erreur",
-                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    throw;
-                }
-            }
-        }
-
-        /// <summary>
-        /// fct qui renvoie une liste de recette
-        /// </summary>
-        /// <returns>liste de recette</returns>
+        /// <returns>Liste de recettes</returns>
         public static List<Recette> GetAll()
         {
             List<Recette> liste = new List<Recette>();
             using (MySqlConnection connection = DBManager.GetConnection())
-
             {
-                connection.OpenIfNot();
+                connection.Open();
 
                 string query = "SELECT Id_Recette, REC_Nom, REC_DateHeureCreation FROM recette";
 
@@ -155,14 +64,18 @@ namespace Squelette_M3
             return liste;
         }
 
-
+        /// <summary>
+        /// Renvoie une recette et la liste ordonnée de ses opérations (via la table Contenir).
+        /// </summary>
+        /// <param name="id">Identifiant de la recette</param>
+        /// <returns>La recette correspondante, ou null si elle n'existe pas</returns>
         public static Recette GetById(int id)
         {
             Recette recette = null;
 
             using (MySqlConnection connection = DBManager.GetConnection())
             {
-                connection.OpenIfNot();
+                connection.Open();
 
                 string query = "SELECT Id_Recette, REC_Nom, REC_DateHeureCreation " +
                               "FROM recette WHERE Id_Recette = @id";
@@ -209,7 +122,6 @@ namespace Squelette_M3
                                 recette.Operations.Add(new Operation
                                 {
                                     Id_Operation = Convert.ToInt32(reader["Id_Operation"]),
-                                    OPE_Ordre = Convert.ToInt32(reader["CON_NoOperation"]),  // ← Ordre depuis Contenir
                                     OPE_Nom = reader["OPE_Nom"]?.ToString() ?? "",
                                     OPE_PositionMoteur = Convert.ToInt32(reader["OPE_PositionMoteur"]),
                                     OPE_TempsAttente = Convert.ToInt32(reader["OPE_TempsAttente"]),
@@ -226,39 +138,39 @@ namespace Squelette_M3
         }
 
         /// <summary>
-/// Compte le nombre d'opérations liées à une recette via la table Contenir.
-/// </summary>
-/// <param name="idRecette">L'identifiant de la recette.</param>
-/// <returns>Le nombre d'opérations.</returns>
-public static int CompterOperations(int idRecette)
-{
-    using (MySqlConnection connection = DBManager.GetConnection())
-    {
-        connection.OpenIfNot();
-
-        string query = "SELECT COUNT(*) FROM Contenir WHERE Id_Recette = @id";
-
-        using (MySqlCommand cmd = new MySqlCommand(query, connection))
+        /// Compte le nombre d'opérations liées à une recette via la table Contenir.
+        /// </summary>
+        /// <param name="idRecette">L'identifiant de la recette.</param>
+        /// <returns>Le nombre d'opérations.</returns>
+        public static int CompterOperations(int idRecette)
         {
-            cmd.Parameters.AddWithValue("@id", idRecette);
-            object result = cmd.ExecuteScalar();
-            return result != null ? Convert.ToInt32(result) : 0;
+            using (MySqlConnection connection = DBManager.GetConnection())
+            {
+                connection.Open();
+
+                string query = "SELECT COUNT(*) FROM Contenir WHERE Id_Recette = @id";
+
+                using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                {
+                    cmd.Parameters.AddWithValue("@id", idRecette);
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToInt32(result) : 0;
+                }
+            }
         }
-    }
-}
 
         /// <summary>
-        /// Supprime une recette et tous les lots associés de la base de données.
+        /// Crée une nouvelle recette ainsi que ses opérations associées (dans une transaction).
         /// </summary>
-        /// <param name="nom">nom de la recette à supprimer</param>
-        /// <param name="operations">liste des opérations associées</param>
-        /// <returns></returns>
-        /// <exception cref="Exception">exception levée en cas d'erreur de base de données</exception>
+        /// <param name="nom">Nom de la recette à créer</param>
+        /// <param name="operations">Liste des opérations à associer, dans l'ordre</param>
+        /// <returns>L'identifiant de la recette créée</returns>
+        /// <exception cref="Exception">Exception levée en cas d'erreur de base de données</exception>
         public static int AjouterRecette(string nom, List<Operation> operations)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
             {
-                connection.OpenIfNot();
+                connection.Open();
 
                 using (MySqlTransaction transaction = connection.BeginTransaction())
                 {
@@ -278,9 +190,9 @@ public static int CompterOperations(int idRecette)
                         }
 
                         // 2. Insérer les opérations et les lier à la recette 
+                        int noOperation = 1;  // Compteur d'ordre
                         foreach (var op in operations)
                         {
-                            int noOperation = 1;  //Compteur d'ordre
                             // Insérer l'opération
                             string insertOp = @"INSERT INTO operation
                                 (OPE_Nom, OPE_PositionMoteur, OPE_TempsAttente, OPE_CycleVerin,
@@ -314,7 +226,7 @@ public static int CompterOperations(int idRecette)
                                 cmdLien.Parameters.AddWithValue("@noOperation", noOperation);
                                 cmdLien.ExecuteNonQuery();
                             }
-                            noOperation++;  //Incrémenter pour la prochaine opération
+                            noOperation++;  // Incrémenter pour la prochaine opération
                         }
 
                         transaction.Commit();
@@ -323,7 +235,7 @@ public static int CompterOperations(int idRecette)
                     catch (MySqlException mex)
                     {
                         transaction.Rollback();
-                        throw new Exception($"❌ Erreur MySQL lors de la modification :\n{mex.Message}", mex);
+                        throw new Exception($"❌ Erreur MySQL lors de la création :\n{mex.Message}", mex);
                     }
                     catch (Exception ex)
                     {
@@ -335,18 +247,18 @@ public static int CompterOperations(int idRecette)
         }
 
         /// <summary>
-        /// Modifie une recette existante en mettant à jour son nom et en remplaçant toutes ses opérations associées par une nouvelle liste d'opérations.
+        /// Modifie une recette existante : met à jour son nom et remplace toutes
+        /// ses opérations associées par une nouvelle liste d'opérations.
         /// </summary>
-        /// <param name="idRecette"></param>
-        /// <param name="nouveauNom"></param>
-        /// <param name="operations"></param>
-        /// <exception cref="Exception"></exception>
-
+        /// <param name="idRecette">Identifiant de la recette à modifier</param>
+        /// <param name="nouveauNom">Nouveau nom de la recette</param>
+        /// <param name="operations">Nouvelle liste d'opérations, dans l'ordre</param>
+        /// <exception cref="Exception">Exception levée en cas d'erreur de base de données</exception>
         public static void ModifierRecette(int idRecette, string nouveauNom, List<Operation> operations)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
             {
-                connection.OpenIfNot();
+                connection.Open();
 
                 using (MySqlTransaction transaction = connection.BeginTransaction())
                 {
@@ -430,7 +342,7 @@ public static int CompterOperations(int idRecette)
                             {
                                 cmd.Parameters.AddWithValue("@idOp", newOpId);
                                 cmd.Parameters.AddWithValue("@idRecette", idRecette);
-                                cmd.Parameters.AddWithValue("@noOp", i + 1);  //Numéro d'ordre
+                                cmd.Parameters.AddWithValue("@noOp", i + 1);  // Numéro d'ordre
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -452,15 +364,16 @@ public static int CompterOperations(int idRecette)
         }
 
         /// <summary>
-        /// Supprime une recette et toutes ses opérations associées de la base de données.
+        /// Supprime une recette ainsi que ses opérations, ses liens Contenir,
+        /// ses lots associés et les événements de ces lots (dans une transaction).
         /// </summary>
         /// <param name="idRecette">Identifiant de la recette à supprimer</param>
-        /// <exception cref="Exception">exception levée en cas d'erreur de base de données</exception>
+        /// <exception cref="Exception">Exception levée en cas d'erreur de base de données</exception>
         public static void SupprimerRecette(int idRecette)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
             {
-                connection.OpenIfNot();
+                connection.Open();
 
                 using (MySqlTransaction transaction = connection.BeginTransaction())
                 {
@@ -485,24 +398,47 @@ public static int CompterOperations(int idRecette)
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 3. Supprimer les opérations
-                        string deleteOperations = "DELETE FROM operation WHERE Id_Recette = @id";
+                        // 3. Récupérer les IDs des opérations liées à cette recette
+                        List<int> opsASupprimer = new List<int>();
+                        string getOps = "SELECT Id_Operation_est_contenu_dans FROM Contenir WHERE Id_Recette = @id";
 
-                        using (MySqlCommand cmd = new MySqlCommand(deleteOperations, connection, transaction))
+                        using (MySqlCommand cmd = new MySqlCommand(getOps, connection, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@id", idRecette);
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                    opsASupprimer.Add(Convert.ToInt32(reader["Id_Operation_est_contenu_dans"]));
+                            }
+                        }
+
+                        // 4. Supprimer les liens dans Contenir
+                        string deleteContenir = "DELETE FROM Contenir WHERE Id_Recette = @id";
+                        using (MySqlCommand cmd = new MySqlCommand(deleteContenir, connection, transaction))
                         {
                             cmd.Parameters.AddWithValue("@id", idRecette);
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 4. Supprimer la recette
-                        string deleteRecette = "DELETE FROM recette WHERE Id_Recette = @id";
+                        // 5. Supprimer les opérations
+                        foreach (int opId in opsASupprimer)
+                        {
+                            string deleteOp = "DELETE FROM operation WHERE Id_Operation = @opId";
+                            using (MySqlCommand cmd = new MySqlCommand(deleteOp, connection, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@opId", opId);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
 
+                        // 6. Supprimer la recette
+                        string deleteRecette = "DELETE FROM recette WHERE Id_Recette = @id";
                         using (MySqlCommand cmd = new MySqlCommand(deleteRecette, connection, transaction))
                         {
                             cmd.Parameters.AddWithValue("@id", idRecette);
                             cmd.ExecuteNonQuery();
                         }
-                        // 5. Supprimer les liens associés
+
                         transaction.Commit();
                     }
                     catch (MySqlException mex)
@@ -520,14 +456,4 @@ public static int CompterOperations(int idRecette)
         }
     }
 
-    public static class MySqlConnectionExtensions
-    {
-        public static void OpenIfNot(this MySqlConnection connection)
-        {
-            if (connection.State != ConnectionState.Open)
-            {
-                connection.Open();
-            }
-        }
-    }
 }

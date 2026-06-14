@@ -1,48 +1,28 @@
-﻿namespace M3.Models
+﻿/*
+ * Auteur  : Noé A-Hadi, Valentin Boegli
+ * Date    : 12.06.2026
+ * Description : Classe Operation - Représente une opération (pas) d'une recette de production.
+ *
+ * Propriétés :
+ * - Id_Operation       : Identifiant unique de l'opération.
+ * - OPE_Nom            : Nom de l'opération.
+ * - OPE_PositionMoteur : Position du moteur (3h, 6h, 9h, 12h).
+ * - OPE_TempsAttente   : Temps d'arrêt en secondes.
+ * - OPE_CycleVerin     : Indique si un cycle vérin est requis.
+ * - OPE_Quittance      : Indique si une quittance manuelle est requise.
+ * - OPE_SensMoteur     : Sens de rotation du moteur.
+ */
+
+namespace Squelette_M3
 {
     public class Operation
     {
-        public int Id_Operation { get; set; }
-        public int OPE_Ordre { get; set; }           // CON_NoOperation dans contenir table associative
-        public string OPE_Nom { get; set; } = "";
-        public int OPE_PositionMoteur { get; set; }  // 3, 6, 9, 12
-        public int OPE_TempsAttente { get; set; }    // En secondes
-        public bool OPE_CycleVerin { get; set; }
-        public bool OPE_Quittance { get; set; }
-        public bool OPE_SensMoteur { get; set; }
-
-
-        public string OPE_Description
-        {
-            get
-            {
-                return $"Opération {OPE_Ordre}: {OPE_Nom}, Position Moteur: {OPE_PositionMoteur}h, Temps d'attente: {OPE_TempsAttente}s, Cycle Vérin: {(OPE_CycleVerin ? "Oui" : "Non")}, Quittance: {(OPE_Quittance ? "Oui" : "Non")}, Sens Moteur: {(OPE_SensMoteur ? "Horaire" : "Anti-horaire")}";
-            }
-        }
-        /// <summary>
-        /// Méthode de création d'une opération avec tous les paramètres requis
-        /// </summary>
-        /// <param name="id">L'identifiant de l'opération</param>
-        /// <param name="ordre">L'ordre de l'opération</param>
-        /// <param name="nom">Le nom de l'opération</param>
-        /// <param name="positionMoteur">La position du moteur</param>
-        /// <param name="tempsAttente">Le temps d'attente en secondes</param>
-        /// <param name="cycleVerin">Indique si l'opération implique un cycle de vérin</param>
-        /// <param name="quittance">Indique si l'opération implique une quittance</param>
-        /// <param name="sensMoteur">Indique le sens du moteur</param>
-        /// <returns></returns>
-        public static Operation Create(int id, string nom, int positionMoteur, int tempsAttente, bool cycleVerin, bool quittance, bool sensMoteur)
-        {
-            return new Operation
-            {
-                Id_Operation = id,
-                OPE_Nom = nom,
-                OPE_PositionMoteur = positionMoteur,
-                OPE_TempsAttente = tempsAttente,
-                OPE_CycleVerin = cycleVerin,
-                OPE_Quittance = quittance,
-                OPE_SensMoteur = sensMoteur
-            };
-        }
+        public int Id_Operation { get; set; }           // PK
+        public string OPE_Nom { get; set; } = "";       // Nom de l'opération
+        public int OPE_PositionMoteur { get; set; }     // Position du moteur : 3, 6, 9, 12h
+        public int OPE_TempsAttente { get; set; }       // Temps d'arrêt en secondes
+        public bool OPE_CycleVerin { get; set; }        // Cycle vérin requis
+        public bool OPE_Quittance { get; set; }         // Quittance manuelle requise
+        public bool OPE_SensMoteur { get; set; }        // Sens de rotation du moteur
     }
 }

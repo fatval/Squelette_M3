@@ -5,6 +5,11 @@
 // Description : Classe statique centralisée gérant la connexion
 //               à la base de données MySQL. Toutes les classes
 //               passent par ici pour obtenir une connexion.
+//
+// Méthodes :
+// - ConnectToDB() : Configure et teste la connexion à la DB.
+// - GetConnection() : Retourne une nouvelle instance MySqlConnection.
+// - TestConnexion() : Vérifie si la connexion est fonctionnelle.
 // ============================================================
 
 using MySql.Data.MySqlClient;
@@ -22,8 +27,6 @@ namespace Squelette_M3
 
         /// <summary>
         /// Configure la connexion à la base de données. Doit être appelé avant tout autre méthode.
-        /// Le format de la chaîne de connexion est : "server=localhost;database=nomDB;user=nomUser;password=mot
-        /// Le port est fixé à 3306 par défaut, mais peut être modifié si nécessaire.
         /// </summary>
         /// <param name="databaseName">Nom de la base (ex: "m3")</param>
         /// <param name="userName">Utilisateur MySQL (ex: "root")</param>
@@ -32,16 +35,15 @@ namespace Squelette_M3
         {
             _connectionString = $"server=localhost;database={databaseName};user={userName};password={password};port=3306";
 
-        // Test de connexion
+            // Test de connexion
             using (MySqlConnection testConn = new MySqlConnection(_connectionString))
             {
-            testConn.Open(); // Lève une exception si ça échoue
+                testConn.Open(); // Lève une exception si ça échoue
             }
         }
 
         /// <summary>
-        /// Configure la connexion à la base de données en utilisant une chaîne de connexion complète.
-        /// Doit être appelé avant tout autre méthode.
+        /// Retourne une nouvelle instance de connexion MySQL prête à être ouverte.
         /// </summary>
         /// <returns>Une instance de MySqlConnection.</returns>
         public static MySqlConnection GetConnection()
@@ -50,7 +52,7 @@ namespace Squelette_M3
         }
 
         /// <summary>
-        /// Teste si la connexion est fonctionnelle
+        /// Teste si la connexion à la base de données est fonctionnelle.
         /// </summary>
         /// <returns>true si la connexion réussit, false sinon.</returns>
         public static bool TestConnexion()
@@ -69,7 +71,7 @@ namespace Squelette_M3
                 }
                 catch
                 {
-                connexionReussie = false; // En cas d'erreur, on retourne false
+                    connexionReussie = false;
                 }
             }
 
