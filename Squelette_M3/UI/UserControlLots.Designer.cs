@@ -157,12 +157,14 @@
             // 
             nudQuantite.BorderStyle = BorderStyle.FixedSingle;
             nudQuantite.Font = new Font("Segoe UI", 9F);
+            nudQuantite.Increment = new decimal(new int[] { 100, 0, 0, 0 });
             nudQuantite.Location = new Point(567, 17);
+            nudQuantite.Maximum = new decimal(new int[] { 10000, 0, 0, 0 });
             nudQuantite.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudQuantite.Name = "nudQuantite";
             nudQuantite.Size = new Size(52, 23);
             nudQuantite.TabIndex = 6;
-            nudQuantite.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            nudQuantite.Value = new decimal(new int[] { 1000, 0, 0, 0 });
             // 
             // btnCreerLot
             // 
