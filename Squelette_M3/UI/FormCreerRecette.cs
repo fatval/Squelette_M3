@@ -1,9 +1,19 @@
-﻿using M3.Models;
+﻿// ============================================================================
+// Fichier     : FormCreerRecette.cs
+// Auteurs     : Noé A-Hadi, Valentin Boegli
+// Date        : Juin 2026
+// Description : Formulaire permettant la création et la modification d'une 
+//               recette de production. Il permet de définir le nom de la 
+//               recette et de gérer sa séquence d'opérations (entre 1 et 10).
+//
+// Méthodes principales :
+// - FormCreerRecette() : Constructeur par défaut (Mode création).
+// - FormCreerRecette(Recette) : Constructeur surchargé (Mode modification).
+// - RafraichirGrille() : Met à jour l'affichage du DataGridView avec la liste.
+// - btnEnregistrer_Click() : Valide les données (nom, nb d'opérations) 
+//                            puis appelle AjouterRecette ou ModifierRecette.
+// ============================================================================
 using Squelette_M3;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-
 namespace M3
 {
     public partial class FormCreerRecette : Form
@@ -12,6 +22,9 @@ namespace M3
         private int recetteIdAModifier = -1;
 
         // ─── CONSTRUCTEUR : Nouvelle recette ───────────────────────
+        /// <summary>
+        /// Constructeur par défaut. Initialise le formulaire en mode "Création d'une nouvelle recette".
+        /// </summary>
         public FormCreerRecette()
         {
             InitializeComponent();
@@ -19,6 +32,10 @@ namespace M3
         }
 
         // ─── CONSTRUCTEUR : Modifier une recette existante ─────────
+        /// <summary>
+        /// Constructeur surchargé. Initialise le formulaire en mode "Modification d'une recette existante".
+        /// </summary>
+        /// <param name="recetteAModifier">L'objet Recette contenant les données à modifier.</param>
         public FormCreerRecette(Recette recetteAModifier)
         {
             InitializeComponent();
@@ -31,14 +48,14 @@ namespace M3
             RafraichirGrille();
         }
 
-
+        // ─── RAFRAÎCHIR LA GRILLE ──────────────────────────────────
         /// <summary>
-        /// Met à jour le contenu de la grille d'opérations pour refléter l'état actuel de la liste des opérations en
-        /// cours.
+        /// Met à jour le contenu de la grille d'opérations pour refléter l'état actuel de la liste en mémoire.
         /// </summary>
-        /// <remarks>Cette méthode efface toutes les lignes existantes dans la grille, puis ajoute une
-        /// ligne pour chaque opération en cours. Elle doit être appelée chaque fois que la liste des opérations change
-        /// afin de garantir que l'affichage reste synchronisé avec les données sous-jacentes.</remarks>
+        /// <remarks>
+        /// Efface les lignes existantes puis ajoute une ligne pour chaque opération de la liste.
+        /// Garantit que l'affichage reste synchronisé avec les données sous-jacentes.
+        /// </remarks>
         private void RafraichirGrille()
         {
             dgvOperations.Rows.Clear();
@@ -50,12 +67,16 @@ namespace M3
                 dgvOperations.Rows[rowIndex].Cells["colSensMoteur"].Value = op.OPE_SensMoteur;
                 dgvOperations.Rows[rowIndex].Cells["colTempsArret"].Value = op.OPE_TempsAttente;
                 dgvOperations.Rows[rowIndex].Cells["colQuittance"].Value = op.OPE_Quittance;
-                dgvOperations.Rows[rowIndex].Cells["colCycleVerin"].Value = op.OPE_CycleVerin;  
-
+                dgvOperations.Rows[rowIndex].Cells["colCycleVerin"].Value = op.OPE_CycleVerin;
             }
         }
 
         // ─── AJOUTER OPÉRATION ──────────────────────────────────────
+        /// <summary>
+        /// Ajoute une nouvelle opération avec des valeurs par défaut à la liste en cours (limite de 10 max).
+        /// </summary>
+        /// <param name="sender">L'objet déclenchant l'événement.</param>
+        /// <param name="e">Les arguments de l'événement.</param>
         private void btnAjouterOp_Click(object sender, EventArgs e)
         {
             try
@@ -75,12 +96,11 @@ namespace M3
                 Operation nouvelleOp = new Operation
                 {
                     Id_Operation = operationsEnCours.Count + 1,
-                    OPE_PositionMoteur = 3,
+                    OPE_PositionMoteur = 12,
                     OPE_SensMoteur = false,
                     OPE_TempsAttente = 0,
                     OPE_Quittance = false,
                     OPE_CycleVerin = false,
-
                 };
 
                 operationsEnCours.Add(nouvelleOp);
@@ -97,8 +117,12 @@ namespace M3
             }
         }
 
-
         // ─── SUPPRIMER OPÉRATION ────────────────────────────────────
+        /// <summary>
+        /// Supprime l'opération actuellement sélectionnée dans la grille et réorganise les IDs.
+        /// </summary>
+        /// <param name="sender">L'objet déclenchant l'événement.</param>
+        /// <param name="e">Les arguments de l'événement.</param>
         private void btnSupprimerOp_Click(object sender, EventArgs e)
         {
             try
@@ -128,8 +152,11 @@ namespace M3
             }
         }
 
-
         // ─── SYNCHRONISER GRILLE → LISTE ───────────────────────────
+        /// <summary>
+        /// Lit les données saisies par l'utilisateur dans la grille et met à jour la liste des opérations en mémoire.
+        /// </summary>
+        /// <returns>True si la synchronisation a réussi, False en cas d'erreur de lecture.</returns>
         private bool SynchroniserDepuisGrille()
         {
             try
@@ -142,7 +169,7 @@ namespace M3
                     DataGridViewRow row = dgvOperations.Rows[i];
 
                     // Position moteur (3, 6, 9, 12)
-                    int positionMoteur = 3;
+                    int positionMoteur = 12;
                     if (row.Cells["colPosition"].Value != null)
                         int.TryParse(row.Cells["colPosition"].Value.ToString(), out positionMoteur);
 
@@ -168,12 +195,11 @@ namespace M3
 
                     operationsEnCours.Add(new Operation
                     {
-                        OPE_Ordre = i + 1,
                         OPE_PositionMoteur = positionMoteur,
                         OPE_TempsAttente = tempsAttente,
                         OPE_Quittance = quittance,
-                        OPE_CycleVerin = cycleVerin,  
-                        OPE_SensMoteur = sensMoteur   
+                        OPE_CycleVerin = cycleVerin,
+                        OPE_SensMoteur = sensMoteur
                     });
                 }
 
@@ -188,6 +214,12 @@ namespace M3
         }
 
         // ─── ENREGISTRER ───────────────────────────────────────────
+        /// <summary>
+        /// Valide les saisies (nom, nb opérations), synchronise la grille puis enregistre 
+        /// la recette en base de données (Ajout ou Modification).
+        /// </summary>
+        /// <param name="sender">L'objet déclenchant l'événement.</param>
+        /// <param name="e">Les arguments de l'événement.</param>
         private void btnEnregistrer_Click(object sender, EventArgs e)
         {
             try
@@ -201,6 +233,7 @@ namespace M3
                 }
 
                 if (!SynchroniserDepuisGrille()) return;
+
                 //Gestion d'erreur : 
                 if (operationsEnCours.Count == 0)
                 {
@@ -215,6 +248,7 @@ namespace M3
                     REC_DateHeureCreation = DateTime.Now,
                     Operations = new List<Operation>(operationsEnCours)
                 };
+
                 //Si recetteIdAModifier = -1 --> Nouvelle recette, sinon, modification d'une recette existante
                 if (recetteIdAModifier == -1)
                 {
@@ -228,7 +262,6 @@ namespace M3
                     MessageBox.Show($"✅ Recette '{recette.REC_Nom}' modifiée avec succès !",
                         "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-
 
                 this.DialogResult = DialogResult.OK;
                 this.Close();
@@ -249,7 +282,6 @@ namespace M3
                 MessageBox.Show($"❌ Détail complet :\n\n{message}",
                     "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
     }
 }

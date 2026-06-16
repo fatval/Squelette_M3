@@ -2,14 +2,16 @@
 
 ## 📋 Description du Projet
 
-Squelette M3 est une application **Windows Forms** développée en **C#** permettant de gérer des **lots de production**, des **recettes** et un **historique des événements**. L'application utilise une base de données **MySQL** pour la persistance des données et offre une interface utilisateur moderne et intuitive.
+**Squelette M3** est une application **Windows Forms** développée en **C# (.NET 10.0)** permettant de gérer des **lots de production**, des **recettes**, et un **historique complet des événements**. L'application propose une interface intuitive et moderne avec fonctionnalités complètes de CRUD (Create, Read, Update, Delete), transactions sécurisées et exports de données.
 
-### État du Projet (12.06.2026)
+### État du Projet (15.06.2026)
 ✅ **Version stable avec logique fonctionnelle complète**  
-✅ **Interface utilisateur moderne et intuitive**  
-✅ **Gestion complète des lots, recettes et historique implémentée**  
-✅ **Export de données en XML et CSV fonctionnel**  
+✅ **Interface utilisateur moderne (Windows Forms)**  
 ✅ **Architecture en couches bien structurée**  
+✅ **Gestion transactionnelle robuste avec MySQL**  
+✅ **Export de données en XML et CSV fonctionnel**  
+✅ **Validation des données complète**  
+✅ **Historique avec recherche temps réel**  
 
 ---
 
@@ -18,233 +20,306 @@ Squelette M3 est une application **Windows Forms** développée en **C#** permet
 ```
 Squelette_M3/
 │
-├── DataAccessLayer/           # Couche d'accès aux données
-│   └── DBManager.cs           # Gestionnaire de connexions MySQL
+├── 📄 Squelette_M3.slnx             # Solution Visual Studio
+├── 📄 README.md                      # Documentation
+├── 📄 .gitignore                     # Fichiers à ignorer Git
 │
-├── Entites/                   # Classes métier (modèles)
-│   ├── Lot.cs                 # Entité Lot
-│   ├── Recette.cs             # Entité Recette
-│   └── Evenement.cs           # Entité Événement
-│
-├── UI/                        # Interface utilisateur (Windows Forms)
-│   ├── FormMain.cs            # Formulaire principal avec navigation
-│   ├── UserControlRecettes.cs # Gestion des recettes
-│   ├── UserControlLots.cs     # Gestion des lots
-│   ├── UserControlHistorique.cs # Historique et export des données
-│   └── FormCreerRecette.cs    # Formulaire de création/modification de recette
-│
-├
-│
-│
-├── Program.cs                 # Point d'entrée de l'application
-├── Squelette_M3.csproj        # Configuration du projet
-└── Squelette_M3.sln           # Solution Visual Studio
+└── 📁 Squelette_M3/                 # Projet principal (C#, .NET 10.0)
+    │
+    ├── 📄 Program.cs                # Point d'entrée de l'application
+    ├── 📄 Squelette_M3.csproj       # Configuration du projet
+    │
+    ├── 📁 DataAccessLayer/          # 🔴 Couche d'Accès aux Données
+    │   └── DBManager.cs             # Gestionnaire centralisé des connexions MySQL
+    │
+    ├── 📁 Entites/                  # 🟠 Couche Métier (Modèles de données)
+    │   ├── Lot.cs                   # Classe Lot (lots de production)
+    │   ├── Recette.cs               # Classe Recette (recettes avec opérations)
+    │   ├── Operation.cs             # Classe Operation (opérations d'une recette)
+    │   ├── Evenement.cs             # Classe Evenement (historique des événements)
+    │   ├── Etat.cs                  # Classe Etat (états possibles d'un lot)
+    │   └── Contenir.cs              # Classe Contenir (table associative)
+    │
+    ├── 📁 Properties/               # Ressources et configurations
+    │   ├── Resources.resx           # Ressources de l'application
+    │   └── Resources.Designer.cs    # Fichier généré pour les ressources
+    │
+    └── 📁 UI/                       # 🟡 Couche Présentation (Interface Utilisateur)
+        │
+        ├── 📄 FormMain.cs           # Formulaire principal avec navigation
+        ├── 📄 FormMain.Designer.cs  # Interface du formulaire principal (généré)
+        ├── 📄 FormMain.resx         # Ressources du formulaire principal
+        │
+        ├── 📄 FormCreerRecette.cs              # Formulaire création/modification de recette
+        ├── 📄 FormCreerRecette.Designer.cs    # Interface du formulaire recette (généré)
+        ├── 📄 FormCreerRecette.resx           # Ressources du formulaire recette
+        │
+        ├── 📄 UserControlRecettes.cs          # Control gestion des recettes
+        ├── 📄 UserControlRecettes.Designer.cs # Interface (généré)
+        ├── 📄 UserControlRecettes.resx        # Ressources
+        │
+        ├── 📄 UserControlLots.cs              # Control gestion des lots
+        ├── 📄 UserControlLots.Designer.cs     # Interface (généré)
+        ├── 📄 UserControlLots.resx            # Ressources
+        │
+        ├── 📄 UserControlHistorique.cs        # Control historique et exports
+        ├── 📄 UserControlHistorique.Designer.cs # Interface (généré)
+        └── 📄 UserControlHistorique.resx      # Ressources
+
+└── 📁 .github/
+    └── 📄 copilot-instructions.md   # Directives Copilot (commentaires en français)
 ```
 
 ---
 
 ## 🔧 Composants Principaux
 
-### 1. **DataAccessLayer - DBManager.cs**
-Classe statique responsable de la gestion de la connexion MySQL.
+### 1. **DataAccessLayer/DBManager.cs** 🔴
+Classe statique centralisée pour la gestion de **toutes les connexions MySQL**.
 
-**Méthodes principales:**
+**Responsabilités:**
+- Gestion de la chaîne de connexion unique
+- Ouverture des connexions
+- Tests de connectivité
+- Format: `server=localhost;database={nom};user={utilisateur};password={motdepasse};port=3306`
+
+**Méthodes publiques:**
+
 | Méthode | Description |
 |---------|-------------|
-| `ConnecterABD(nomBaseDonnees, nomUtilisateur, motDePasse)` | Configure la connexion à la base de données |
-| `ObtenirConnexion()` | Retourne une nouvelle connexion MySQL |
-| `TesterConnexion()` | Teste la connexion à la base de données |
+| `ConnectToDB(databaseName, userName, password)` | Initialise la connexion MySQL (appelé au démarrage) |
+| `GetConnection()` | Retourne une nouvelle instance de `MySqlConnection` |
+| `TestConnexion()` | Teste la connexion à la base de données |
+
+---
+
+### 2. **Entités Métier (Couche Métier)** 🟠
+
+#### **Lot.cs** - Gestion des lots de production
 
 **Propriétés:**
-- `_chaussedConnexion` - Chaîne de connexion statique
+```csharp
+public int Id_Lot { get; set; }              // Identifiant unique
+public string LOT_Nom { get; set; }          // Nom du lot
+public int LOT_Quantite { get; set; }        // Quantité produite
+public DateTime LOT_DateHeureCreation { get; set; }  // Date/heure création
+public int Id_Etat { get; set; }             // Clé étrangère : état
+public int ETA_Libelle { get; set; }         // État du lot
+public int Id_Recette { get; set; }          // Clé étrangère : recette
+public string REC_Nom { get; set; }          // Nom de la recette associée
+```
 
-### 2. **Entités Métier**
-
-#### **Lot.cs**
-Représente un lot de production avec ses propriétés et méthodes.
-
-**Propriétés principales:**
-- `Id_Lot` - Identifiant unique
-- `LOT_Nom` - Nom du lot
-- `LOT_Quantite` - Quantité produite
-- `LOT_DateHeureCreation` - Date/heure de création
-- `Id_Etat` - État actuel (En attente, En cours, Terminé, Erreur)
-- `Id_Recette` - Référence à la recette
-- `REC_Nom` - Nom de la recette associée
-
-**Méthodes principales:**
+**Méthodes:**
+- `RechercherLotParNom(nom)` - Recherche un lot par son nom
 - `AfficherTousLesLots()` - Affiche tous les lots en console
-- `CreerLot(nom, quantite, idRecette)` - Crée un nouveau lot avec validation
+- `CreerLot(nom, quantite, idRecette)` - Crée un lot
 - `SupprimerLot(idLot)` - Supprime un lot
-- `MettreAJourEtatLot(idLot, idEtat)` - Modifie l'état d'un lot
+- `MettreAJourEtatLot(idLot, idEtat)` - Met à jour l'état d'un lot
 
-#### **Recette.cs**
-Représente une recette avec ses opérations associées.
+---
 
-**Propriétés principales:**
-- `Id_Recette` - Identifiant unique
-- `REC_Nom` - Nom de la recette
-- `REC_DateCreation` - Date de création
-- `Operations` - Liste des opérations de la recette
-
-**Méthodes principales:**
-- `CreerRecette(nom)` - Crée une nouvelle recette
-- `ModifierRecette(idRecette, nom)` - Modifie une recette existante
-- `SupprimerRecette(idRecette)` - Supprime une recette avec validation
-
-#### **Evenement.cs**
-Enregistre les événements/logs associés aux lots.
+#### **Recette.cs** - Gestion des recettes et opérations
 
 **Propriétés:**
-- `Id_Evenement` - Identifiant unique
-- `EVE_Message` - Description de l'événement
-- `EVE_DateHeure` - Timestamp de l'événement
-- `Id_Lot` - Référence au lot concerné
+```csharp
+public int Id_Recette { get; set; }                    // Identifiant unique
+public string REC_Nom { get; set; }                    // Nom de la recette
+public DateTime REC_DateHeureCreation { get; set; }    // Date création
+public List<Operation> Operations { get; set; }        // Opérations associées
+```
 
-### 3. **Interface Utilisateur (UI)**
+**Méthodes statiques:**
 
-#### **FormMain.cs**
-Formulaire principal avec navigation par onglets/boutons.
-
-**Propriétés:**
-- `_couleurActive` - Couleur active: RGB(0, 120, 215) - Bleu
-- `_couleurInactive` - Couleur inactive: RGB(45, 45, 48) - Gris foncé
-
-**Méthodes principales:**
 | Méthode | Description |
 |---------|-------------|
-| `AfficherPage(UserControl)` | Affiche une page dans le panneau principal |
-| `DesactiverTousBoutons()` | Réinitialise les couleurs des boutons |
-| `BtnRecettes_Click()` | Navigue vers la gestion des recettes |
-| `BtnLots_Click()` | Navigue vers la gestion des lots |
-| `BtnHistorique_Click()` | Navigue vers l'historique |
+| `GetAll()` | Retourne la liste de toutes les recettes |
+| `GetById(id)` | Charge une recette avec ses opérations associées |
+| `CompterOperations(idRecette)` | Compte le nombre d'opérations d'une recette |
+| `AjouterRecette(nom, operations)` | Crée une recette avec ses opérations (transaction) |
+| `ModifierRecette(idRecette, nom, operations)` | Modifie une recette et remplace ses opérations |
+| `SupprimerRecette(idRecette)` | Supprime une recette (transaction) |
 
-#### **UserControlRecettes.cs**
-Gestion et affichage des recettes disponibles.
+---
+
+#### **Operation.cs** - Opérations d'une recette
+
+**Propriétés:**
+```csharp
+public int Id_Operation { get; set; }        // Identifiant unique
+public int OPE_Ordre { get; set; }           // Ordre dans la recette
+public string OPE_Nom { get; set; }          // Nom de l'opération
+public int OPE_PositionMoteur { get; set; }  // Position (3, 6, 9, 12 heures)
+public int OPE_TempsAttente { get; set; }    // Temps d'attente en secondes
+public bool OPE_CycleVerin { get; set; }     // Cycle de vérin activé?
+public bool OPE_Quittance { get; set; }      // Quittance requise?
+public bool OPE_SensMoteur { get; set; }     // Sens du moteur
+```
+
+---
+
+#### **Evenement.cs** - Historique des événements
+
+**Propriétés:**
+```csharp
+public int Id_Evenement { get; set; }        // Identifiant unique
+public string EVE_Message { get; set; }      // Message/description
+public DateTime EVE_DateHeure { get; set; }  // Horodatage
+public int Id_Lot { get; set; }              // Clé étrangère : lot
+```
+
+---
+
+#### **Etat.cs** - États possibles d'un lot
+
+**Propriétés:**
+```csharp
+public int Id_Etat { get; set; }             // Identifiant unique
+public string ETA_Libelle { get; set; }      // Libellé (En attente, En cours, Terminé, Erreur)
+```
+
+---
+
+### 3. **Interface Utilisateur (Couche Présentation)** 🟡
+
+#### **FormMain.cs** - Formulaire principal
+
+**Rôle:** Navigation par onglets entre les trois sections de l'application.
+
+**Méthodes:**
+
+| Méthode | Description |
+|---------|-------------|
+| `AfficherPage(UserControl)` | Affiche un UserControl dans le panneau principal |
+| `DesactiverTousBoutons()` | Réinitialise la couleur de tous les boutons |
+| `btnRecettes_Click()` | Navigue vers la gestion des recettes |
+| `btnLots_Click()` | Navigue vers la gestion des lots |
+| `btnHistorique_Click()` | Navigue vers l'historique |
+
+---
+
+#### **UserControlRecettes.cs** - Gestion des recettes
 
 **Fonctionnalités:**
-- DataGridView affichant les recettes
-- Colonnes: ID, Nom de la recette, Date de création
+- DataGridView affichant toutes les recettes
+- Colonnes: ID, Nom, Nombre d'opérations, Date de création
 - Boutons: Ajouter, Modifier, Supprimer
 - Confirmation avant suppression
 
 **Méthodes principales:**
+
 | Méthode | Description |
 |---------|-------------|
-| `ChargerRecettesDGV()` | Charge les recettes depuis la base de données |
-| `BtnAjouter_Click()` | Ouvre le formulaire de création |
-| `BtnModifier_Click()` | Édite une recette sélectionnée |
-| `BtnSupprimer_Click()` | Supprime une recette avec confirmation |
-| `SupprimerRecetteAvecLots(idRecette)` | Supprime en cascade (recette + lots + événements) |
+| `ChargerRecettesDGV()` | Charge les recettes depuis la BD |
+| `btnAjouter_Click()` | Ouvre `FormCreerRecette()` en mode création |
+| `btnModifier_Click()` | Ouvre `FormCreerRecette(recette)` en mode modification |
+| `btnSupprimer_Click()` | Supprime avec confirmation et cascade |
+| `SupprimerRecetteAvecLots(idRecette)` | Transaction: supprime recette → lots → événements |
 
-#### **UserControlLots.cs**
-Gestion complète des lots de production.
+---
+
+#### **UserControlLots.cs** - Gestion des lots
 
 **Fonctionnalités:**
-- DataGridView affichant les lots
+- DataGridView affichant tous les lots
 - ComboBox pour sélectionner la recette
-- Formulaire de création avec validation complète
-- Affichage du statut et de la date de création
+- Champs de saisie pour nom et quantité
+- Création avec validation automatique
 
 **Méthodes principales:**
+
 | Méthode | Description |
 |---------|-------------|
-| `ChargerRecettes()` | Charge les recettes dans le ComboBox |
-| `ChargerLots()` | Affiche tous les lots dans le DataGridView |
-| `BtnCreerLot_Click()` | Crée un nouveau lot avec validation |
-| `RafraichirAffichage()` | Recharge l'affichage des lots |
+| `ChargerRecettes()` | Remplit le ComboBox avec les recettes |
+| `ChargerLots()` | Charge tous les lots dans le DataGridView |
+| `btnCreerLot_Click()` | Crée un nouveau lot avec validation |
 
-**Helper Class:**
-```csharp
-/// <summary>
-/// Classe utilitaire pour l'affichage des recettes dans le ComboBox
-/// </summary>
-public class RecetteItem
-{
-    public int Id_Recette { get; set; }
-    public string REC_Nom { get; set; }
-}
-```
+---
 
-#### **UserControlHistorique.cs**
-Consultation et export de l'historique des lots.
+#### **UserControlHistorique.cs** - Historique et exports
 
 **Fonctionnalités:**
-- DataGridView avec historique complet des lots
-- Recherche temps réel par nom ou ID
-- Affichage des détails d'un lot (double-clic)
-- Export en XML et CSV
-- Rafraîchissement manuel des données
+- DataGridView avec historique complet
+- Recherche en temps réel par nom, ID ou recette
+- Double-clic pour afficher détails complets
+- Export XML et CSV
+- Rafraîchissement manuel
 
 **Méthodes principales:**
+
 | Méthode | Description |
 |---------|-------------|
 | `ChargerHistorique()` | Récupère et affiche l'historique |
-| `ObtenirHistoriqueLots()` | Requête MySQL pour l'historique |
-| `FiltrerDonnees(recherche)` | Filtre les données en mémoire |
-| `TxtRecherche_TextChanged()` | Recherche temps réel |
-| `AfficherDetailLot(idLot)` | Affiche le détail complet d'un lot |
+| `TxtRecherche_TextChanged()` | Filtre les données en temps réel |
+| `AfficherDetailLot(idLot)` | Affiche détail complet + événements |
 | `ExporterXML(chemin)` | Export au format XML |
 | `ExporterCSV(chemin)` | Export au format CSV |
-| `BtnRafraichir_Click()` | Recharge les données |
 
-#### **FormCreerRecette.cs**
-Formulaire dédié à la création et modification de recettes.
+---
+
+#### **FormCreerRecette.cs** - Création/Modification de recette
+
+**Rôle:** Formulaire modal pour créer ou modifier une recette.
 
 **Constructeurs:**
 - `FormCreerRecette()` - Crée une nouvelle recette
-- `FormCreerRecette(Recette recetteAModifier)` - Modifie une recette existante
-
-**Propriétés:**
-- `_operationsEnCours` - Liste des opérations en cours d'édition
-- `_recetteIdAModifier` - ID de la recette en modification (-1 si création)
+- `FormCreerRecette(Recette recetteAModifier)` - Modifie une recette
 
 **Méthodes principales:**
+
 | Méthode | Description |
 |---------|-------------|
-| `RafraichirGrille()` | Synchronise l'affichage avec les données |
-| `BtnAjouterOperation_Click()` | Ajoute une opération (max 10) |
-| `BtnSupprimerOperation_Click()` | Supprime l'opération sélectionnée |
+| `RafraichirGrille()` | Synchronise l'affichage avec les opérations |
+| `btnAjouterOp_Click()` | Ajoute une opération (max 10) |
+| `btnSupprimerOp_Click()` | Supprime l'opération sélectionnée |
 | `SynchroniserDepuisGrille()` | Récupère les données du formulaire |
-| `BtnEnregistrer_Click()` | Enregistre la recette en base de données |
+| `btnEnregistrer_Click()` | Enregistre la recette en base de données |
 
 ---
 
-## 📦 Dépendances
+## 📦 Dépendances et Configuration
 
-- **Framework:** .NET Framework / C# (Windows Desktop Application)
-- **MySQL.Data** - Connecteur MySQL pour C# (version 8.0+)
-- **System.Windows.Forms** - Interface utilisateur
-- **System.Drawing** - Gestion des couleurs et du rendu
-- **System.Xml** - Sérialisation XML pour les exports
+### Framework & Dépendances
+```xml
+<PropertyGroup>
+  <OutputType>WinExe</OutputType>
+  <TargetFramework>net10.0-windows</TargetFramework>
+  <Nullable>enable</Nullable>
+  <UseWindowsForms>true</UseWindowsForms>
+  <ImplicitUsings>enable</ImplicitUsings>
+</PropertyGroup>
+
+<ItemGroup>
+  <PackageReference Include="MySql.Data" Version="9.7.0" />
+</ItemGroup>
+```
+
+### Versions
+- **Framework:** .NET 10.0 (Windows)
+- **Langage:** C# 12+
+- **MySQL.Data:** 9.7.0
+- **UI:** Windows Forms
 
 ---
 
-## 🗄️ Base de Données MySQL
+## 🗄️ Modèle de Données MySQL
 
-Tables principales utilisées:
+### Tables principales
 
 | Table | Description |
 |-------|-------------|
-| `lot` | Enregistre les lots de production |
-| `recette` | Contient les recettes disponibles |
-| `operation` | Opérations associées à chaque recette |
-| `evenement` | Historique des événements par lot |
 | `etat` | États possibles (En attente, En cours, Terminé, Erreur) |
+| `recette` | Recettes avec date de création |
+| `operation` | Opérations de production |
+| `Contenir` | Association Recette ↔ Operation (avec ordre) |
+| `lot` | Lots de production |
+| `evenement` | Historique des événements par lot |
 
-**Exemple de requête:**
-```sql
-SELECT 
-    l.Id_Lot, 
-    l.LOT_Nom, 
-    l.LOT_Quantite, 
-    r.REC_Nom, 
-    l.LOT_DateHeureCreation, 
-    e.ETA_Libelle
-FROM lot l
-JOIN recette r ON l.Id_Recette = r.Id_Recette
-JOIN etat e ON l.Id_Etat = e.Id_Etat
-ORDER BY l.LOT_DateHeureCreation DESC;
+### Relations
+
+```
+Recette (1) ──── (n) Contenir ──── (n) Operation
+Recette (1) ──── (n) Lot ──── (1) Etat
+Lot (1) ──── (n) Evenement
 ```
 
 ---
@@ -252,12 +327,13 @@ ORDER BY l.LOT_DateHeureCreation DESC;
 ## 🚀 Installation et Configuration
 
 ### Prérequis
-- Visual Studio 2019 ou supérieur
-- .NET Framework 4.7.2 ou supérieur
+- Visual Studio 2022+ (ou VS Code avec C#)
+- .NET 10.0 SDK
 - MySQL Server 8.0+ (port 3306 par défaut)
-- Base de données configurée avec les tables
+- Base de données MySQL créée
 
 ### Étapes d'installation
+
 1. **Cloner le repository**
    ```bash
    git clone https://github.com/fatval/Squelette_M3.git
@@ -265,96 +341,54 @@ ORDER BY l.LOT_DateHeureCreation DESC;
    ```
 
 2. **Ouvrir le projet**
-   - Ouvrir `Squelette_M3.sln` dans Visual Studio
+   - Ouvrir `Squelette_M3.slnx` dans Visual Studio
 
 3. **Restaurer les dépendances NuGet**
-   - Menu: Outils → Gestionnaire de packages NuGet → Console du Gestionnaire de packages
-   - Exécuter: `Update-Package -Reinstall`
+   ```bash
+   dotnet restore
+   ```
 
-4. **Configurer les paramètres MySQL**
-   - Créer la base de données MySQL
-   - Importer le schéma de tables
+4. **Configurer la connexion MySQL**
+   - Ouvrir `Program.cs`
+   - Modifier: `DBManager.ConnectToDB("m3", "root", "");`
+   - Remplacer par vos paramètres MySQL
 
-5. **Compiler et exécuter**
-   - Appuyer sur `F5` ou cliquer sur "Démarrer le débogage"
+5. **Créer la base de données**
+   - Créer la base: `CREATE DATABASE m3;`
+   - Importer le schéma SQL
 
-### Configuration de la Connexion MySQL
-```csharp
-// Dans Program.cs au démarrage de l'application
-DBManager.ConncterABD("m3", "root", ""); // (base, utilisateur, mot_de_passe)
-
-// Ou avec connexion personnalisée
-DBManager.ConncterABD("nomBaseDonnees", "nomUtilisateur", "motDePasse");
-```
-
----
-
-## ✅ Checklist de Refactorisation
-
-### Nettoyage du Code
-- ✅ **Fonctions:** Éviter les répétitions
-  - ✅ Extraire les patterns communes
-  - ✅ Utiliser des méthodes utilitaires génériques
-- ✅ **Variables:** Enlever les variables temporaires
-  - ✅ Vérifier les variables non utilisées
-  - ✅ Optimiser la portée des variables
-
-### Cohérence et Standards
-- ✅ **Traduction:** Traduire les noms de fonctions en français
-  - ✅ `ChargerRecettes()` - Déjà français
-  - ✅ `ObtenirConnexion()` - Traduit de `GetConnection()`
-  - ✅ `TesterConnexion()` - Français
-  - ✅ `ConncterABD()` - Traduit de `ConnectToDB()`
-    
-- ✅ **Noms de variables:** Cohérence appliquée
-  - ✅ `_couleurActive` - Clairement nommée
-  - ✅ `_couleurInactive` - Cohérent avec les couleurs
-  - ✅ Préfixes/suffixes cohérents appliqués
-
-- ✅ **Mise en forme du code:** Signature standard appliquée
-  ```csharp
-  /// <summary>
-  /// Description concise et claire de la méthode
-  /// </summary>
-  /// <param name="nom">Description du paramètre</param>
-  /// <returns>Description de la valeur retournée</returns>
-  /// <remarks>
-  /// Auteur: Valentin
-  /// Date: JJ.MM.YYYY
-  /// Description: Détails additionnels de l'implémentation
-  /// </remarks>
-  public static void CreerLot(string nom, int quantite)
-  {
-      // Implémentation...
-  }
-  ```
+6. **Compiler et exécuter**
+   ```bash
+   dotnet run
+   ```
 
 ---
 
-## 💡 Bonnes Pratiques et Standards du Projet
+## 💡 Bonnes Pratiques et Standards
 
 ### Convention de Nommage
+
 | Type | Convention | Exemple |
 |------|-----------|---------|
-| Classes/Fichiers | PascalCase | `FormMain.cs`, `DBManager.cs` |
-| Méthodes publiques | PascalCase | `ChargerLots()`, `MettreAJourEtatLot()` |
-| Variables privées | camelCase avec _ | `_chaussedConnexion`, `_couleurActive` |
-| Propriétés | PascalCase | `Id_Lot`, `REC_Nom` |
-| Constantes | UPPER_SNAKE_CASE | `_CHAUSSEDE_CONNEXION_DEFAUT` |
-| Paramètres | camelCase | `nom`, `quantite`, `idRecette` |
+| **Classes/Fichiers** | PascalCase | `FormMain.cs`, `DBManager.cs` |
+| **Méthodes publiques** | PascalCase | `ChargerRecettes()`, `AjouterRecette()` |
+| **Variables privées** | camelCase avec `_` | `_colorActif`, `_donneesCompletes` |
+| **Propriétés** | PascalCase | `Id_Lot`, `REC_Nom` |
+| **Constantes** | UPPER_SNAKE_CASE | `_CONNEXION_STRING` |
+| **Paramètres** | camelCase | `nom`, `quantite`, `idRecette` |
 
 ### Documentation du Code
+
 ```csharp
 /// <summary>
-/// Description concise et claire de la méthode
+/// Description brève et claire de la méthode en français.
 /// </summary>
 /// <param name="nom">Description du paramètre</param>
-/// <param name="quantite">Autre paramètre</param>
 /// <returns>Description de la valeur retournée</returns>
 /// <remarks>
-/// Auteur: Valentin
-/// Date: 08.06.2026
-/// Détails: Crée un lot dans la base de données avec validation
+/// Auteur: [Prénom] [Nom]
+/// Date: [JJ.MM.YYYY]
+/// Détails: Explications de l'implémentation
 /// </remarks>
 public static void CreerLot(string nom, int quantite)
 {
@@ -363,51 +397,23 @@ public static void CreerLot(string nom, int quantite)
 ```
 
 ### Langage des Commentaires
-✅ **FRANÇAIS** - Tous les commentaires et documentation en français  
-(Voir `.github/copilot-instructions.md`)
+✅ **FRANÇAIS** - Tous les commentaires et documentation en français
 
-### Langage de Programmation
-✅ **C#** - Langage principal pour toute implémentation  
-✅ **SQL** - Pour les requêtes de base de données  
-✅ **XML/CSV** - Pour les exports de données  
-
-### Séparation des Responsabilités (Layered Architecture)
-```
-┌─────────────────────────────────────┐
-│         Interface (UI Layer)        │  UserControlXxx.cs, FormXxx.cs
-│    Affichage, événements utilisateur│
-│  Responsabilité: Présentation       │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────┴──────────────────────┐
-│      Business Logic / Métier        │  Lot.cs, Recette.cs, Evenement.cs
-│  Validation, calculs, règles métier │
-│  Responsabilité: Logique métier     │
-└──────────────┬──────────────────────┘
-               │
-┌──────────────┴──────────────────────┐
-│     Data Access Layer (DAL)         │  DBManager.cs
-│  Opérations MySQL, connexions       │
-│  Responsabilité: Persistance        │
-└─────────────────────────────────────┘
-```
-
-### Pratiques de Développement
+### Séparation des Responsabilités
 - ✅ Pas de logique métier dans les formulaires
+- ✅ DBManager centralise toutes les connexions
 - ✅ Validation des données à l'entrée
-- ✅ Gestion appropriée des exceptions
-- ✅ Closes en cascade pour les suppressions (recette → lots → événements)
-- ✅ Confirmation de l'utilisateur pour les opérations destructrices
-- ✅ Actualisation automatique de l'interface après modifications
+- ✅ Transactions pour opérations multi-table
+- ✅ Confirmation utilisateur pour suppressions
 
 ---
 
 ## 🔗 Ressources Utiles
 
-- **Repository GitHub:** [fatval/Squelette_M3](https://github.com/fatval/Squelette_M3)
-- **Directives Copilot:** `.github/copilot-instructions.md`
-- **Documentation MySQL:** [MySQL 8.0 Reference](https://dev.mysql.com/doc/refman/8.0/en/)
-- **Microsoft Docs - Windows Forms:** [docs.microsoft.com/windows-forms](https://docs.microsoft.com/en-us/dotnet/desktop/winforms)
+- **Repository:** [fatval/Squelette_M3](https://github.com/fatval/Squelette_M3)
+- **MySQL Docs:** [MySQL 8.0 Reference](https://dev.mysql.com/doc/refman/8.0/en/)
+- **Windows Forms:** [Microsoft WinForms Docs](https://docs.microsoft.com/en-us/dotnet/desktop/winforms)
+- **C# Documentation:** [Microsoft C# Docs](https://docs.microsoft.com/en-us/dotnet/csharp)
 
 ---
 
@@ -417,18 +423,19 @@ public static void CreerLot(string nom, int quantite)
 |------|--------|-------------|
 | 18.05.2026 | Valentin | Implémentation initiale - version stable |
 | 08.06.2026 | Copilot | Mise à jour détaillée du README |
-| 12.06.2026 | Copilot & ESnoea | Mise à jour complète avec refactorisation et standards |
+| 12.06.2026 | Copilot & ESnoea | Refactorisation et standards |
+| 15.06.2026 | ESnoea | Mise à jour complète architecture avec analyse complète |
 
 ---
 
 ## 👥 Équipe de Développement
 
 - **Valentin** - Logique métier et interface utilisateur
-- **Noé (ESnoea)** - Refactorisation, architecture, cohérence du code
+- **ESnoea** - Architecture, refactorisation, cohérence du code
 - **Copilot** - Assistance au développement et documentation
 
 ---
 
-**Dernière mise à jour:** 12.06.2026  
+**Dernière mise à jour:** 15.06.2026  
 **Version:** 1.0.0 (Stable)  
 **État:** ✅ Production Ready

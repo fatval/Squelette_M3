@@ -1,13 +1,29 @@
-﻿using M3;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using MySql.Data.MySqlClient;   
+﻿// ============================================================================
+// Fichier     : UserControlRecettes.cs
+// Auteurs     : Noé A-Hadi, Valentin Boegli
+// Date        : Juin 2026
+// Description : Interface de gestion des recettes de production. Permet de 
+//               visualiser l'ensemble des recettes, d'en ajouter de nouvelles, 
+//               ainsi que de les modifier ou de les supprimer. 
+//               Toute la logique métier et SQL est déléguée à la classe Recette.
+//
+// Méthodes principales :
+// - ChargerRecettesDGV() : Récupère et affiche les recettes dans le tableau.
+// - btnAjouter_Click() : Ouvre le formulaire de création d'une nouvelle recette.
+// - btnModifier_Click() : Ouvre le formulaire pour modifier la recette sélectionnée.
+// - btnSupprimer_Click() : Supprime la recette sélectionnée après confirmation.
+// ============================================================================
 
+using M3;
 namespace Squelette_M3
 {
     public partial class UserControlRecettes : UserControl
     {
+        // ─── CONSTRUCTEUR ─────────────────────────────────────────────────────
+        /// <summary>
+        /// Constructeur par défaut. Initialise le composant, bloque le redimensionnement
+        /// des lignes du tableau et charge la liste des recettes existantes.
+        /// </summary>
         public UserControlRecettes()
         {
             InitializeComponent();
@@ -15,8 +31,10 @@ namespace Squelette_M3
             ChargerRecettesDGV();
         }
 
+        // ─── CHARGER LES RECETTES ─────────────────────────────────────────────
         /// <summary>
-        /// 
+        /// Vide le DataGridView puis le remplit avec les données de toutes les recettes 
+        /// présentes dans la base de données, y compris le nombre d'opérations associées.
         /// </summary>
         private void ChargerRecettesDGV()
         {
@@ -44,6 +62,13 @@ namespace Squelette_M3
             }
         }
 
+        // ─── AJOUTER UNE RECETTE ──────────────────────────────────────────────
+        /// <summary>
+        /// Gère le clic sur le bouton "Ajouter". Ouvre le formulaire de création 
+        /// d'une recette et rafraîchit la liste si la création a été validée.
+        /// </summary>
+        /// <param name="sender">L'objet déclenchant l'événement.</param>
+        /// <param name="e">Les arguments de l'événement.</param>
         private void btnAjouter_Click(object sender, EventArgs e)
         {
             FormCreerRecette form = new FormCreerRecette();
@@ -54,6 +79,14 @@ namespace Squelette_M3
             }
         }
 
+        // ─── MODIFIER UNE RECETTE ─────────────────────────────────────────────
+        /// <summary>
+        /// Gère le clic sur le bouton "Modifier". Vérifie qu'une recette est sélectionnée, 
+        /// charge ses informations depuis la base de données, puis ouvre le formulaire 
+        /// de création/modification en lui passant l'objet à éditer.
+        /// </summary>
+        /// <param name="sender">L'objet déclenchant l'événement.</param>
+        /// <param name="e">Les arguments de l'événement.</param>
         private void btnModifier_Click(object sender, EventArgs e)
         {
             try
@@ -106,8 +139,13 @@ namespace Squelette_M3
             }
         }
 
-
-       
+        // ─── SUPPRIMER UNE RECETTE ────────────────────────────────────────────
+        /// <summary>
+        /// Gère le clic sur le bouton "Supprimer". Demande une confirmation à l'utilisateur, 
+        /// puis supprime la recette sélectionnée (et ses dépendances) de la base de données.
+        /// </summary>
+        /// <param name="sender">L'objet déclenchant l'événement.</param>
+        /// <param name="e">Les arguments de l'événement.</param>
         private void btnSupprimer_Click(object sender, EventArgs e)
         {
             try
@@ -131,99 +169,14 @@ namespace Squelette_M3
 
                 if (confirm == DialogResult.Yes)
                 {
-                    SupprimerRecetteAvecLots(idRecette);
+                    // ✅ Appel direct à Recette.cs — plus de SQL ici
+                    Recette.SupprimerRecette(idRecette);
                     ChargerRecettesDGV();
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        /// <summary>
-        /// Supprime une recette ainsi que tous les lots et événements associés de la base de données dans une
-        /// transaction atomique.
-        /// </summary>
-        /// <remarks>Cette méthode supprime la recette spécifiée, tous les lots qui lui sont liés, les
-        /// événements associés à ces lots, ainsi que les entrées correspondantes dans la table associative. Toutes les
-        /// opérations sont effectuées dans une transaction pour garantir la cohérence des données. En cas d'erreur, la
-        /// transaction est annulée et un message d'erreur est affiché à l'utilisateur.</remarks>
-        /// <param name="idRecette">Identifiant unique de la recette à supprimer. Doit correspondre à une recette existante dans la base de
-        /// données.</param>
-        private void SupprimerRecetteAvecLots(int idRecette)
-        {
-            using (MySqlConnection connection = DBManager.GetConnection())
-            {
-                connection.Open();
-                using (MySqlTransaction transaction = connection.BeginTransaction())
-                {
-                    try
-                    {
-                        // 1️⃣ RÉCUPÉRER TOUS LES LOTS LIÉS À CETTE RECETTE
-                        List<int> lotsASupprimer = new List<int>();
-                        string getLotsQuery = "SELECT Id_Lot FROM lot WHERE Id_Recette = @id";
-                        using (MySqlCommand cmd = new MySqlCommand(getLotsQuery, connection, transaction))
-                        {
-                            cmd.Parameters.AddWithValue("@id", idRecette);
-                            using (MySqlDataReader reader = cmd.ExecuteReader())
-                            {
-                                while (reader.Read())
-                                {
-                                    lotsASupprimer.Add(Convert.ToInt32(reader["Id_Lot"]));
-                                }
-                            }
-                        }
-
-                        // 2️⃣ SUPPRIMER LES ÉVÉNEMENTS DE CES LOTS
-                        if (lotsASupprimer.Count > 0)
-                        {
-                            string lotsIn = string.Join(",", lotsASupprimer);
-                            string deleteEvenements = $"DELETE FROM evenement WHERE Id_Lot IN ({lotsIn})";
-                            using (MySqlCommand cmd = new MySqlCommand(deleteEvenements, connection, transaction))
-                            {
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
-
-                        // 3️⃣ SUPPRIMER LES LOTS
-                        string deleteLots = "DELETE FROM lot WHERE Id_Recette = @id";//placeholder  (@id)pour éviter les injections SQL
-                        using (MySqlCommand cmd = new MySqlCommand(deleteLots, connection, transaction))
-                        {
-                            cmd.Parameters.AddWithValue("@id", idRecette);
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        // 4️⃣ SUPPRIMER DANS LA TABLE ASSOCIATIVE Contenir
-                        string deleteContenir = "DELETE FROM Contenir WHERE Id_Recette = @id";
-                        using (MySqlCommand cmd = new MySqlCommand(deleteContenir, connection, transaction))
-                        {
-                            cmd.Parameters.AddWithValue("@id", idRecette);
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        // 5️⃣ SUPPRIMER LA RECETTE
-                        string deleteRecette = "DELETE FROM recette WHERE Id_Recette = @id";
-                        using (MySqlCommand cmd = new MySqlCommand(deleteRecette, connection, transaction))
-                        {
-                            cmd.Parameters.AddWithValue("@id", idRecette);
-                            cmd.ExecuteNonQuery();
-                        }
-
-                        transaction.Commit();
-                        MessageBox.Show("✅ Recette et ses lots supprimés avec succès !", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (MySqlException mex)
-                    {
-                        transaction.Rollback();
-                        MessageBox.Show($"❌ Erreur SQL : {mex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        MessageBox.Show($"❌ Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
             }
         }
     }
