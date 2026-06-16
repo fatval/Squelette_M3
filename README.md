@@ -2,13 +2,14 @@
 
 ## 📋 Description du Projet
 
-**Squelette M3** est une application **Windows Forms** développée en **C# (.NET 10.0)** permettant de gérer des **lots de production**, des **recettes**, et un **historique complet des événements**. L'application propose une interface intuitive et moderne avec fonctionnalités complètes de CRUD (Create, Read, Update, Delete), transactions sécurisées et exports de données.
+**Squelette M3** est une application **Windows Forms** développée en **C# (.NET 10.0)** permettant de gérer des **lots de production**, des **recettes**, et un **historique complet des événements**.
 
-### État du Projet (15.06.2026)
+### État du Projet (16.06.2026)
 ✅ **Version stable avec logique fonctionnelle complète**  
 ✅ **Interface utilisateur moderne (Windows Forms)**  
 ✅ **Architecture en couches bien structurée**  
 ✅ **Gestion transactionnelle robuste avec MySQL**  
+✅ **Suppression en cascade robuste implémentée**  
 ✅ **Export de données en XML et CSV fonctionnel**  
 ✅ **Validation des données complète**  
 ✅ **Historique avec recherche temps réel**  
@@ -112,9 +113,9 @@ public string REC_Nom { get; set; }          // Nom de la recette associée
 **Méthodes:**
 - `RechercherLotParNom(nom)` - Recherche un lot par son nom
 - `AfficherTousLesLots()` - Affiche tous les lots en console
-- `CreerLot(nom, quantite, idRecette)` - Crée un lot
-- `SupprimerLot(idLot)` - Supprime un lot
-- `MettreAJourEtatLot(idLot, idEtat)` - Met à jour l'état d'un lot
+- `CreerLot(nom, quantite, idRecette)` - Crée un lot (transaction)
+- `SupprimerLot(idLot)` - Supprime un lot et ses événements associés (transaction)
+- `MettreAJourEtat(idLot, idEtat)` - Met à jour l'état d'un lot
 
 ---
 
@@ -136,8 +137,8 @@ public List<Operation> Operations { get; set; }        // Opérations associées
 | `GetById(id)` | Charge une recette avec ses opérations associées |
 | `CompterOperations(idRecette)` | Compte le nombre d'opérations d'une recette |
 | `AjouterRecette(nom, operations)` | Crée une recette avec ses opérations (transaction) |
-| `ModifierRecette(idRecette, nom, operations)` | Modifie une recette et remplace ses opérations |
-| `SupprimerRecette(idRecette)` | Supprime une recette (transaction) |
+| `ModifierRecette(idRecette, nom, operations)` | Modifie une recette et remplace ses opérations (transaction) |
+| `SupprimerRecette(idRecette)` | Supprime recette, opérations, lots et événements (transaction en cascade) |
 
 ---
 
@@ -324,6 +325,22 @@ Lot (1) ──── (n) Evenement
 
 ---
 
+## 🔄 Suppression en Cascade (Delete on Cascade)
+
+### Ordre de suppression transactionnel
+
+Lors de la suppression d'une recette, l'ordre de suppression respecte les contraintes de clés étrangères:
+
+1. **Événements** → Suppression des événements liés aux lots
+2. **Lots** → Suppression des lots liés à la recette
+3. **Liens Contenir** → Suppression des associations recette-opération
+4. **Opérations** → Suppression des opérations orphelines
+5. **Recette** → Suppression de la recette elle-même
+
+Cette implémentation garantit l'intégrité référentielle et évite les erreurs de contrainte de clé étrangère.
+
+---
+
 ## 🚀 Installation et Configuration
 
 ### Prérequis
@@ -405,6 +422,7 @@ public static void CreerLot(string nom, int quantite)
 - ✅ Validation des données à l'entrée
 - ✅ Transactions pour opérations multi-table
 - ✅ Confirmation utilisateur pour suppressions
+- ✅ Suppression en cascade robuste avec gestion d'erreurs
 
 ---
 
@@ -425,6 +443,7 @@ public static void CreerLot(string nom, int quantite)
 | 08.06.2026 | Copilot | Mise à jour détaillée du README |
 | 12.06.2026 | Copilot & ESnoea | Refactorisation et standards |
 | 15.06.2026 | ESnoea | Mise à jour complète architecture avec analyse complète |
+| 16.06.2026 | Valentin & ESnoea | Refactorisation du code, ajout commentaires, fix suppression cascade |
 
 ---
 
@@ -436,6 +455,6 @@ public static void CreerLot(string nom, int quantite)
 
 ---
 
-**Dernière mise à jour:** 15.06.2026  
-**Version:** 1.0.0 (Stable)  
+**Dernière mise à jour:** 16.06.2026  
+**Version:** 1.0.1 (Stable)  
 **État:** ✅ Production Ready
