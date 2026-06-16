@@ -1,36 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MySql.Data.MySqlClient;
-namespace M3.Entites;
+﻿/*
+ * Auteurs : Noé A-Hadi, Valentin Boegli
+ * Date    : 12.06.2026
+ * Description : Classe Etat - Représente la table de référence des états d'un lot.
+ *               Définit le statut actuel (Ex: En attente, En production, Terminé, En erreur).
+ *
+ * Propriétés :
+ * - Id_Etat      : Identifiant unique de l'état (PK).
+ * - ETA_Libelle  : Libellé de l'état.
+ *
+ * Remarques :
+ * - Cette classe a été créée pour maintenir une cohérence stricte avec la structure 
+ *   de la base de données (MLD). 
+ * - Dans la pratique (WinForms), les getters/setters de cette classe ne sont pas 
+ *   explicitement appelés. Le libellé de l'état (ETA_Libelle) est récupéré directement 
+ *   via une jointure SQL (JOIN) dans la classe Lot (qui agit comme DTO). Cela évite 
+ *   de complexifier inutilement le code et facilite le DataBinding dans l'interface.
+ */
 
-
-internal class Etat
+namespace Squelette_M3
 {
-    
-    public int Id_Etat { get; set; }
-    public string ETA_Libelle { get; set; }
-
-    public static void AfficherTousLesEtats()
+    internal class Etat
     {
-        const string CONNEXION_STRING = "server=localhost;user=root;password=;database=m3";
-        StringBuilder result = new StringBuilder();
-        using (MySqlConnection connection = new MySqlConnection(CONNEXION_STRING))
-        {
-            connection.Open();
-            string query = "SELECT * FROM Etat";
-            using (MySqlCommand command = new MySqlCommand(query, connection))
-            {
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        result.AppendLine($"ID: {reader["Id_Etat"]}, Libellé: {reader["ETA_Libelle"]}");
-                    }
-                }
-            }
-        }
-        Console.WriteLine(result.ToString());
+        // ─── Propriétés ──────────────────────────────────────────────────────
+        public int Id_Etat { get; set; }         // PK
+        public string ETA_Libelle { get; set; }  // Ex: "En attente", "En production", "Terminé", "En erreur"
     }
-}     
-
+}
