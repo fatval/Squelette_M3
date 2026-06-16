@@ -152,7 +152,7 @@ namespace Squelette_M3
             {
                 if (dgvRecettes.SelectedRows.Count == 0)
                 {
-                    MessageBox.Show("Sélectionnez une recette à supprimer.");
+                    MessageBox.Show("Sélectionnez une recette à supprimer.", "Attention", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -169,14 +169,44 @@ namespace Squelette_M3
 
                 if (confirm == DialogResult.Yes)
                 {
-                    // ✅ Appel direct à Recette.cs — plus de SQL ici
-                    Recette.SupprimerRecette(idRecette);
-                    ChargerRecettesDGV();
+                    try
+                    {
+                        Recette.SupprimerRecette(idRecette);
+                        ChargerRecettesDGV();
+                    }
+                    catch (InvalidOperationException ioEx)
+                    {
+                        MessageBox.Show(
+                            $"❌ Impossible de supprimer la recette :\n{ioEx.Message}",
+                            "Erreur de suppression",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(
+                            $"❌ Erreur lors de la suppression :\n{ex.Message}",
+                            "Erreur",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
                 }
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show(
+                    "❌ Erreur : ID de recette invalide.",
+                    "Erreur",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    $"❌ Erreur inattendue :\n{ex.Message}",
+                    "Erreur critique",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
     }

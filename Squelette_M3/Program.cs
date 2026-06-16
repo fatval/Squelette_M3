@@ -7,9 +7,6 @@
 //               données et lance le formulaire principal.
 // ============================================================================
 
-using System;
-using System.Windows.Forms;
-
 namespace Squelette_M3
 {
     internal static class Program

@@ -259,7 +259,7 @@ namespace Squelette_M3
                 FROM lot l
                 JOIN etat e ON l.Id_Etat = e.Id_Etat
                 WHERE l.Id_Recette = @IdRecette
-                  AND e.ETA_Nom IN ('En attente', 'En cours', 'Erreur')";
+                  AND e.ETA_Libelle IN ('Terminé', 'En production', 'Erreur')";
 
             using (MySqlCommand cmd = new MySqlCommand(query, connection))
             {
@@ -412,8 +412,7 @@ namespace Squelette_M3
                 if (!PeutEtreModifieeOuSupprimee(idRecette, connection))
                 {
                     throw new InvalidOperationException(
-                        "❌ Impossible de supprimer cette recette : elle est liée à des lots en attente, en cours ou en erreur.\n\n" +
-                        "Veuillez terminer ou annuler ces lots avant de supprimer la recette.");
+                        "❌ Impossible de supprimer cette recette : elle est liée à des lots en cours, en erreur ou terminé.");
                 }
 
                 using (MySqlTransaction transaction = connection.BeginTransaction())
