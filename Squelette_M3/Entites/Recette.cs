@@ -31,7 +31,6 @@ namespace Squelette_M3
         public DateTime REC_DateHeureCreation { get; set; }                     // Date et heure de création
         public List<Operation> Operations { get; set; } = new List<Operation>();// Opérations ordonnées
 
-
         /// <summary>
         /// Renvoie la liste de toutes les recettes (sans leurs opérations).
         /// </summary>
@@ -189,7 +188,7 @@ namespace Squelette_M3
                             newId = (int)cmd.LastInsertedId;
                         }
 
-                        // 2. Insérer les opérations et les lier à la recette 
+                        // 2. Insérer les opérations et les lier à la recette
                         int noOperation = 1;  // Compteur d'ordre
                         foreach (var op in operations)
                         {
@@ -247,6 +246,30 @@ namespace Squelette_M3
         }
 
         /// <summary>
+        /// Vérifie si une recette peut être modifiée/supprimée.
+        /// Retourne false si elle est liée à des lots dans un état bloquant (En attente/En cours/Erreur).
+        /// </summary>
+        /// <param name="idRecette">ID de la recette à vérifier</param>
+        /// <param name="connection">Connexion MySQL active</param>
+        /// <returns>True si la recette peut être modifiée/supprimée, False sinon</returns>
+        public static bool PeutEtreModifieeOuSupprimee(int idRecette, MySqlConnection connection)
+        {
+            string query = @"
+                SELECT COUNT(*)
+                FROM lot l
+                JOIN etat e ON l.Id_Etat = e.Id_Etat
+                WHERE l.Id_Recette = @IdRecette
+                  AND e.ETA_Nom IN ('En attente', 'En cours', 'Erreur')";
+
+            using (MySqlCommand cmd = new MySqlCommand(query, connection))
+            {
+                cmd.Parameters.AddWithValue("@IdRecette", idRecette);
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count == 0;
+            }
+        }
+
+        /// <summary>
         /// Modifie une recette existante : met à jour son nom et remplace toutes
         /// ses opérations associées par une nouvelle liste d'opérations.
         /// </summary>
@@ -254,11 +277,20 @@ namespace Squelette_M3
         /// <param name="nouveauNom">Nouveau nom de la recette</param>
         /// <param name="operations">Nouvelle liste d'opérations, dans l'ordre</param>
         /// <exception cref="Exception">Exception levée en cas d'erreur de base de données</exception>
+        /// <exception cref="InvalidOperationException">Levée si la recette est liée à des lots bloquants</exception>
         public static void ModifierRecette(int idRecette, string nouveauNom, List<Operation> operations)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
             {
                 connection.Open();
+
+                // 🔴 VÉRIFICATION DES ÉTATS BLOQUANTS AVANT TOUTE OPÉRATION
+                if (!PeutEtreModifieeOuSupprimee(idRecette, connection))
+                {
+                    throw new InvalidOperationException(
+                        "❌ Impossible de modifier cette recette : elle est liée à des lots en attente, en cours ou en erreur.\n\n" +
+                        "Veuillez terminer ou annuler ces lots avant de modifier la recette.");
+                }
 
                 using (MySqlTransaction transaction = connection.BeginTransaction())
                 {
@@ -312,9 +344,9 @@ namespace Squelette_M3
                         {
                             var op = operations[i];
 
-                            // Insérer l'opération (SANS Id_Recette dans la table operation)
+                            // Insérer l'opération
                             string insertOp = @"INSERT INTO operation
-                        (OPE_Nom, OPE_PositionMoteur, OPE_TempsAttente, 
+                        (OPE_Nom, OPE_PositionMoteur, OPE_TempsAttente,
                          OPE_CycleVerin, OPE_Quittance, OPE_SensMoteur)
                         VALUES (@nom, @position, @temps, @verin, @quittance, @sens)";
 
@@ -369,11 +401,20 @@ namespace Squelette_M3
         /// </summary>
         /// <param name="idRecette">Identifiant de la recette à supprimer</param>
         /// <exception cref="Exception">Exception levée en cas d'erreur de base de données</exception>
+        /// <exception cref="InvalidOperationException">Levée si la recette est liée à des lots bloquants</exception>
         public static void SupprimerRecette(int idRecette)
         {
             using (MySqlConnection connection = DBManager.GetConnection())
             {
                 connection.Open();
+
+                //  VÉRIFICATION DES ÉTATS BLOQUANTS AVANT TOUTE OPÉRATION
+                if (!PeutEtreModifieeOuSupprimee(idRecette, connection))
+                {
+                    throw new InvalidOperationException(
+                        "❌ Impossible de supprimer cette recette : elle est liée à des lots en attente, en cours ou en erreur.\n\n" +
+                        "Veuillez terminer ou annuler ces lots avant de supprimer la recette.");
+                }
 
                 using (MySqlTransaction transaction = connection.BeginTransaction())
                 {
@@ -389,7 +430,7 @@ namespace Squelette_M3
                             cmd.ExecuteNonQuery();
                         }
 
-                        // 2. Supprimer les lots
+                        // 2. Supprimer les lots associés à cette recette
                         string deleteLots = "DELETE FROM lot WHERE Id_Recette = @id";
 
                         using (MySqlCommand cmd = new MySqlCommand(deleteLots, connection, transaction))
@@ -455,5 +496,4 @@ namespace Squelette_M3
             }
         }
     }
-
 }

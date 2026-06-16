@@ -23,14 +23,16 @@ namespace Squelette_M3
         {
             // Permet à l'application de s'adapter à la résolution de l'écran et ne pas tenir compte du scaling windows
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
+
+            // Active le thème visuel de l'application (pour les boutons, etc.)
             ApplicationConfiguration.Initialize();
 
+            // Initialisation de la connexion à la base de donnees MySQL (ici projet scolaire avec DB en local, mais en réalité on aurait gérer le MDP différemment, avec un USER SECRET)
             DBManager.ConnectToDB("m3", "root", "");
+
+
+            // Lancement du formulaire principal de l'application
             Application.Run(new FormMain());
-
-            // Initialisation de la connexion à la base de données MySQL (ici projet scolaire avec DB en local, mais en réalité on aurait gérer le MDP différemment, avec un USER SECRET)
-            DBManager.ConnectToDB("m3", "root", "");
-
         }
     }
 }
